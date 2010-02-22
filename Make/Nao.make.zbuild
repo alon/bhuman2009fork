@@ -1,0 +1,150 @@
+
+# on cygwin insert path to crosscompiler 
+ifneq ($(ComSpec)$(COMSPEC),)
+  PATH := crosstool:$(PATH)
+  PROTOC := ../Util/protobuf/win32/bin/protoc
+else
+  PROTOC := ../Util/protobuf/linux/bin/protoc
+endif
+
+<?lua
+
+template = "../Src/SimulatorQt/Make/Templates/Makefile"
+platform = "linux" -- force platform, use linux even on windows (for / separated paths)
+files = { 
+  matchrecursive("../Src/Modules/*.cpp", "../Src/Modules/*.h"),
+  matchfiles("../Src/Platform/*.h"),
+  matchfiles("../Src/Platform/linux/*.cpp", "../Src/Platform/linux/*.h"),
+  matchfiles("../Src/Platform/Win32Linux/*.cpp", "../Src/Platform/Win32Linux/*.h"),
+  matchrecursive("../Src/Processes/*.cpp", "../Src/Processes/*.h"),
+  matchrecursive("../Src/Representations/*.cpp", "../Src/Representations/*.h"),
+  matchrecursive("../Src/Tools/*.cpp", "../Src/Tools/*.h"),
+  matchrecursive("../Src/Tools/*.proto"),
+}
+
+global = {
+  includepaths = { 
+    "../Src",
+    "../Util/I2C/include",
+    "../Build/Nao/Linux/$(ConfigurationName)",
+    "../Util/protobuf/include",
+  },
+  libpaths = { 
+    "../Util/libjpeg/lib",
+    "../Util/protobuf/linux/lib",
+  },
+  libs = { 
+    "rt", "jpeg", "protobuf", "pthread",
+  },
+}
+
+configs = {
+  {
+    name = "Debug",
+    objdir = "$(SolutionDir)/../Build/Nao/Linux/Debug",
+    defines = { 
+      "DEBUG", "_DEBUG", 
+      "LINUX", "TARGET_ROBOT", 
+      "__STRICT_ANSI__",
+    },
+    includepaths = global.includepaths,
+    buildflags = "-march=k6-2 -pipe -Wall -Wno-strict-aliasing -Wno-non-virtual-dtor  -Wno-deprecated -g",
+    linkflags = "",
+    libpaths = global.libpaths,
+    libs = global.libs,
+    output = "bhuman",
+  }, 
+  {
+    name = "Optimized",
+    objdir = "$(SolutionDir)/../Build/Nao/Linux/Optimized",
+    defines = { 
+      "NDEBUG", 
+      "LINUX", "TARGET_ROBOT", 
+      "__STRICT_ANSI__",
+    },
+    includepaths = global.includepaths,
+    buildflags = "-march=k6-2 -pipe -Wall -Wno-strict-aliasing -Wno-non-virtual-dtor  -Wno-deprecated -fomit-frame-pointer -O2 -mmmx -m3dnow -fgcse-after-reload -funswitch-loops -finline-functions",
+    linkflags = "-s",
+    libpaths = global.libpaths,
+    libs = global.libs,
+    output = "bhuman",
+  },
+  {
+    name = "Release",
+    objdir = "$(SolutionDir)/../Build/Nao/Linux/Release",
+    defines = { 
+      "NDEBUG", "RELEASE",
+      "LINUX", "TARGET_ROBOT", 
+      "__STRICT_ANSI__",
+    },
+    includepaths = global.includepaths,
+    buildflags = "-march=k6-2 -pipe -Wall -Wno-strict-aliasing -Wno-non-virtual-dtor  -Wno-deprecated -Wno-unused -fomit-frame-pointer -O2 -mmmx -m3dnow -fgcse-after-reload -funswitch-loops -finline-functions",
+    linkflags = "-s",
+    libpaths = global.libpaths,
+    libs = global.libs,
+    output = "bhuman",
+  }, 
+  {
+    name = "ReleaseForProfiling",
+    objdir = "$(SolutionDir)/../Build/Nao/Linux/ReleaseForProfiling",
+    defines = { 
+      "NDEBUG", "RELEASE",
+      "LINUX", "TARGET_ROBOT", 
+      "__STRICT_ANSI__",
+    },
+    includepaths = global.includepaths,
+    buildflags = "-march=k6-2 -pipe -Wall -Wno-strict-aliasing -Wno-non-virtual-dtor  -Wno-deprecated -Wno-unused -mmmx -m3dnow -g -pg",
+    linkflags = "-pg",
+    libpaths = global.libpaths,
+    libs = global.libs,
+    output = "bhuman",
+  }, 
+}
+
+
+customBuildTools = {
+  {
+    file = "CognitionModules.cfg.build",
+    command = "$(ZBUILDGEN) CognitionModules.cfg.build -o ../Config/Processes/CognitionModules.cfg", 
+    description = "CognitionModules.cfg.build (h2cfg)",
+    dependencies = { "../Src/Modules/CognitionModules.h" },
+    output = "../Config/Processes/CognitionModules.cfg",
+  },
+  {
+    file = "MotionModules.cfg.build",
+    command = "$(ZBUILDGEN) MotionModules.cfg.build -o ../Config/Processes/MotionModules.cfg",
+    description = "MotionModules.cfg.build (h2cfg)",
+    dependencies = { "../Src/Modules/MotionModules.h" },
+    output = "../Config/Processes/MotionModules.cfg",
+  },
+}
+
+?>
+
+<?lua
+local sslProtoPath = "../Src/Tools/sslvision/proto";
+local protoFiles = matchfiles(sslProtoPath .. "/*.proto")
+for i,file in pairs(protoFiles) do
+  local basename = path.getbasename(file)
+  local outname = "$(OutDir)/" .. path.dropextension(basename) .. ".pb.cc"
+  local tool = {
+    file = file,
+    command = "$(PROTOC) -I" .. sslProtoPath .. " --cpp_out=../Build/Nao/Linux/$(ConfigurationName) " .. file,
+    description = basename,
+    output = outname,
+  }
+  table.insert(customBuildTools, tool)
+  table.insert(files, { tool.output })
+end
+
+-- build final file list from files
+
+newFiles = {}
+for i, filelist in pairs(files) do
+  for i, file in pairs(filelist) do
+    table.insert(newFiles, file)
+  end
+end
+files = newFiles
+
+?>

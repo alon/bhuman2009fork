@@ -1,0 +1,104 @@
+<RoSiIncludeFile>
+  
+  <OpenGLSettings>
+  
+    <LightModel twoSided="false" localCameraViewer="true" localObjectViewer="false"/>
+    <Culling face="BACK" front="CCW"/>
+    <DisableWGLShareLists/>
+    <!-- <Antialiasing samples="16"/> -->
+    <!-- <UseBaseColors/> -->
+    <Hints display="WARNINGS"/>
+    <!-- <PolyonOffset factor="1.0" units="1.0"/> -->
+    <!-- <UseSoftwareShadowMapping/> -->
+    <CubeMapGeneration posx="0.0" posy="0.0" posz="0.4" size="512" clipNear="0.01" clipFar="30.0" update="2"/>
+    
+    <ShaderDef name="FF Lighting" type="VERTEX" file="FFLighting.vert"/>
+    <ShaderDef name="Post Velocity Buffer VS" type="VERTEX" file="PostVelocityBuffer.vert"/>
+    <ShaderDef name="Post Velocity Buffer FS" type="FRAGMENT" file="PostVelocityBuffer.frag"/>
+    <ShaderDef name="Post Velocity Buffer 2 VS" type="VERTEX" file="PostVelocityBuffer2.vert"/>
+    <ShaderDef name="Post Velocity Buffer 2 FS" type="FRAGMENT" file="PostVelocityBuffer2.frag"/>
+    <ShaderDef name="Post Velocity Buffer Comb FS" type="FRAGMENT" file="PostVelocityBufferComb.frag"/>
+    <ShaderDef name="Post Velocity Buffer Comb 2 FS" type="FRAGMENT" file="PostVelocityBufferComb2.frag"/>
+    <ShaderDef name="Velocity Buffer VS" type="VERTEX" file="VelocityBuffer.vert"/>
+    <ShaderDef name="Velocity Buffer FS" type="FRAGMENT" file="VelocityBuffer.frag"/>
+    <ShaderDef name="Velocity Buffer 2 VS" type="VERTEX" file="VelocityBuffer2.vert"/>
+    <ShaderDef name="Velocity Buffer 2 FS" type="FRAGMENT" file="VelocityBuffer2.frag"/>
+    <ShaderDef name="AccumulationBuffer VS" type="VERTEX" file="AccumulationBufferShader.vert"/>
+    <ShaderDef name="AccumulationBuffer FS" type="FRAGMENT" file="AccumulationBufferShader.frag"/>
+    <ShaderDef name="Post Accumulation Buffer FS" type="FRAGMENT" file="PostAccumulationBuffer.frag"/>
+    
+    <Program name="Post Velocity Buffer">
+      <Shader ref="Post Velocity Buffer VS"/>
+      <Shader ref="Post Velocity Buffer FS"/>
+      <Uniform ref="Texture0" type="FBO"/>
+      <Uniform ref="Texture1" swap="Texture2" type="FBOPhysicUpdateSwap"/>
+      <Uniform ref="Texture2" swap="Texture1" type="FBO"/>
+    </Program>
+    <Program name="Post Velocity Buffer 2">
+      <Shader ref="Post Velocity Buffer 2 VS"/>
+      <Shader ref="Post Velocity Buffer 2 FS"/>
+      <Uniform ref="Texture0" type="FBO"/>
+      <Uniform ref="Texture1" swap="Texture2" type="FBOPhysicUpdateSwap"/>
+      <Uniform ref="Texture2" swap="Texture1" type="FBO"/>
+      <Uniform ref="Texture3" type="Noise"/>
+      <Uniform ref="Random"/>
+    </Program>
+    <Program name="Post Velocity Buffer Comb">
+      <Shader ref="Post Velocity Buffer 2 VS"/>
+      <Shader ref="Post Velocity Buffer Comb FS"/>
+      <Uniform ref="Texture0" type="FBO"/>
+      <Uniform ref="Texture1" swap="Texture2" type="FBOPhysicUpdateSwap"/>
+      <Uniform ref="Texture2" swap="Texture1" type="FBO"/>
+      <Uniform ref="Texture3" type="Noise"/>
+      <Uniform ref="Texture4" type="Storage"/>
+      <Uniform ref="Random"/>
+    </Program>
+    <Program name="Post Velocity Buffer Comb 2">
+      <Shader ref="Post Velocity Buffer 2 VS"/>
+      <Shader ref="Post Velocity Buffer Comb 2 FS"/>
+      <Uniform ref="Texture0" type="FBO"/>
+      <Uniform ref="Texture1" swap="Texture2" type="FBO"/>
+      <Uniform ref="Texture2" swap="Texture1" type="FBOPhysicUpdateSwap"/>
+      <Uniform ref="Texture3" type="FBO" filter="nearest"/>
+      <Uniform ref="Texture4" type="FBO" ignore="true" filter="nearest"/>
+      <Uniform ref="Texture5" type="Noise"/>
+      <Uniform ref="Random"/>
+    </Program>
+    <Program name="Velocity Buffer">
+      <Shader ref="FF Lighting"/>
+      <Shader ref="Velocity Buffer VS"/>
+      <Shader ref="Velocity Buffer FS"/>
+      <Uniform ref="previous_ModelViewProjectionMatrix"/>
+      <Uniform ref="ApplyTexture"/>
+      <Uniform ref="Texture0"/>
+      <MRT bitmask="3"/>
+    </Program>
+    <Program name="Velocity Buffer 2">
+      <Shader ref="Velocity Buffer 2 VS"/>
+      <Shader ref="Velocity Buffer 2 FS"/>
+      <Uniform ref="NumLights"/>
+      <Uniform ref="previous_ModelViewProjectionMatrix"/>
+      <Uniform ref="ApplyTexture"/>
+      <Uniform ref="Texture0"/>
+      <MRT bitmask="3"/>
+    </Program>
+    <Program name="Accumulation Buffer">
+      <Shader ref="AccumulationBuffer VS"/>
+      <Shader ref="AccumulationBuffer FS"/>
+      <Uniform ref="NumLights"/>
+      <Uniform ref="ApplyTexture"/>
+      <Uniform ref="Texture0"/>
+      <MRT bitmask="1"/>
+    </Program>
+    <Program name="Post Accumulation Buffer" extension="Post Debug Collect">
+      <Shader ref="Post Velocity Buffer 2 VS"/>
+      <Shader ref="Post Accumulation Buffer FS"/>
+      <Uniform ref="Texture0" type="FBO"/>
+      <Uniform ref="Texture4" swap="Texture3" type="FBORenderPassSwap"/>
+      <Uniform ref="Texture3" swap="Texture4" type="FBO" ignore="true"/>
+      <MRT bitmask="8" clearbitmask="16"/>
+    </Program>
+    
+  </OpenGLSettings>
+  
+</RoSiIncludeFile>

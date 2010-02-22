@@ -1,0 +1,4 @@
+set representation:RobotPose { rotation = 0; translation = { x = -1200; y = 0; }; validity = 1.0; }
+vid raw module:CameraMatrixProvider:calibrationHelper 
+set representation:HeadJointRequest { pan = 1000; tilt = 1000; }
+get representation:CameraCalibration

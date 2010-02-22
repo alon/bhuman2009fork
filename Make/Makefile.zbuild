@@ -1,0 +1,149 @@
+<?lua if linux then ?>
+
+ifeq ($(ComSpec)$(COMSPEC),)
+PATH := ../Src/SimulatorQt/Util/zbuildgen/Linux/bin:$(PATH)
+else
+PATH := ../Src/SimulatorQt/Util/zbuildgen/Win32/bin:$(PATH)
+endif
+
+<?lua
+
+template = "../Src/SimulatorQt/Make/Templates/SolutionMakefile"
+platform = "linux"
+projects = { 
+  {
+    name = "SimRobotCore",
+    dir = "../Src/SimulatorQt/Make/",
+  },
+  {
+    name = "SimRobotGUI",
+    dir = "../Src/SimulatorQt/Make/",
+    dependencies = { "SimRobotCore" },
+  },
+  {
+    name = "Controller",
+  },
+  {
+    name = "Simulator",
+    dependencies = { "SimRobotGUI", "Controller", "SpecialActions", "Behavior" },
+  },
+  {
+    name = "URC",
+  },
+  {
+    name = "SpecialActions",
+    dependencies = { "URC" },
+  },
+  {
+    name = "Behavior",
+    dependencies = { "URC" },
+  },
+  {
+    name = "libbhuman",
+    dependencies = { },
+    dontBuild = true,
+  },
+  {
+    name = "Nao",
+    dependencies = { "libbhuman", "SpecialActions", "Behavior" },
+    dontBuild = true,
+  },
+  {
+    name = "SimulatorDoc",
+    dir = "Documentation",
+    dontBuild = true,
+  },
+  {
+    name = "BehaviorDoc",
+    dir = "Documentation",
+    makeflags = "-j 1",
+    dontBuild = true,
+  },
+}
+configs = { 
+  {
+    name = "DebugWithReleaseLibs",
+    projectConfigs = {
+      { "SimRobotCore", "Release" },
+      { "SimRobotGUI", "Release" },
+      { "Controller", "Release" },
+      { "Simulator", "DebugWithReleaseLibs" },
+      { "URC", "Debug" },
+      { "SpecialActions", "Release" },
+      { "Behavior", "Release" },
+      { "Nao", "Debug" },
+      { "SimulatorDoc", "Release" },
+      { "BehaviorDoc", "Release" },
+      { "libbhuman", "Release" },
+    },
+  },
+  {
+    name = "Debug",
+    projectConfigs = {
+      { "SimRobotCore", "Debug" },
+      { "SimRobotGUI", "Debug" },
+      { "Controller", "Debug" },
+      { "Simulator", "Debug" },
+      { "URC", "Debug" },
+      { "SpecialActions", "Release" },
+      { "Behavior", "Release" },
+      { "Nao", "Debug" },
+      { "SimulatorDoc", "Release" },
+      { "BehaviorDoc", "Release" },
+      { "libbhuman", "Release" },
+    },
+  }, 
+  {
+    name = "Release",
+    projectConfigs = {
+      { "SimRobotCore", "Release" },
+      { "SimRobotGUI", "Release" },
+      { "Controller", "Release" },
+      { "Simulator", "Optimized" },
+      { "URC", "Debug" },
+      { "SpecialActions", "Release" },
+      { "Behavior", "Release" },
+      { "Nao", "Release" },
+      { "SimulatorDoc", "Release" },
+      { "BehaviorDoc", "Release" },
+      { "libbhuman", "Release" },
+    },
+  },
+  {
+    name = "ReleaseForProfiling",
+    projectConfigs = {
+      { "SimRobotCore", "Release" },
+      { "SimRobotGUI", "Release" },
+      { "Controller", "Release" },
+      { "Simulator", "Optimized" },
+      { "URC", "Debug" },
+      { "SpecialActions", "Release" },
+      { "Behavior", "Release" },
+      { "Nao", "ReleaseForProfiling" },
+      { "SimulatorDoc", "Release" },
+      { "BehaviorDoc", "Release" },
+      { "libbhuman", "Release" },
+    },
+  },
+  {
+    name = "Optimized",
+    projectConfigs = {
+      { "SimRobotCore", "Release" },
+      { "SimRobotGUI", "Release" },
+      { "Controller", "Release" },
+      { "Simulator", "Optimized" },
+      { "URC", "Debug" },
+      { "SpecialActions", "Release" },
+      { "Behavior", "Release" },
+      { "Nao", "Optimized" },
+      { "SimulatorDoc", "Release" },
+      { "BehaviorDoc", "Release" },
+      { "libbhuman", "Release" },
+s    },
+  },
+}
+
+zbuildgenFlags = ". Behavior Documentation ../Src/SimulatorQt/Make/SimRobotCore.make.zbuild ../Src/SimulatorQt/Make/SimRobotGUI.make.zbuild ../Src/SimulatorQt/Make/SimRobotCore.vcproj.zbuild ../Src/SimulatorQt/Make/SimRobotGUI.vcproj.zbuild"
+
+?>
+<?lua end ?>

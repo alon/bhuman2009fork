@@ -1,0 +1,18 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="XabslEditor.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="CacheDir" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Cache/</Value>
+    </Setting>
+    <Setting Name="recentBehaviors" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ScintillaXabslFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">./xabsl.xml</Value>
+    </Setting>
+    <Setting Name="recentOptions" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+  </Settings>
+</SettingsFile>

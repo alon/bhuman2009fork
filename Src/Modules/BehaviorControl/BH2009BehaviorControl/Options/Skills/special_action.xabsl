@@ -1,0 +1,67 @@
+/** Perform a special action. */
+option special_action 
+{
+
+  /** Special action ID to perform */
+  enum motion.special_action @id;
+
+  bool @mirror;
+
+  initial state special_action {
+    decision {
+
+      if (executed_motion.type == special_action && executed_motion.special_action == motion.special_action && 
+        ((executed_motion.special_action.mirror && @mirror) || (!executed_motion.special_action.mirror && !@mirror))) 
+      {
+        goto special_action_in_progress;
+      }
+
+      else if (state_time > 5000) {
+        goto aborted;
+      }
+      else {
+        stay;
+      }
+    }
+    action {
+      motion.type = special_action;
+      motion.special_action.mirror = @mirror;
+      motion.special_action = @id;
+      motion.last_special_action = @id;
+    }
+  }
+
+  state special_action_in_progress {
+    decision {
+
+      if (executed_motion.type != special_action) {
+        goto finished;
+      }
+      else {
+        stay;
+      }
+    }
+    action {
+      motion.type = stand;
+    }
+  }
+
+  target state finished {
+    decision
+    {
+      if(motion.last_special_action != @id)
+        goto special_action;
+      else 
+        stay;
+    }
+    action {
+      motion.type = stand;
+    }
+  }
+  target state aborted {
+    action {
+      motion.type = stand;
+    }
+  }
+}
+

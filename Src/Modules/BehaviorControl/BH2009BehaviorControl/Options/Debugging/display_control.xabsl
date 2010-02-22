@@ -1,0 +1,15 @@
+option display_control
+{
+  initial state display
+  {
+    action 
+    {
+      display_right_eye();
+      display_kickoff();
+      display_team_color();
+      display_state();
+      display_left_eye();
+      display_ears();
+    }
+  }
+}

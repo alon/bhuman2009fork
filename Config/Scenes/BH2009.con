@@ -1,0 +1,42 @@
+# activate simulation time
+st on
+
+# in case we have more than a single robot
+robot all
+
+# Select modules for simulator
+mr Image CognitionLogDataProvider
+mr CameraInfo CognitionLogDataProvider
+mr FrameInfo CognitionLogDataProvider
+mr JointData MotionLogDataProvider
+mr SensorData MotionLogDataProvider
+mr KeyStates MotionLogDataProvider
+mr FrameInfo MotionLogDataProvider
+mr GroundTruthRobotPose CognitionLogDataProvider
+mr GroundTruthBallModel CognitionLogDataProvider
+mr SoundOutput off
+
+# Use different color table for simulation
+ct load ..\\..\\Scenes\\coltable.c64
+
+# switch off image correction in simulator (because there is no distortion)
+dr module:CoordinateSystemProvider:noCorrection on
+
+# all views are defined in another script
+call Views
+
+# joint request and LED request are required by simulation
+dr representation:JointRequest
+dr representation:LEDRequest
+
+# request joint data and sensor data
+dr representation:SensorData
+dr representation:JointData
+
+# request behavior messages
+dr automatedRequests:xabsl:debugSymbols once
+dr automatedRequests:xabsl:debugMessages
+
+
+vfd worldState module:GoalLocatorNao:field
+vid raw module:GoalLocatorNao:image

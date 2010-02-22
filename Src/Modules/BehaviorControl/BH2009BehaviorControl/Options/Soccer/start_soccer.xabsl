@@ -1,0 +1,24 @@
+/** The root option of the BH2009 soccer behavior */
+option start_soccer
+{
+  initial state start_soccer
+  {
+    decision
+    {
+      stay;
+    }
+
+    action 
+    {
+      // control the body movement
+      body_control();
+      
+      official_button_interface();
+      
+      display_control();
+      
+      // control head movement according to value of head.control_mode
+      head_control();
+    }
+  }  
+}

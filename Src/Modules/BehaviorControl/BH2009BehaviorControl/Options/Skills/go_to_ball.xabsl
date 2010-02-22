@@ -1,0 +1,117 @@
+/** Go to the last seen ball position */
+option go_to_ball
+{
+  initial state decide_position
+  {
+    decision
+    {
+      if(locator.pose.x < ball.position.field.x)
+        goto walk_behind_ball_front;
+      else
+        goto walk_behind_ball_back;
+    }
+    action
+    {
+    }
+  }
+
+  state walk_behind_ball_front
+  {
+    decision
+    {
+      if(locator.pose.x > ball.position.field.x + 200)
+        goto decide_position;
+      else if(abs(value = ball.angle) > 75 && ball.distance < 750)
+        goto turn_behind_ball;
+      else
+        stay;
+    }
+    action
+    {
+      soccer.behavior_action = go_to_ball;
+      head.control_mode = look_at_ball_and_goal_and_around;
+      motion.type = walk;
+      motion.walk_speed.x = ball.distance < 350 ? (ball.x - 140) / 4 : 140;
+      motion.walk_speed.y = (ball.angle - locator.opponent_goal.angle) * 2;
+      motion.walk_speed.rot = ball.angle;
+    }
+  }
+
+  state walk_behind_ball_back
+  {
+    decision
+    {
+      if(ball.angle - locator.opponent_goal.angle < 0 && ball.angle - locator.opponent_goal.angle > -180 || ball.angle - locator.opponent_goal.angle > 180)
+        goto walk_left_around;
+      else
+        goto walk_right_around;
+    }
+    action
+    {
+    }
+  }
+
+  state walk_left_around
+  {
+    decision
+    {
+      if(ball.x < 0 && ball.y > 0)
+        goto turn_behind_ball;
+      else if(locator.pose.x < ball.position.field.x - 200)
+        goto decide_position;
+      else
+        stay;
+    }
+    action
+    {
+      soccer.behavior_action = go_to_ball;
+      head.control_mode = look_at_ball_and_goal_and_around;
+      motion.type = walk;
+      motion.walk_speed.x = ball.distance > 700 ? 150 : 100;
+      motion.walk_speed.y = 0 ;
+      motion.walk_speed.rot = ball.x > 750 ? atan2(y = ball.y - 400 , x = ball.x) / 2 : (ball.y - 400) / 10;
+    }
+  }
+
+  state walk_right_around
+  {
+    decision
+    {
+      if(ball.x < 0 && ball.y < 0)
+        goto turn_behind_ball;
+      else if(locator.pose.x < ball.position.field.x - 200)
+        goto decide_position;
+      else
+        stay;
+    }
+    action
+    {
+      soccer.behavior_action = go_to_ball;
+      head.control_mode = look_at_ball_and_goal_and_around;
+      motion.type = walk;
+      motion.walk_speed.x = ball.distance > 700 ? 150 : 100;
+      motion.walk_speed.y = 0;
+      motion.walk_speed.rot = ball.x > 750 ? atan2(y = ball.y + 400 , x = ball.x) / 2 : (ball.y + 400) / 10;
+    }
+  }
+
+  state turn_behind_ball
+  {
+    decision
+    {
+      if(abs(value = ball.angle - locator.opponent_goal.angle) < 15 || ball.distance > 750)
+        goto decide_position;
+      else
+        stay;
+    }
+    action
+    {
+      soccer.behavior_action = go_to_ball;
+      head.control_mode = look_at_ball_and_goal_and_around;
+      motion.type = walk;
+      motion.walk_speed.x = abs(value = ball.angle) < 20 ? (ball.distance - 300) / 5 : 0;
+      motion.walk_speed.y = abs(value = ball.angle) < 25 ? (locator.opponent_goal.angle > 0 ? -40 : 40) : 0;
+      motion.walk_speed.rot = ball.angle / 2;    
+    }
+  }
+}

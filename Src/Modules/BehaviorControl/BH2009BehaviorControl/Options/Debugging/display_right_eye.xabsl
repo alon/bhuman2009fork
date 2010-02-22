@@ -1,0 +1,82 @@
+option display_right_eye
+{
+  common decision 
+  {
+    if(!locator.ground_contact && fall_down_state == upright)
+      goto picked_up;
+    else if(role.role == keeper)
+      goto keeper;
+    else if(role.role == defender)
+      goto defender;
+    else if(role.role == striker)
+      goto striker;
+    else if(role.role == supporter)
+      goto supporter;
+  }
+
+
+  initial state nothing 
+  {
+    action 
+    {
+      led_request.faceRightBlue  = led_request.state.off;
+      led_request.faceRightGreen = led_request.state.off;
+      led_request.faceRightRed   = led_request.state.off;
+    }
+  }
+  
+  
+  state picked_up
+  {
+    action
+    {
+      led_request.faceRightBlue  = led_request.state.on;
+      led_request.faceRightGreen = led_request.state.off;
+      led_request.faceRightRed   = led_request.state.off;
+    }
+  }
+  
+  
+  state keeper
+  {
+    action
+    {
+      led_request.faceRightBlue  = ball.time_when_own_y_axis_reached < 1000000 ? led_request.state.blinking : led_request.state.on;
+      led_request.faceRightGreen = led_request.state.off;
+      led_request.faceRightRed   = led_request.state.off;
+    }
+  }
+  
+  
+  state defender
+  {
+    action 
+    {
+      led_request.faceRightBlue  = led_request.state.on;
+      led_request.faceRightGreen = led_request.state.on;
+      led_request.faceRightRed   = led_request.state.on;
+    }
+  }
+  
+  
+  state supporter 
+  {
+    action 
+    {
+      led_request.faceRightBlue  = led_request.state.off;
+      led_request.faceRightGreen = team.is_attacking ? led_request.state.blinking : led_request.state.on;
+      led_request.faceRightRed   = led_request.state.off;
+    }
+  }
+
+
+  state striker 
+  {
+    action 
+    {
+      led_request.faceRightBlue  = led_request.state.off;
+      led_request.faceRightGreen = led_request.state.off;
+      led_request.faceRightRed   = led_request.state.on;
+    }
+  }
+}

@@ -1,0 +1,8 @@
+
+Hallo,
+
+diese Dateien stammen aus dem CVS Projekt "dotml-1.1". 
+
+Bitte hier nichts ändern, sondern am besten in Absprache mit mir in eben diesem Projekt.
+
+Martin

@@ -1,0 +1,8 @@
+echo motion
+set representation:HeadJointRequest unchanged
+
+js 2 160 0.01 # x axis
+js 4 0.5 0.01 # rotation axis
+js 1 80 0.01 # y axis
+
+jc motion set representation:MotionRequest { motion = walk; specialActionRequest = { specialAction = playDead; mirror = false; }; walkRequest = { speed = { rotation = $4; translation = { x = $2; y = $1; }; }; target = { rotation = 0; translation = { x = 0; y = 0; }; }; pedantic = false; }; kickRequest = { kickType = none; mirror = false; dynamical = false; dynPoints[0] = { }; odometryOffset[0] = { }; }; } 

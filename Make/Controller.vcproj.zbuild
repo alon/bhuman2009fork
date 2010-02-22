@@ -1,0 +1,23 @@
+<?lua
+
+template = "../Src/SimulatorQt/Make/Templates/updateQtVcProjFile"
+--template = "../Src/SimulatorQt/Make/Templates/updateVcProjFile"
+platform = "windows"
+baseFile = "Controller.vcproj"
+files = matchrecursive("..\\Src\\ControllerQt\\*.cpp", "..\\Src\\ControllerQt\\*.h")
+root = "..\\Src\\ControllerQt"
+
+qtMoc = "..\\Src\\SimulatorQt\\Util\\qt\\Win32\\bin\\moc.exe"
+qtRcc = "..\\Src\\SimulatorQt\\Util\\qt\\Win32\\bin\\rcc.exe"
+--qtGenDir = "$(IntDir)"
+qtGenDir = "..\\Build\\Controller\\Win32\\$(ConfigurationName)"
+
+newFiles = {}
+for i, file in pairs(files) do
+  if path.getbasename(path.getdirname(file)) ~= "Linux" then
+    table.insert(newFiles, file)
+  end
+end
+files = newFiles
+
+?>

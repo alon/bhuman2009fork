@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="9,00"
+	Name="BehaviorDoc"
+	ProjectGUID="{A675FCCD-E8F2-49C1-BCF7-7B49B9228907}"
+	RootNamespace="BehaviorDoc"
+	Keyword="MakeFileProj"
+	TargetFrameworkVersion="196613"
+	>
+	<Platforms>
+		<Platform
+			Name="Win32"
+		/>
+	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
+	<Configurations>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="../../Build/BehaviorDoc/Win32/$(ConfigurationName)"
+			IntermediateDirectory="../../Build/BehaviorDoc/Win32/$(ConfigurationName)"
+			ConfigurationType="0"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="bash -c &quot;../../Src/SimulatorQt/Util/zbuildgen/Win32/bin/zbuildgen.exe BehaviorDoc.make.zbuild ../Behavior &amp;&amp; make -f BehaviorDoc.make Release&quot;"
+				ReBuildCommandLine="bash -c &quot;../../Src/SimulatorQt/Util/zbuildgen/Win32/bin/zbuildgen.exe BehaviorDoc.make.zbuild ../Behavior &amp;&amp; make -f BehaviorDoc.make clean &amp;&amp; make -f BehaviorDoc.make Release&quot;"
+				CleanCommandLine="bash -c &quot;../../Src/SimulatorQt/Util/zbuildgen/Win32/bin/zbuildgen.exe BehaviorDoc.make.zbuild ../Behavior &amp;&amp; make -f BehaviorDoc.make clean&quot;"
+				Output=""
+				PreprocessorDefinitions=""
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>

@@ -1,0 +1,45 @@
+<?lua if linux then ?>
+
+ifeq ($(ComSpec)$(COMSPEC),)
+PATH := ../Util/zbuildgen/Linux/bin:$(PATH)
+else
+PATH := ../Util/zbuildgen/Win32/bin:$(PATH)
+endif
+
+<?lua
+
+template = "Templates/SolutionMakefile"
+projects = { 
+  {
+    name = "SimRobotCore",
+  },
+  {
+    name = "SimRobotGUI",
+    dependencies = { "SimRobotCore" },
+  },
+  {
+    name = "SimRobotDemo",
+    dependencies = { "SimRobotGUI" },
+  },
+}
+configs = { 
+  {
+    name = "Debug",
+    projectConfigs = {
+      { "SimRobotCore", "Debug" },
+      { "SimRobotGUI", "Debug" },
+      { "SimRobotDemo", "Debug" },
+    },
+  },
+  {
+    name = "Release",
+    projectConfigs = {
+      { "SimRobotCore", "Release" },
+      { "SimRobotGUI", "Release" },
+      { "SimRobotDemo", "Release" },
+    },
+  },
+}
+
+?>
+<?lua end ?>

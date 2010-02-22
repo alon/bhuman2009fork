@@ -1,0 +1,43 @@
+option display_kickoff
+{
+  common decision
+  {
+    if (game.kickoff_team == game.team_color) 
+      goto own;
+    else if (game.kickoff_team != game.team_color) 
+      goto opponent;
+  }
+  
+  
+  initial state nothing
+  {
+    action
+    {
+      led_request.footRightRed   = led_request.state.off;
+      led_request.footRightGreen = led_request.state.off;
+      led_request.footRightBlue  = led_request.state.off;
+    }
+  }
+  
+  
+  state own
+  {
+    action
+    {
+      led_request.footRightRed   = led_request.state.on;
+      led_request.footRightGreen = led_request.state.on;
+      led_request.footRightBlue  = led_request.state.on;
+    }
+  }
+  
+  
+  state opponent
+  {
+    action
+    {
+      led_request.footRightRed   = led_request.state.off;
+      led_request.footRightGreen = led_request.state.off;
+      led_request.footRightBlue  = led_request.state.off;
+    }
+  }
+}

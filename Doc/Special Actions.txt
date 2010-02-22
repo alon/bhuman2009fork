@@ -1,0 +1,88 @@
+Syntax of Motion Files (*.mof)
+------------------------------
+
+A motion file starts with a line that defines the name of the special action. By convention, it is identical to the name of the motion file, e.g.:
+
+  motion_id = swing
+
+After that, any sequence of the following lines is possible:
+
+1. Empty lines are simply ignored.
+
+2. Comments start with a " by convention. They are also ignored.
+
+3. A label is defined by the keyword "label" followed by an identifier, e.g. "label loop". Please note that the special "label start" must be defined before the first set of joint angles or transition.
+
+4. A transition is defined by the keyword "transition", followed by the condition, the name of the target motion file, and a label in that target motion file. For instance
+
+  transition swing swing loop
+
+means "when the execution of this motion reaches this line, and the special action currently selected is "swing", then jump to the special action "swing" at the label "loop".
+
+There is a special condition "allMotions" which means "whatever motion is currently selected". So
+
+  transition allMotions swing loop
+
+is an unconditional jump to motion file "swing" at label "loop".
+
+There is also a special motion file "extern.mof" that represents the possibility of switching to another kind of motion, e.g. walking. "extern" is also the entry point from other kinds of motion, e.g. when it is switched from "walk" to "specialAction", the motion net is entered in motion file "extern" at label "start". Therefore "extern.mof" contains transitions to all other motion files, and all other motion files contain a transition back to "extern", typically as their last line:
+
+  transition allMotions extern start
+
+5. A set of joint angles consists of 24 entries, the first 22 of which define the angles, the 23rd entry defines whether to interpolate or not ("0" or "1"), and the final entry defines how many ms the execution of this motion should take. Each angle is either a number in the range [-90 ... 90], defining the angle in degrees, the character "-", meaning "switch off this joint", or the character "*", meaning "do not overwrite the current angle". If interpolation is activated, intermediate joint angles are calculated and sent to the robot to slowly reach the target angles. Without interpolation,the target angles are sent immediately and kept for the entier duration of this motion.
+
+6. A set of joint hardness values consists of the keyword "hardness" followed by 23 values, the first 22 are the hardness values for the joints (or * for the default value), the last value is the interpolation time in ms(if 0 no interpolation). Each hardness value is a number in the range [0...100]. If the interpolation time is not set to 0 and another hardness command is issued before the interpolation time is over (if the joint angle requests between two hardness statements last not as long as the first hardness request needs to interpolate) the desired hardness will never be reached, but instead the next hardness request will start to interpolate from the actual (interpolated) hardness value. Anyway it would be good to always reset (with interpolation) all the hardness values to the default value at the end of the special action, otherwise the hardness might get reset hard (without interpolation) when the special action is over and another motion gets executed.
+
+Example: stand.mof
+
+motion_id = stand
+
+label start
+
+"HP HT AL0 AL1 AL2 AL3 AR0 AR1 AR2 AR3 LL0 LL1 LL2 LL3 LL4 LL5 LR0 LR1 LR2 LR3 LR4 LR5 Int Dur
+hardness * * * * * * * * * * * * * * * * * * * * * 100 50
+*  *  0   -50 -2 -40  0   -50 -2  -40 -6  -1  -43 92  -48 0   -6  -1  -43 92  -48 -1  1   100
+
+transition stand stand start
+transition allMotions extern start
+
+
+Adding a New Special Action
+---------------------------
+
+1. Add the new special action to SpecialActionRequest::SpecialAction (in \Src\Representations\MotionControl\SpecialActionRequest.h)
+
+2. Add it to SpecialActionRequest::getSpecialActionName()
+
+3. Add it to Src/Modules/SpecialActions/MotionNetSpecialActions/mof/extern.mof
+
+4. Create a new mof in Src/Modules/MotionControl/mof
+
+5. Add an entry to the Config/odometry.cfg
+
+6. Rebuild the code.
+
+
+Developing a New Special Action
+-------------------------------
+
+During the development of a new special action it might help to add the following lines to the motion file immediatly before the final "transition allMotions extern start":
+
+label wait
+  -    -   -   -    -   -   -    -   -   -   -   -    -   -   -   -   -    0 100
+transition <mof> <mof> wait
+
+<mof> has to be replaced by the name of the motion. The lines ensure that the motion is only executed once. The console command "mof" will recompile the motion net and send it to the robot. It will also restart the current motion. So a typical development cycle is:
+
+  Execute console command "set representation:MotionRequest { motion = specialAction; specialActionRequest = { specialAction = <mof>; mirror = false; }; walkRequest = { speed = { rotation = 0.0; translation = { x = 0; y = 0; }; }; }; kickRequest = { kickType = forward; }; }"
+  |
+ _
+| v
+| Edit newMof.mof
+| |
+| Save newMof.mof
+| |
+| Execute console command "mof"
+|_|
+
+

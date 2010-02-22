@@ -1,0 +1,33 @@
+namespace test("Test") {
+	 
+	enum output durst {
+		bier,
+		vodka
+	}
+	
+	enum output hunger {
+		hamburger,
+		cheeseburger
+	}
+	
+	
+
+}
+
+
+/* output symbol type domain mismatch */
+option alpha
+{
+	initial state beta {
+		
+		subsequent-option {
+			alpha();
+		}
+	
+	    hunger = bier;
+
+		decision-tree {
+			transition-to-state(beta);
+		}
+	}
+}

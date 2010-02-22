@@ -1,0 +1,17 @@
+What is XABSL?
+
+The Extensible Agent Behavior Specification Language XABSL is an XML based behavior description language. XABSL can be used to describe behaviors of autonomous agents. The runtime system XabslEngine executes the behaviors on a target platform.
+
+Specific behavior description languages prove to be suitable replacements to native programming language like C++ when the number and complexity of behavior patterns of an agent increases. XABSL simplifies the process of specifying complex behaviors and supports the design of both very reactive and long term oriented behaviors. XABSL uses hierarchies of behavior modules called options that contain state machines for decision making.
+
+XABSL should be applied whenever there is a behavior control problem that is too complex to be written in C++. XABSL can be employed on any robotic platform for that a C++ compiler exists. The XML Schemas, the tools and the runtime system XabslEngine (confer below) can be downloaded for free. Read the licence for more details.
+
+Publications
+
+M. Lötzsch, J. Bach, H.-D. Burkhard, and M. Jüngel. Designing Agent Behavior with the Extensible Agent Behavior Specification Language XABSL. In 7th International Workshop on RoboCup 2003 (Robot World Cup Soccer Games and Conferences), Lecture Notes in Artificial Intelligence, Padova, Italy, 2004. Springer. to appear.
+
+T. Röfer, I. Dahm, U. Düffert, J. Hoffmann, M. Jüngel, M. Kallnik, M. Lötzsch, M. Risler, M. Stelzer, and J. Ziegler. German-Team 2003. In 7th International Workshop on RoboCup 2003 (Robot World Cup Soccer Games and Conferences), Lecture Notes in Artificial Intelligence, Padova, Italy, 2004. Springer (to appear). more detailed in http:// www.robocup.de/germanteam/GT2003.pdf.
+
+Application
+
+XABSL is used by the GermanTeam for RoboCup competitions in the Sony Four Legged League. In this league, teams of 4 of Sony's Aibos compete against each other on a 5m x 3m soccer field. The robots act completely autonomously. They have a camera in their head with that they can recognize the color coded ball, other players, goals, lines and landmarks. It has 4 Legs with 3 degress of freedom (DOF) each. The head has 3 DOF. A bandwith-limited WireLess LAN communication allows cooperation and team strategies

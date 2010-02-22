@@ -1,0 +1,32 @@
+# replay a log file.
+# you have to adjust the name of the log file.
+sl LOG logfile
+
+# select modules for log file replay
+mr Image CognitionLogDataProvider
+mr CameraInfo CognitionLogDataProvider
+mr FrameInfo CognitionLogDataProvider
+mr JointData MotionLogDataProvider
+mr SensorData MotionLogDataProvider
+mr KeyStates MotionLogDataProvider
+mr FrameInfo MotionLogDataProvider
+mr OdometryData MotionLogDataProvider
+mr CameraMatrix CognitionLogDataProvider
+mr ImageCoordinateSystem CognitionLogDataProvider
+
+# simulation time on, otherwise log data may be skipped
+st on
+msg off
+
+# all views are defined in another script
+call Views
+
+# navigate in log file using shortcuts
+jc 1 log pause # Shift+Crtl+A
+jc 17 log goto 1 # Shift+Crtl+Q
+jc 19 log start # Shift+Crtl+S
+jc 23 log repeat # Shift+Crtl+W
+jc 24 log forward # Shift+Crtl+X
+jc 25 log backward # Shift+Crtl+Y
+
+set representation:GameInfo { state = 3; firstHalf = 0; kickOffTeam = 0; secsRemaining = 0; dropInTeam = 0; dropInTime = 0; secondaryState = 0; }

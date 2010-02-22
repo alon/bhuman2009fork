@@ -1,0 +1,31 @@
+<?lua
+
+template = "Templates/updateVcProjFile"
+platform = "windows"
+baseFile = "SimRobotDemo.vcproj"
+files = matchrecursive("..\\SimRobotDemo\\*.cpp", "..\\SimRobotDemo\\*.h")
+root = "..\\SimRobotDemo"
+copyfiles = {
+  "..\\Util\\libxml2\\Win32\\bin\\libxml2.dll",
+  "..\\Util\\ode\\Win32\\dll\\ode_single.dll",
+  "..\\Util\\ode\\Win32\\dll\\ode_singled.dll",
+  "..\\Util\\qt\\Win32\\bin\\QtCore4.dll",
+  "..\\Util\\qt\\Win32\\bin\\QtGui4.dll",
+  "..\\Util\\qt\\Win32\\bin\\QtOpenGL4.dll",
+  "..\\Util\\glew\\Win32\\bin\\glew32.dll",
+  "..\\SimRobotCore\\Simulation\\RoSi.xsd",
+}
+
+customBuildTools = {}
+for i, file in pairs(copyfiles) do
+  local tool = {
+    filter = ".copy",
+    file = file,
+    command = "copy " .. file .. " \"$(OutDir)\"",
+    description = file .. " (copy)",
+    output = "$(OutDir)\\" .. path.getbasename(file),
+  }
+  table.insert(customBuildTools, tool)
+end
+
+?>

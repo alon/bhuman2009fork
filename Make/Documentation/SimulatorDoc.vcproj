@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="9,00"
+	Name="SimulatorDoc"
+	ProjectGUID="{F6ADD275-1D57-464B-A31A-2F838CAAC4C7}"
+	RootNamespace="SimulatorDoc"
+	Keyword="MakeFileProj"
+	TargetFrameworkVersion="196613"
+	>
+	<Platforms>
+		<Platform
+			Name="Win32"
+		/>
+	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
+	<Configurations>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="../../Build/SimulatorDoc/Win32/$(ConfigurationName)"
+			IntermediateDirectory="../../Build/SimulatorDoc/Win32/$(ConfigurationName)"
+			ConfigurationType="0"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="bash -c &quot;make -f SimulatorDoc.make Release&quot;"
+				ReBuildCommandLine="bash -c &quot;make -f SimulatorDoc.make clean &amp;&amp; make -f SimulatorDoc.make Release&quot;"
+				CleanCommandLine="bash -c &quot;make -f SimulatorDoc.make clean&quot;"
+				Output="..\..\Doc\Reference\Simulator\index.html"
+				PreprocessorDefinitions=""
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<File
+			RelativePath="Simulator_Documentation.cfg"
+			>
+		</File>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>

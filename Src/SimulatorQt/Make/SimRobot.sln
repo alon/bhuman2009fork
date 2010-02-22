@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimRobotCore", "SimRobotCore.vcproj", "{8B2C45A3-097E-3704-BF8F-9EB74A767AF5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimRobotDemo", "SimRobotDemo.vcproj", "{1398F6B5-CD94-3372-BF57-9A8B388CDB52}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5C6F609F-6829-3883-A454-DE4117AFCA8C} = {5C6F609F-6829-3883-A454-DE4117AFCA8C}
+		{8B2C45A3-097E-3704-BF8F-9EB74A767AF5} = {8B2C45A3-097E-3704-BF8F-9EB74A767AF5}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimRobotGUI", "SimRobotGUI.vcproj", "{5C6F609F-6829-3883-A454-DE4117AFCA8C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VcProjGeneration (zbuildgen)", "zbuildgen.vcproj", "{2679ACC3-5EE4-4457-8574-045E1ECF3EEC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8B2C45A3-097E-3704-BF8F-9EB74A767AF5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8B2C45A3-097E-3704-BF8F-9EB74A767AF5}.Debug|Win32.Build.0 = Debug|Win32
+		{8B2C45A3-097E-3704-BF8F-9EB74A767AF5}.Release|Win32.ActiveCfg = Release|Win32
+		{8B2C45A3-097E-3704-BF8F-9EB74A767AF5}.Release|Win32.Build.0 = Release|Win32
+		{1398F6B5-CD94-3372-BF57-9A8B388CDB52}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1398F6B5-CD94-3372-BF57-9A8B388CDB52}.Debug|Win32.Build.0 = Debug|Win32
+		{1398F6B5-CD94-3372-BF57-9A8B388CDB52}.Release|Win32.ActiveCfg = Release|Win32
+		{1398F6B5-CD94-3372-BF57-9A8B388CDB52}.Release|Win32.Build.0 = Release|Win32
+		{5C6F609F-6829-3883-A454-DE4117AFCA8C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5C6F609F-6829-3883-A454-DE4117AFCA8C}.Debug|Win32.Build.0 = Debug|Win32
+		{5C6F609F-6829-3883-A454-DE4117AFCA8C}.Release|Win32.ActiveCfg = Release|Win32
+		{5C6F609F-6829-3883-A454-DE4117AFCA8C}.Release|Win32.Build.0 = Release|Win32
+		{2679ACC3-5EE4-4457-8574-045E1ECF3EEC}.Debug|Win32.ActiveCfg = Release|Win32
+		{2679ACC3-5EE4-4457-8574-045E1ECF3EEC}.Debug|Win32.Build.0 = Release|Win32
+		{2679ACC3-5EE4-4457-8574-045E1ECF3EEC}.Release|Win32.ActiveCfg = Release|Win32
+		{2679ACC3-5EE4-4457-8574-045E1ECF3EEC}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

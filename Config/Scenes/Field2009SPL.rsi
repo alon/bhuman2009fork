@@ -1,0 +1,917 @@
+<RoSiIncludeFile>
+  <AppearanceDefinition name="field-green">
+<!--    <Color r="0.247" g="0.322" b="0.192" a="1.0"/>  -->
+    <Color r="0.12" g="0.56" b="0.27" a="1.0"/> 
+    <DiffuseTexture file="Textures/shadow.tga" mode="GL_MODULATE"/>
+    <TextureGenModeS mode="OBJECT_LINEAR" s="0.0" t=".1" r="0.0" q="0.0"/>
+    <TextureGenModeT mode="OBJECT_LINEAR" s=".1" t="0.0" r="0.0" q="0.0"/>
+  </AppearanceDefinition>
+  
+  <AppearanceDefinition name="field-net">
+    <Color r="1.0" g="1.0" b="1.0" a="1.0"/>
+    <DiffuseTexture file="Textures/net.tga" mode="GL_REPLACE"/>
+  </AppearanceDefinition>
+
+  <AppearanceDefinition name="field-white">
+    <Color r="1.0" g="1.0" b="1.0" a="1.0"/>
+    <DiffuseTexture file="Textures/shadow.tga" mode="GL_MODULATE"/>
+  </AppearanceDefinition>
+  
+  <AppearanceDefinition name="field-blue">
+    <Color r="0.302" g="0.365" b="0.604" a="1.0"/>
+  </AppearanceDefinition>
+  
+  <AppearanceDefinition name="field-yellow">
+    <Color r="1.0" g="1.0" b="0.0" a="1.0"/>
+  </AppearanceDefinition>
+  
+  <AppearanceDefinition name="field-grey">
+<!--    <Color r="0.38" g="0.38" b="0.38" a="1.0"/> -->
+    <Color r="0.22" g="0.22" b="0.22" a="1.0"/>
+  </AppearanceDefinition>
+
+  <AppearanceDefinition name="crowd">
+    <Color r="1.0" g="1.0" b="1.0" a="1.0"/>
+    <DiffuseTexture file="Textures/crowd.tga" mode="GL_REPLACE"/>
+  </AppearanceDefinition>
+
+  <!-- The field -->
+  
+ 
+  <VertexList name="field coords">
+    <Vertex name="goalOwnOuterRightTriangleFront" x="-0.05" y="-0.703" z="0"/>
+    <Vertex name="goalOwnOuterRightTriangleBack" x="-0.4" y="-0.703" z="0"/>
+    <Vertex name="goalOwnOuterRightTriangleTop" x="-0.05" y="-0.703" z="0.4"/>
+    <Vertex name="goalOwnOuterLeftTriangleFront" x="-0.05" y="0.703" z="0"/>
+    <Vertex name="goalOwnOuterLeftTriangleBack" x="-0.4" y="0.703" z="0"/>
+    <Vertex name="goalOwnOuterLeftTriangleTop" x="-0.05" y="0.703" z="0.4"/>
+
+    <Vertex name="goalOwnInnerRightTriangleFront" x="-0.05" y="-0.697" z="0"/>
+    <Vertex name="goalOwnInnerRightTriangleBack" x="-0.4" y="-0.697" z="0"/>
+    <Vertex name="goalOwnInnerRightTriangleTop" x="-0.05" y="-0.697" z="0.4"/>
+    <Vertex name="goalOwnInnerLeftTriangleFront" x="-0.05" y="0.697" z="0"/>
+    <Vertex name="goalOwnInnerLeftTriangleBack" x="-0.4" y="0.697" z="0"/>
+    <Vertex name="goalOwnInnerLeftTriangleTop" x="-0.05" y="0.697" z="0.4"/>    
+    <!-- new defined vertexes -->
+    <Vertex name="greenBehindGoalFL"  x="3.7" y="2.7"  z="0"/>
+    <Vertex name="greenBehindGoalFR"  x="3.7" y="-2.7" z="0"/>
+    <Vertex name="greenBehindGoalBL"  x="3.025" y="2.7"  z="0"/>
+    <Vertex name="greenBehindGoalBR"  x="3.025" y="-2.7" z="0"/>
+    
+    <Vertex name="greenLeftOutFL"  x="3.025"  y="-2.7"  z="0"/>
+    <Vertex name="greenLeftOutFR"  x="3.025"  y="-2.025"  z="0"/>
+    <Vertex name="greenLeftOutBL"  x="-3.025" y="-2.7"  z="0"/>
+    <Vertex name="greenLeftOutBR"  x="-3.025" y="-2.025"  z="0"/>
+    
+    <Vertex name="keeperGreenFL" x="2.975" y="-1.475" z="0"/>
+    <Vertex name="keeperGreenFR" x="2.975" y="1.475" z="0"/>
+    <Vertex name="keeperGreenBL" x="2.425"  y="-1.475" z="0"/>
+    <Vertex name="keeperGreenBR" x="2.425"  y="1.475" z="0"/>
+
+    <Vertex name="leftFrontFieldFL" x="2.975" y="1.975" z="0"/>
+    <Vertex name="leftFrontFieldFR" x="2.975" y="1.525" z="0"/>
+    <Vertex name="leftFrontFieldBL" x="0.025" y="1.975" z="0"/>
+    <Vertex name="leftFrontFieldBR" x="0.025" y="1.525" z="0"/>
+
+    <Vertex name="rightFrontFieldFL" x="2.975" y="-1.975" z="0"/>
+    <Vertex name="rightFrontFieldFR" x="2.975" y="-1.525" z="0"/>
+    <Vertex name="rightFrontFieldBL" x="0.025" y="-1.975" z="0"/>
+    <Vertex name="rightFrontFieldBR" x="0.025" y="-1.525" z="0"/>
+
+    <Vertex name="midField1FL" x="2.375" y="1.525" z="0"/>
+    <Vertex name="midField1FR" x="2.375" y="-1.525" z="0"/>
+    <Vertex name="midField1BL" x="1.25" y="1.525" z="0"/>
+    <Vertex name="midField1BR" x="1.25" y="-1.525" z="0"/> 
+
+    <Vertex name="midField2FL" x="1.25" y="1.525" z="0"/>
+    <Vertex name="midField2FR" x="1.25" y="0.625" z="0"/>
+    <Vertex name="midField2BL" x="0.025" y="1.525" z="0"/>
+    <Vertex name="midField2BR" x="0.025" y="0.625" z="0"/>
+
+    <Vertex name="midField3FL" x="1.25" y="-1.525" z="0"/>
+    <Vertex name="midField3FR" x="1.25" y="-0.625" z="0"/>
+    <Vertex name="midField3BL" x="0.025" y="-1.525" z="0"/>
+    <Vertex name="midField3BR" x="0.025" y="-0.625" z="0"/>
+
+    <Vertex name="midField6FL" x="1.25" y="0.05" z="0"/>
+    <Vertex name="midField6FR" x="1.25" y="0.625" z="0"/>
+    <Vertex name="midField6BL" x="1.15" y="0.05" z="0"/>
+    <Vertex name="midField6BR" x="1.15" y="0.625" z="0"/>
+
+    <Vertex name="midField7FL" x="1.25" y="-0.05" z="0"/>
+    <Vertex name="midField7FR" x="1.25" y="-0.625" z="0"/>
+    <Vertex name="midField7BL" x="1.15" y="-0.05" z="0"/>
+    <Vertex name="midField7BR" x="1.15" y="-0.625" z="0"/>
+  
+    <Vertex name="midField8FL" x="1.15" y="0.625" z="0"/>
+    <Vertex name="midField8FR" x="1.15" y="-0.625" z="0"/>
+    <Vertex name="midField8BL" x="0.625" y="0.625" z="0"/>
+    <Vertex name="midField8BR" x="0.625" y="-0.625" z="0"/>
+
+  </VertexList>
+
+  <VertexListWithTexCoords name="net coords">
+    <Vertex name="netOwnRightBottom" x="-0.4" y="-0.703" z="0" s="140" t="0"/>
+    <Vertex name="netOwnRightTop" x="-0.05" y="-0.703" z="0.8" s="140" t="80"/>
+    <Vertex name="netOwnLeftBottom" x="-0.4" y="0.703" z="0" s="0" t="0"/>
+    <Vertex name="netOwnLeftTop" x="-0.05" y="0.703" z="0.8" s="0" t="8"/>
+    <Vertex name="netOwnRightFront" x="-0.05" y="-0.703" z="0.4" s="119" t="35"/>
+    <Vertex name="netOwnLeftFront" x="-0.05" y="0.703" z="0.4" s="21" t="35"/>
+  </VertexListWithTexCoords>
+  <VertexListWithTexCoords name="net coords">
+    <Vertex name="netOwnRightBottom" x="-0.4" y="-0.703" z="0" s="28" t="0"/>
+    <Vertex name="netOwnRightTop" x="-0.05" y="-0.703" z="0.8" s="28" t="16"/>
+    <Vertex name="netOwnLeftBottom" x="-0.4" y="0.703" z="0" s="0" t="0"/>
+    <Vertex name="netOwnLeftTop" x="-0.05" y="0.703" z="0.8" s="0" t="16"/>
+    <Vertex name="netOwnRightFront" x="-0.05" y="-0.703" z="0.4" s="23.8" t="7"/>
+    <Vertex name="netOwnLeftFront" x="-0.05" y="0.703" z="0.4" s="4.2" t="7"/>
+  </VertexListWithTexCoords>
+
+  <VertexList name="carpet coords">
+    <Vertex name="greyCarpetLeftXCorner"   x= "50"  y="50"  z="0"/>
+    <Vertex name="greyCarpetRightXCorner"  x= "50"  y="-50" z="0"/>
+    <Vertex name="greyCarpetLeftYCorner"   x="-50" y="50"  z="0"/>
+    <Vertex name="greyCarpetRightYCorner"  x="-50" y="-50" z="0"/>
+
+    <Vertex name="whiteLineAroundFieldLongLeftXCorner"   x= "3.725" y= ".0125" z="0"/>
+    <Vertex name="whiteLineAroundFieldLongRightXCorner"  x= "3.725" y="-.0125" z="0"/>
+    <Vertex name="whiteLineAroundFieldLongLeftYCorner"   x="-3.725" y= ".0125" z="0"/>
+    <Vertex name="whiteLineAroundFieldLongRightYCorner"  x="-3.725" y="-.0125" z="0"/>
+
+    <Vertex name="whiteLineAroundFieldShortLeftXCorner"   x= ".0125" y= "2.7" z="0"/>
+    <Vertex name="whiteLineAroundFieldShortRightXCorner"  x= ".0125" y="-2.7" z="0"/>
+    <Vertex name="whiteLineAroundFieldShortLeftYCorner"   x="-.0125" y= "2.7" z="0"/>
+    <Vertex name="whiteLineAroundFieldShortRightYCorner"  x="-.0125" y="-2.7" z="0"/>
+  </VertexList>
+
+  <VertexList name="middle line coords">
+    <Vertex name="middleLineCenterFL" x="0.025" y="1.975" z="0"/>
+    <Vertex name="middleLineCenterFR" x="0.025" y="0.05" z="0"/>
+    <Vertex name="middleLineCenterBL" x="-0.025" y="1.975" z="0"/>
+    <Vertex name="middleLineCenterBR" x="-0.025" y="0.05" z="0"/>
+  </VertexList>
+
+  <VertexList name="cross coords">
+    <Vertex name="crossCenterLineFL" x="0.05" y="0.025" z="0"/>
+    <Vertex name="crossCenterLineFR" x="0.05" y="-0.025" z="0"/>
+    <Vertex name="crossCenterLineBL" x="-0.05" y="0.025" z="0"/>
+    <Vertex name="crossCenterLineBR" x="-0.05" y="-0.025" z="0"/>
+
+    <Vertex name="leftCrossFL" x="0.025" y="0.05" z="0"/>
+    <Vertex name="leftCrossFR" x="0.025" y="0.025" z="0"/>
+    <Vertex name="leftCrossBL" x="-0.025" y="0.05" z="0"/>
+    <Vertex name="leftCrossBR" x="-0.025" y="0.025" z="0"/>
+
+    <Vertex name="rightCrossFL" x="0.025" y="-0.05" z="0"/>
+    <Vertex name="rightCrossFR" x="0.025" y="-0.025" z="0"/>
+    <Vertex name="rightCrossBL" x="-0.025" y="-0.05" z="0"/>
+    <Vertex name="rightCrossBR" x="-0.025" y="-0.025" z="0"/>
+   
+    <Vertex name="greenCrossUpLeftFL" x="0.05" y="0.05" z="0"/>
+    <Vertex name="greenCrossUpLeftFR" x="0.05" y="0.025" z="0"/>
+    <Vertex name="greenCrossUpLeftBL" x="0.025" y="0.05" z="0"/>
+    <Vertex name="greenCrossUpLeftBR" x="0.025" y="0.025" z="0"/>
+
+    <Vertex name="greenCrossUpRightFL" x="0.05" y="-0.05" z="0"/>
+    <Vertex name="greenCrossUpRightFR" x="0.05" y="-0.025" z="0"/>
+    <Vertex name="greenCrossUpRightBL" x="0.025" y="-0.05" z="0"/>
+    <Vertex name="greenCrossUpRightBR" x="0.025" y="-0.025" z="0"/>
+
+    <Vertex name="greenCrossDownLeftFL" x="-0.05" y="0.05" z="0"/>
+    <Vertex name="greenCrossDownLeftFR" x="-0.05" y="0.025" z="0"/>
+    <Vertex name="greenCrossDownLeftBL" x="-0.025" y="0.05" z="0"/>
+    <Vertex name="greenCrossDownLeftBR" x="-0.025" y="0.025" z="0"/>
+
+    <Vertex name="greenCrossDownRightFL" x="-0.05" y="-0.05" z="0"/>
+    <Vertex name="greenCrossDownRightFR" x="-0.05" y="-0.025" z="0"/>
+    <Vertex name="greenCrossDownRightBL" x="-0.025" y="-0.05" z="0"/>
+    <Vertex name="greenCrossDownRightBR" x="-0.025" y="-0.025" z="0"/>
+
+
+
+
+  </VertexList>
+
+  <VertexList name="field line coords">
+    <Vertex name="goalLineFL" x="3.025" y="2.025" z="0"/>
+    <Vertex name="goalLineFR" x="3.025" y="-2.025" z="0"/>
+    <Vertex name="goalLineBL" x="2.975" y="2.025" z="0"/>
+    <Vertex name="goalLineBR" x="2.975" y="-2.025" z="0"/>
+
+    <Vertex name="outerLineLeftFL" x="2.975" y="2.025" z="0"/>
+    <Vertex name="outerLineLeftFR" x="2.975" y="1.975" z="0"/>
+    <Vertex name="outerLineLeftBL" x="-2.975" y="2.025" z="0"/>
+    <Vertex name="outerLineLeftBR" x="-2.975" y="1.975" z="0"/>
+
+    <Vertex name="keeperLineLeftFL" x="2.975" y="1.525" z="0"/>
+    <Vertex name="keeperLineLeftFR" x="2.975" y="1.475" z="0"/>
+    <Vertex name="keeperLineLeftBL" x="2.425" y="1.525" z="0"/>
+    <Vertex name="keeperLineLeftBR" x="2.425" y="1.475" z="0"/>
+
+    <Vertex name="keeperLineRightFL" x="2.975" y="-1.525" z="0"/>
+    <Vertex name="keeperLineRightFR" x="2.975" y="-1.475" z="0"/>
+    <Vertex name="keeperLineRightBL" x="2.425" y="-1.525" z="0"/>
+    <Vertex name="keeperLineRightBR" x="2.425" y="-1.475" z="0"/>
+
+    <Vertex name="keeperLineFrontFL" x="2.425" y="1.525" z="0"/>
+    <Vertex name="keeperLineFrontFR" x="2.425" y="-1.525" z="0"/>
+    <Vertex name="keeperLineFrontBL" x="2.375" y="1.525" z="0"/>
+    <Vertex name="keeperLineFrontBR" x="2.375" y="-1.525" z="0"/> 
+
+  </VertexList>
+  
+  <VertexList name="quarter Circle">
+	<Vertex name="midFieldCenter1" x="0.0500" y="0.0500" z="0"/>
+	<Vertex name="midFieldCenter2" x="0.0500" y="-0.0500" z="0"/>
+	<Vertex name="midFieldCenter3" x="0.1122" y="-0.0500" z="0"/>
+	<Vertex name="midFieldCenter4" x="0.1122" y="0.0500" z="0"/>
+	<Vertex name="midFieldInnerCircleRight1a" x="0.0000" y="0.5750" z="0"/>
+	<Vertex name="midFieldOuterCircleRight1a" x="0.0000" y="0.6250" z="0"/>
+	<Vertex name="midFieldOuterCircleRight2a" x="0.0250" y="0.6245" z="0"/>
+	<Vertex name="midFieldOuterCircleRight2b" x="0.0250" y="0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleRight2a" x="0.0250" y="0.5745" z="0"/>
+	<Vertex name="midFieldInnerCircleRight2b" x="0.0250" y="0.0500" z="0"/>
+	<Vertex name="midFieldInnerCircleRight3a" x="0.0564" y="0.5722" z="0"/>
+	<Vertex name="midFieldInnerCircleRight3ba" x="0.0564" y="0.0500" z="0"/>
+	<Vertex name="midFieldInnerCircleRight3bb" x="0.0564" y="0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleRight3a" x="0.0613" y="0.6220" z="0"/>
+	<Vertex name="midFieldOuterCircleRight3b" x="0.0613" y="0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleRight4a" x="0.1122" y="0.5640" z="0"/>
+	<Vertex name="midFieldInnerCircleRight4b" x="0.1122" y="0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleRight4a" x="0.1219" y="0.6130" z="0"/>
+	<Vertex name="midFieldOuterCircleRight4b" x="0.1219" y="0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleRight5a" x="0.1669" y="0.5502" z="0"/>
+	<Vertex name="midFieldInnerCircleRight5b" x="0.1669" y="0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleRight5a" x="0.1814" y="0.5981" z="0"/>
+	<Vertex name="midFieldOuterCircleRight5b" x="0.1814" y="0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleRight6a" x="0.2200" y="0.5312" z="0"/>
+	<Vertex name="midFieldInnerCircleRight6b" x="0.2200" y="0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleRight6a" x="0.2392" y="0.5774" z="0"/>
+	<Vertex name="midFieldOuterCircleRight6b" x="0.2392" y="0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleRight7a" x="0.2711" y="0.5071" z="0"/>
+	<Vertex name="midFieldInnerCircleRight7b" x="0.2711" y="0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleRight7a" x="0.2946" y="0.5512" z="0"/>
+	<Vertex name="midFieldOuterCircleRight7b" x="0.2946" y="0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleRight8a" x="0.3195" y="0.4781" z="0"/>
+	<Vertex name="midFieldInnerCircleRight8b" x="0.3195" y="0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleRight8a" x="0.3472" y="0.5197" z="0"/>
+	<Vertex name="midFieldOuterCircleRight8b" x="0.3472" y="0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleRight9a" x="0.3648" y="0.4445" z="0"/>
+	<Vertex name="midFieldInnerCircleRight9b" x="0.3648" y="0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleRight9a" x="0.3965" y="0.4831" z="0"/>
+	<Vertex name="midFieldOuterCircleRight9b" x="0.3965" y="0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleRight10a" x="0.4066" y="0.4066" z="0"/>
+	<Vertex name="midFieldInnerCircleRight10b" x="0.4066" y="0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleRight10a" x="0.4419" y="0.4419" z="0"/>
+	<Vertex name="midFieldOuterCircleRight10b" x="0.4419" y="0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleRight11a" x="0.4445" y="0.3648" z="0"/>
+	<Vertex name="midFieldInnerCircleRight11b" x="0.4445" y="0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleRight11a" x="0.4831" y="0.3965" z="0"/>
+	<Vertex name="midFieldOuterCircleRight11b" x="0.4831" y="0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleRight12a" x="0.4781" y="0.3195" z="0"/>
+	<Vertex name="midFieldInnerCircleRight12b" x="0.4781" y="0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleRight12a" x="0.5197" y="0.3472" z="0"/>
+	<Vertex name="midFieldOuterCircleRight12b" x="0.5197" y="0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleRight13a" x="0.5071" y="0.2711" z="0"/>
+	<Vertex name="midFieldInnerCircleRight13b" x="0.5071" y="0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleRight13a" x="0.5512" y="0.2946" z="0"/>
+	<Vertex name="midFieldOuterCircleRight13b" x="0.5512" y="0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleRight14a" x="0.5312" y="0.2200" z="0"/>
+	<Vertex name="midFieldInnerCircleRight14b" x="0.5312" y="0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleRight14a" x="0.5774" y="0.2392" z="0"/>
+	<Vertex name="midFieldOuterCircleRight14b" x="0.5774" y="0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleRight15a" x="0.5502" y="0.1669" z="0"/>
+	<Vertex name="midFieldInnerCircleRight15b" x="0.5502" y="0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleRight15a" x="0.5981" y="0.1814" z="0"/>
+	<Vertex name="midFieldOuterCircleRight15b" x="0.5981" y="0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleRight16a" x="0.5640" y="0.1122" z="0"/>
+	<Vertex name="midFieldInnerCircleRight16b" x="0.5640" y="0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleRight16a" x="0.6130" y="0.1219" z="0"/>
+	<Vertex name="midFieldOuterCircleRight16b" x="0.6130" y="0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleRight17a" x="0.5722" y="0.0564" z="0"/>
+	<Vertex name="midFieldInnerCircleRight17b" x="0.5722" y="0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleRight17a" x="0.6220" y="0.0613" z="0"/>
+	<Vertex name="midFieldOuterCircleRight17b" x="0.6220" y="0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleRight18a" x="0.5750" y="0.0000" z="0"/>
+	<Vertex name="midFieldInnerCircleRight18b" x="0.5750" y="0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleRight18a" x="0.6250" y="0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleRight18b" x="0.6250" y="0.6250" z="0"/>
+		
+	<Vertex name="midFieldInnerCircleLeft1a" x="0.0000" y="-0.5750" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft1a" x="0.0000" y="-0.6250" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft2a" x="0.0250" y="-0.6245" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft2b" x="0.0250" y="-0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft2a" x="0.0250" y="-0.5745" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft2b" x="0.0250" y="-0.0500" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft3a" x="0.0564" y="-0.5722" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft3ba" x="0.0564" y="-0.0500" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft3bb" x="0.0564" y="-0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft3a" x="0.0613" y="-0.6220" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft3b" x="0.0613" y="-0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft4a" x="0.1122" y="-0.5640" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft4b" x="0.1122" y="-0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft4a" x="0.1219" y="-0.6130" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft4b" x="0.1219" y="-0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft5a" x="0.1669" y="-0.5502" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft5b" x="0.1669" y="-0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft5a" x="0.1814" y="-0.5981" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft5b" x="0.1814" y="-0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft6a" x="0.2200" y="-0.5312" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft6b" x="0.2200" y="-0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft6a" x="0.2392" y="-0.5774" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft6b" x="0.2392" y="-0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft7a" x="0.2711" y="-0.5071" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft7b" x="0.2711" y="-0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft7a" x="0.2946" y="-0.5512" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft7b" x="0.2946" y="-0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft8a" x="0.3195" y="-0.4781" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft8b" x="0.3195" y="-0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft8a" x="0.3472" y="-0.5197" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft8b" x="0.3472" y="-0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft9a" x="0.3648" y="-0.4445" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft9b" x="0.3648" y="-0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft9a" x="0.3965" y="-0.4831" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft9b" x="0.3965" y="-0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft10a" x="0.4066" y="-0.4066" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft10b" x="0.4066" y="-0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft10a" x="0.4419" y="-0.4419" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft10b" x="0.4419" y="-0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft11a" x="0.4445" y="-0.3648" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft11b" x="0.4445" y="-0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft11a" x="0.4831" y="-0.3965" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft11b" x="0.4831" y="-0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft12a" x="0.4781" y="-0.3195" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft12b" x="0.4781" y="-0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft12a" x="0.5197" y="-0.3472" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft12b" x="0.5197" y="-0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft13a" x="0.5071" y="-0.2711" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft13b" x="0.5071" y="-0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft13a" x="0.5512" y="-0.2946" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft13b" x="0.5512" y="-0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft14a" x="0.5312" y="-0.2200" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft14b" x="0.5312" y="-0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft14a" x="0.5774" y="-0.2392" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft14b" x="0.5774" y="-0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft15a" x="0.5502" y="-0.1669" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft15b" x="0.5502" y="-0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft15a" x="0.5981" y="-0.1814" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft15b" x="0.5981" y="-0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft16a" x="0.5640" y="-0.1122" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft16b" x="0.5640" y="-0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft16a" x="0.6130" y="-0.1219" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft16b" x="0.6130" y="-0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft17a" x="0.5722" y="-0.0564" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft17b" x="0.5722" y="-0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft17a" x="0.6220" y="-0.0613" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft17b" x="0.6220" y="-0.6250" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft18a" x="0.5750" y="-0.0000" z="0"/>
+	<Vertex name="midFieldInnerCircleLeft18b" x="0.5750" y="-0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft18a" x="0.6250" y="-0.0000" z="0"/>
+	<Vertex name="midFieldOuterCircleLeft18b" x="0.6250" y="-0.6250" z="0"/>
+    
+    <Vertex name="midFieldInnerCircleCrossFL" x="0.05" y="0.561" z="0"/>
+    <Vertex name="midFieldInnerCircleCrossFR" x="0.05" y="0.05" z="0"/>
+    <Vertex name="midFieldInnerCircleCrossBL" x="0.025" y="0.563" z="0"/>
+    <Vertex name="midFieldInnerCircleCrossBR" x="0.025" y="0.05" z="0"/>
+
+  </VertexList>
+
+  <VertexListWithTexCoords name="crowd coords">
+    <Vertex name="crowdBehindOwnGoalRightBottom" x="0.0" y="4.0"  z="0"   s="1" t="0"/>
+    <Vertex name="crowdBehindOwnGoalLeftBottom"  x="0.0" y="-4.0" z="0"   s="0" t="0"/>
+    <Vertex name="crowdBehindOwnGoalLeftTop"     x="0.0" y="-4.0" z="2.0" s="0" t="1"/>
+    <Vertex name="crowdBehindOwnGoalRightTop"    x="0.0" y="4.0"  z="2.0" s="1" t="1"/>
+  </VertexListWithTexCoords>
+
+
+  <!-- The field -->
+  
+  <Macro name="support triangles">
+    <Compound>
+      <Elements>
+        <ComplexShape name="lines">
+          <Appearance ref="field-white"/>
+          <GraphicalRepresentation vertexList="field coords">
+            <Triangle v1="goalOwnInnerRightTriangleFront" v2="goalOwnInnerRightTriangleBack" v3="goalOwnInnerRightTriangleTop"/>
+            <Triangle v1="goalOwnInnerLeftTriangleBack" v2="goalOwnInnerLeftTriangleFront" v3="goalOwnInnerLeftTriangleTop"/>
+            <Triangle v1="goalOwnOuterRightTriangleBack" v2="goalOwnOuterRightTriangleFront" v3="goalOwnOuterRightTriangleTop"/>
+            <Triangle v1="goalOwnOuterLeftTriangleFront" v2="goalOwnOuterLeftTriangleBack" v3="goalOwnOuterLeftTriangleTop"/>
+            <Quad v1="goalOwnInnerRightTriangleBack" v2="goalOwnOuterRightTriangleBack" v3="goalOwnOuterRightTriangleTop" v4="goalOwnInnerRightTriangleTop"/>
+            <Quad v1="goalOwnOuterLeftTriangleBack" v2="goalOwnInnerLeftTriangleBack" v3="goalOwnInnerLeftTriangleTop" v4="goalOwnOuterLeftTriangleTop"/>
+          </GraphicalRepresentation>
+          <PhysicalRepresentation>
+            <SimpleBox name="left" length="0.40" width="0.006" height="0.40">
+              <Translation x="-0.275" y="0.7" z="0.2"/>
+              <PhysicalAttributes>
+                <Mass value="0.1"/>
+              </PhysicalAttributes>
+            </SimpleBox>
+            <SimpleBox name="right" length="0.40" width="0.006" height="0.40">
+              <Translation x="-0.275" y="-0.7" z="0.2"/>
+              <PhysicalAttributes>
+                <Mass value="0.1"/>
+              </PhysicalAttributes>
+            </SimpleBox>
+          </PhysicalRepresentation>
+        </ComplexShape>
+      </Elements>
+    </Compound>
+  </Macro>
+
+  <Macro name="net">
+    <Compound>
+      <Elements>
+        <ComplexShape name="net1">
+          <Appearance ref="field-net"/>
+          <GraphicalRepresentation vertexList="net coords">
+            <Triangle v1="netOwnRightBottom" v2="netOwnRightFront" v3="netOwnRightTop"/>
+            <Triangle v1="netOwnLeftBottom" v2="netOwnLeftFront" v3="netOwnLeftTop"/>
+            <Quad v1="netOwnRightBottom" v2="netOwnLeftBottom" v3="netOwnLeftTop" v4="netOwnRightTop"/>
+          </GraphicalRepresentation>
+          <PhysicalRepresentation/>
+        </ComplexShape>
+        <ComplexShape name="net2">
+          <Appearance ref="field-net"/>
+          <GraphicalRepresentation vertexList="net coords">
+            <Triangle v1="netOwnRightBottom" v2="netOwnRightFront" v3="netOwnRightTop"/>
+            <Triangle v1="netOwnLeftBottom" v2="netOwnLeftFront" v3="netOwnLeftTop"/>
+            <Quad v1="netOwnRightBottom" v2="netOwnLeftBottom" v3="netOwnLeftTop" v4="netOwnRightTop"/>
+            <GraphicalAttributes>
+              <FlipNormal value="true"/>
+            </GraphicalAttributes>
+          </GraphicalRepresentation>
+          <PhysicalRepresentation>
+            <SimpleBox name="left" length="0.006" width="1.406" height="0.35">
+              <Translation x="-0.403" y="0" z="0.175"/>
+              <PhysicalAttributes>
+                <Mass value="0.1"/>
+              </PhysicalAttributes>
+            </SimpleBox>
+          </PhysicalRepresentation>
+        </ComplexShape>
+      </Elements>
+    </Compound>
+  </Macro>
+
+  <Macro name="goal">
+    <Compound>
+      <Elements>
+        <Cylinder name="left post" radius="0.05" height="0.8">
+          <Translation x="0" y="0.7" z="0.4"/>
+        </Cylinder>
+        <Cylinder name="right post" radius="0.05" height="0.8">
+          <Translation x="0" y="-0.7" z="0.4"/>
+        </Cylinder>
+        <Cylinder name="crossbar" radius="0.025" height="1.32">
+          <Translation x="0" y="0" z="0.775"/>
+          <Rotation x="90" y="0" z="0"/>
+        </Cylinder>
+      </Elements>
+    </Compound>
+  </Macro>
+
+  <Macro name="fieldWithoutStripes">
+    <Compound>
+      <Elements>
+        <ComplexShape name="fieldWithoutStripes">
+          <Appearance ref="field-green"/>
+          <GraphicalRepresentation vertexList="field coords">
+            <fQuad v1="greenBehindGoalFL" v2="greenBehindGoalFR" v3="greenBehindGoalBR" v4="greenBehindGoalBL"/>
+            <Quad v1="greenLeftOutFL" v2="greenLeftOutFR" v3="greenLeftOutBR" v4="greenLeftOutBL"/>
+            <Quad v1="keeperGreenFL" v2="keeperGreenFR" v3="keeperGreenBR" v4="keeperGreenBL"/>
+            <fQuad v1="leftFrontFieldFL" v2="leftFrontFieldFR" v3="leftFrontFieldBR" v4="leftFrontFieldBL"/>
+            <Quad v1="rightFrontFieldFL" v2="rightFrontFieldFR" v3="rightFrontFieldBR" v4="rightFrontFieldBL"/>
+            <fQuad v1="midField1FL" v2="midField1FR" v3="midField1BR" v4="midField1BL"/>
+            <fQuad v1="midField2FL" v2="midField2FR" v3="midField2BR" v4="midField2BL"/>
+            <Quad v1="midField3FL" v2="midField3FR" v3="midField3BR" v4="midField3BL"/>
+            <Quad v1="midField6FL" v2="midField6FR" v3="midField6BR" v4="midField6BL"/>
+            <fQuad v1="midField7FL" v2="midField7FR" v3="midField7BR" v4="midField7BL"/>
+            <fQuad v1="midField8FL" v2="midField8FR" v3="midField8BR" v4="midField8BL"/>
+
+            <GraphicalAttributes>
+              <SmoothSurface value="false"/>
+              <CombinePrimitives value="true"/>
+            </GraphicalAttributes>
+          </GraphicalRepresentation>
+          <PhysicalRepresentation>
+          </PhysicalRepresentation>
+        </ComplexShape>
+      </Elements>
+    </Compound>
+  </Macro>
+ 
+  <Macro name="midFieldLine">
+    <Compound>
+      <Elements>
+        <ComplexShape name ="midFieldLine">
+          <Appearance ref="field-white"/>
+          <GraphicalRepresentation vertexList="middle line coords">
+            <fQuad v1="middleLineCenterFL" v2="middleLineCenterFR" v3="middleLineCenterBR" v4="middleLineCenterBL"/>
+            <GraphicalAttributes>
+              <SmoothSurface value="false"/>
+              <CombinePrimitives value="true"/>
+            </GraphicalAttributes>
+          </GraphicalRepresentation>
+          <PhysicalRepresentation/>
+        </ComplexShape>
+      </Elements>
+    </Compound>
+  </Macro>
+
+  <Macro name="fieldLines">
+    <Compound>
+      <Elements>
+        <ComplexShape name ="fieldLines">
+          <Appearance ref="field-white"/>
+          <GraphicalRepresentation vertexList="field line coords">
+            <fQuad v1="goalLineFL" v2="goalLineFR" v3="goalLineBR" v4="goalLineBL"/>
+            <fQuad v1="outerLineLeftFL" v2="outerLineLeftFR" v3="outerLineLeftBR" v4="outerLineLeftBL"/>
+            <fQuad v1="keeperLineLeftFL" v2="keeperLineLeftFR" v3="keeperLineLeftBR" v4="keeperLineLeftBL"/>
+            <Quad v1="keeperLineRightFL" v2="keeperLineRightFR" v3="keeperLineRightBR" v4="keeperLineRightBL"/>
+            <fQuad v1="keeperLineFrontFL" v2="keeperLineFrontFR" v3="keeperLineFrontBR" v4="keeperLineFrontBL"/>
+        <GraphicalAttributes>
+              <SmoothSurface value="false"/>
+              <CombinePrimitives value="true"/>
+            </GraphicalAttributes>
+          </GraphicalRepresentation>
+          <PhysicalRepresentation/>
+        </ComplexShape>
+      </Elements>
+    </Compound>
+  </Macro>
+
+  <Macro name="cross">
+    <Compound>
+      <Elements>
+        <ComplexShape name ="cross">
+          <Appearance ref="field-white"/>
+          <GraphicalRepresentation vertexList="cross coords">
+            <fQuad v1="crossCenterLineFL" v2="crossCenterLineFR" v3="crossCenterLineBR" v4="crossCenterLineBL"/>
+            <fQuad v1="leftCrossFL" v2="leftCrossFR" v3="leftCrossBR" v4="leftCrossBL"/>
+            <Quad v1="rightCrossFL" v2="rightCrossFR" v3="rightCrossBR" v4="rightCrossBL"/>
+            <GraphicalAttributes>
+              <SmoothSurface value="false"/>
+              <CombinePrimitives value="true"/>
+            </GraphicalAttributes>
+          </GraphicalRepresentation>
+          <PhysicalRepresentation/>
+        </ComplexShape>
+        <ComplexShape name ="cross green">
+          <Appearance ref="field-green"/>
+          <GraphicalRepresentation vertexList="cross coords">
+            <fQuad v1="greenCrossUpLeftFL" v2="greenCrossUpLeftFR" v3="greenCrossUpLeftBR" v4="greenCrossUpLeftBL"/>
+            <Quad v1="greenCrossUpRightFL" v2="greenCrossUpRightFR" v3="greenCrossUpRightBR" v4="greenCrossUpRightBL"/>
+            <Quad v1="greenCrossDownLeftFL" v2="greenCrossDownLeftFR" v3="greenCrossDownLeftBR" v4="greenCrossDownLeftBL"/>
+            <fQuad v1="greenCrossDownRightFL" v2="greenCrossDownRightFR" v3="greenCrossDownRightBR" v4="greenCrossDownRightBL"/>
+            <GraphicalAttributes>
+              <SmoothSurface value="false"/>
+              <CombinePrimitives value="true"/>
+            </GraphicalAttributes>
+          </GraphicalRepresentation>
+          <PhysicalRepresentation/>
+        </ComplexShape>
+      </Elements>
+    </Compound>
+  </Macro>
+
+  <Macro name="quarter circle 40">
+    <ComplexShape name="quarter circle 40">
+      <Appearance ref="field-white"/>
+      <GraphicalRepresentation vertexList="quarter Circle">
+		<fQuad v1="midFieldInnerCircleRight1a" v2="midFieldOuterCircleRight1a" v3="midFieldOuterCircleRight2a" v4="midFieldInnerCircleRight2a"/>
+		<fQuad v1="midFieldInnerCircleRight2a" v2="midFieldOuterCircleRight2a" v3="midFieldOuterCircleRight3a" v4="midFieldInnerCircleRight3a"/>
+		<fQuad v1="midFieldInnerCircleRight3a" v2="midFieldOuterCircleRight3a" v3="midFieldOuterCircleRight4a" v4="midFieldInnerCircleRight4a"/>
+		<fQuad v1="midFieldInnerCircleRight4a" v2="midFieldOuterCircleRight4a" v3="midFieldOuterCircleRight5a" v4="midFieldInnerCircleRight5a"/>
+		<fQuad v1="midFieldInnerCircleRight5a" v2="midFieldOuterCircleRight5a" v3="midFieldOuterCircleRight6a" v4="midFieldInnerCircleRight6a"/>
+		<fQuad v1="midFieldInnerCircleRight6a" v2="midFieldOuterCircleRight6a" v3="midFieldOuterCircleRight7a" v4="midFieldInnerCircleRight7a"/>
+		<fQuad v1="midFieldInnerCircleRight7a" v2="midFieldOuterCircleRight7a" v3="midFieldOuterCircleRight8a" v4="midFieldInnerCircleRight8a"/>
+		<fQuad v1="midFieldInnerCircleRight8a" v2="midFieldOuterCircleRight8a" v3="midFieldOuterCircleRight9a" v4="midFieldInnerCircleRight9a"/>
+		<fQuad v1="midFieldInnerCircleRight9a" v2="midFieldOuterCircleRight9a" v3="midFieldOuterCircleRight10a" v4="midFieldInnerCircleRight10a"/>
+		<fQuad v1="midFieldInnerCircleRight10a" v2="midFieldOuterCircleRight10a" v3="midFieldOuterCircleRight11a" v4="midFieldInnerCircleRight11a"/>
+		<fQuad v1="midFieldInnerCircleRight11a" v2="midFieldOuterCircleRight11a" v3="midFieldOuterCircleRight12a" v4="midFieldInnerCircleRight12a"/>
+		<fQuad v1="midFieldInnerCircleRight12a" v2="midFieldOuterCircleRight12a" v3="midFieldOuterCircleRight13a" v4="midFieldInnerCircleRight13a"/>
+		<fQuad v1="midFieldInnerCircleRight13a" v2="midFieldOuterCircleRight13a" v3="midFieldOuterCircleRight14a" v4="midFieldInnerCircleRight14a"/>
+		<fQuad v1="midFieldInnerCircleRight14a" v2="midFieldOuterCircleRight14a" v3="midFieldOuterCircleRight15a" v4="midFieldInnerCircleRight15a"/>
+		<fQuad v1="midFieldInnerCircleRight15a" v2="midFieldOuterCircleRight15a" v3="midFieldOuterCircleRight16a" v4="midFieldInnerCircleRight16a"/>
+		<fQuad v1="midFieldInnerCircleRight16a" v2="midFieldOuterCircleRight16a" v3="midFieldOuterCircleRight17a" v4="midFieldInnerCircleRight17a"/>
+		<fQuad v1="midFieldInnerCircleRight17a" v2="midFieldOuterCircleRight17a" v3="midFieldOuterCircleRight18a" v4="midFieldInnerCircleRight18a"/>
+
+		<Quad v1="midFieldInnerCircleLeft1a" v2="midFieldOuterCircleLeft1a" v3="midFieldOuterCircleLeft2a" v4="midFieldInnerCircleLeft2a"/>
+		<Quad v1="midFieldInnerCircleLeft2a" v2="midFieldOuterCircleLeft2a" v3="midFieldOuterCircleLeft3a" v4="midFieldInnerCircleLeft3a"/>
+		<Quad v1="midFieldInnerCircleLeft3a" v2="midFieldOuterCircleLeft3a" v3="midFieldOuterCircleLeft4a" v4="midFieldInnerCircleLeft4a"/>
+		<Quad v1="midFieldInnerCircleLeft4a" v2="midFieldOuterCircleLeft4a" v3="midFieldOuterCircleLeft5a" v4="midFieldInnerCircleLeft5a"/>
+		<Quad v1="midFieldInnerCircleLeft5a" v2="midFieldOuterCircleLeft5a" v3="midFieldOuterCircleLeft6a" v4="midFieldInnerCircleLeft6a"/>
+		<Quad v1="midFieldInnerCircleLeft6a" v2="midFieldOuterCircleLeft6a" v3="midFieldOuterCircleLeft7a" v4="midFieldInnerCircleLeft7a"/>
+		<Quad v1="midFieldInnerCircleLeft7a" v2="midFieldOuterCircleLeft7a" v3="midFieldOuterCircleLeft8a" v4="midFieldInnerCircleLeft8a"/>
+		<Quad v1="midFieldInnerCircleLeft8a" v2="midFieldOuterCircleLeft8a" v3="midFieldOuterCircleLeft9a" v4="midFieldInnerCircleLeft9a"/>
+		<Quad v1="midFieldInnerCircleLeft9a" v2="midFieldOuterCircleLeft9a" v3="midFieldOuterCircleLeft10a" v4="midFieldInnerCircleLeft10a"/>
+		<Quad v1="midFieldInnerCircleLeft10a" v2="midFieldOuterCircleLeft10a" v3="midFieldOuterCircleLeft11a" v4="midFieldInnerCircleLeft11a"/>
+		<Quad v1="midFieldInnerCircleLeft11a" v2="midFieldOuterCircleLeft11a" v3="midFieldOuterCircleLeft12a" v4="midFieldInnerCircleLeft12a"/>
+		<Quad v1="midFieldInnerCircleLeft12a" v2="midFieldOuterCircleLeft12a" v3="midFieldOuterCircleLeft13a" v4="midFieldInnerCircleLeft13a"/>
+		<Quad v1="midFieldInnerCircleLeft13a" v2="midFieldOuterCircleLeft13a" v3="midFieldOuterCircleLeft14a" v4="midFieldInnerCircleLeft14a"/>
+		<Quad v1="midFieldInnerCircleLeft14a" v2="midFieldOuterCircleLeft14a" v3="midFieldOuterCircleLeft15a" v4="midFieldInnerCircleLeft15a"/>
+		<Quad v1="midFieldInnerCircleLeft15a" v2="midFieldOuterCircleLeft15a" v3="midFieldOuterCircleLeft16a" v4="midFieldInnerCircleLeft16a"/>
+		<Quad v1="midFieldInnerCircleLeft16a" v2="midFieldOuterCircleLeft16a" v3="midFieldOuterCircleLeft17a" v4="midFieldInnerCircleLeft17a"/>
+		<Quad v1="midFieldInnerCircleLeft17a" v2="midFieldOuterCircleLeft17a" v3="midFieldOuterCircleLeft18a" v4="midFieldInnerCircleLeft18a"/>
+
+      </GraphicalRepresentation>
+      <PhysicalRepresentation/>
+    </ComplexShape>
+    <ComplexShape name="quarter circle 40 green">
+      <Appearance ref="field-green"/>
+      <GraphicalRepresentation vertexList="quarter Circle">
+		<Quad v1="midFieldCenter1" v2="midFieldCenter2" v3="midFieldCenter3" v4="midFieldCenter4"/>
+
+		<fQuad v1="midFieldOuterCircleRight2a" v2="midFieldOuterCircleRight2b" v3="midFieldOuterCircleRight3b" v4="midFieldOuterCircleRight3a"/>
+		<fQuad v1="midFieldOuterCircleRight3a" v2="midFieldOuterCircleRight3b" v3="midFieldOuterCircleRight4b" v4="midFieldOuterCircleRight4a"/>
+		<fQuad v1="midFieldOuterCircleRight4a" v2="midFieldOuterCircleRight4b" v3="midFieldOuterCircleRight5b" v4="midFieldOuterCircleRight5a"/>
+		<fQuad v1="midFieldOuterCircleRight5a" v2="midFieldOuterCircleRight5b" v3="midFieldOuterCircleRight6b" v4="midFieldOuterCircleRight6a"/>
+		<fQuad v1="midFieldOuterCircleRight6a" v2="midFieldOuterCircleRight6b" v3="midFieldOuterCircleRight7b" v4="midFieldOuterCircleRight7a"/>
+		<fQuad v1="midFieldOuterCircleRight7a" v2="midFieldOuterCircleRight7b" v3="midFieldOuterCircleRight8b" v4="midFieldOuterCircleRight8a"/>
+		<fQuad v1="midFieldOuterCircleRight8a" v2="midFieldOuterCircleRight8b" v3="midFieldOuterCircleRight9b" v4="midFieldOuterCircleRight9a"/>
+		<fQuad v1="midFieldOuterCircleRight9a" v2="midFieldOuterCircleRight9b" v3="midFieldOuterCircleRight10b" v4="midFieldOuterCircleRight10a"/>
+		<fQuad v1="midFieldOuterCircleRight10a" v2="midFieldOuterCircleRight10b" v3="midFieldOuterCircleRight11b" v4="midFieldOuterCircleRight11a"/>
+		<fQuad v1="midFieldOuterCircleRight11a" v2="midFieldOuterCircleRight11b" v3="midFieldOuterCircleRight12b" v4="midFieldOuterCircleRight12a"/>
+		<fQuad v1="midFieldOuterCircleRight12a" v2="midFieldOuterCircleRight12b" v3="midFieldOuterCircleRight13b" v4="midFieldOuterCircleRight13a"/>
+		<fQuad v1="midFieldOuterCircleRight13a" v2="midFieldOuterCircleRight13b" v3="midFieldOuterCircleRight14b" v4="midFieldOuterCircleRight14a"/>
+		<fQuad v1="midFieldOuterCircleRight14a" v2="midFieldOuterCircleRight14b" v3="midFieldOuterCircleRight15b" v4="midFieldOuterCircleRight15a"/>
+		<fQuad v1="midFieldOuterCircleRight15a" v2="midFieldOuterCircleRight15b" v3="midFieldOuterCircleRight16b" v4="midFieldOuterCircleRight16a"/>
+		<fQuad v1="midFieldOuterCircleRight16a" v2="midFieldOuterCircleRight16b" v3="midFieldOuterCircleRight17b" v4="midFieldOuterCircleRight17a"/>
+		<fQuad v1="midFieldOuterCircleRight17a" v2="midFieldOuterCircleRight17b" v3="midFieldOuterCircleRight18b" v4="midFieldOuterCircleRight18a"/>
+
+		<Quad v1="midFieldOuterCircleLeft2a" v2="midFieldOuterCircleLeft2b" v3="midFieldOuterCircleLeft3b" v4="midFieldOuterCircleLeft3a"/>
+		<Quad v1="midFieldOuterCircleLeft3a" v2="midFieldOuterCircleLeft3b" v3="midFieldOuterCircleLeft4b" v4="midFieldOuterCircleLeft4a"/>
+		<Quad v1="midFieldOuterCircleLeft4a" v2="midFieldOuterCircleLeft4b" v3="midFieldOuterCircleLeft5b" v4="midFieldOuterCircleLeft5a"/>
+		<Quad v1="midFieldOuterCircleLeft5a" v2="midFieldOuterCircleLeft5b" v3="midFieldOuterCircleLeft6b" v4="midFieldOuterCircleLeft6a"/>
+		<Quad v1="midFieldOuterCircleLeft6a" v2="midFieldOuterCircleLeft6b" v3="midFieldOuterCircleLeft7b" v4="midFieldOuterCircleLeft7a"/>
+		<Quad v1="midFieldOuterCircleLeft7a" v2="midFieldOuterCircleLeft7b" v3="midFieldOuterCircleLeft8b" v4="midFieldOuterCircleLeft8a"/>
+		<Quad v1="midFieldOuterCircleLeft8a" v2="midFieldOuterCircleLeft8b" v3="midFieldOuterCircleLeft9b" v4="midFieldOuterCircleLeft9a"/>
+		<Quad v1="midFieldOuterCircleLeft9a" v2="midFieldOuterCircleLeft9b" v3="midFieldOuterCircleLeft10b" v4="midFieldOuterCircleLeft10a"/>
+		<Quad v1="midFieldOuterCircleLeft10a" v2="midFieldOuterCircleLeft10b" v3="midFieldOuterCircleLeft11b" v4="midFieldOuterCircleLeft11a"/>
+		<Quad v1="midFieldOuterCircleLeft11a" v2="midFieldOuterCircleLeft11b" v3="midFieldOuterCircleLeft12b" v4="midFieldOuterCircleLeft12a"/>
+		<Quad v1="midFieldOuterCircleLeft12a" v2="midFieldOuterCircleLeft12b" v3="midFieldOuterCircleLeft13b" v4="midFieldOuterCircleLeft13a"/>
+		<Quad v1="midFieldOuterCircleLeft13a" v2="midFieldOuterCircleLeft13b" v3="midFieldOuterCircleLeft14b" v4="midFieldOuterCircleLeft14a"/>
+		<Quad v1="midFieldOuterCircleLeft14a" v2="midFieldOuterCircleLeft14b" v3="midFieldOuterCircleLeft15b" v4="midFieldOuterCircleLeft15a"/>
+		<Quad v1="midFieldOuterCircleLeft15a" v2="midFieldOuterCircleLeft15b" v3="midFieldOuterCircleLeft16b" v4="midFieldOuterCircleLeft16a"/>
+		<Quad v1="midFieldOuterCircleLeft16a" v2="midFieldOuterCircleLeft16b" v3="midFieldOuterCircleLeft17b" v4="midFieldOuterCircleLeft17a"/>
+		<Quad v1="midFieldOuterCircleLeft17a" v2="midFieldOuterCircleLeft17b" v3="midFieldOuterCircleLeft18b" v4="midFieldOuterCircleLeft18a"/>
+
+		<Quad v1="midFieldInnerCircleRight2a" v2="midFieldInnerCircleRight2b" v3="midFieldInnerCircleRight3ba" v4="midFieldInnerCircleRight3a"/>
+		<Quad v1="midFieldInnerCircleRight3a" v2="midFieldInnerCircleRight3bb" v3="midFieldInnerCircleRight4b" v4="midFieldInnerCircleRight4a"/>
+		<Quad v1="midFieldInnerCircleRight4a" v2="midFieldInnerCircleRight4b" v3="midFieldInnerCircleRight5b" v4="midFieldInnerCircleRight5a"/>
+		<Quad v1="midFieldInnerCircleRight5a" v2="midFieldInnerCircleRight5b" v3="midFieldInnerCircleRight6b" v4="midFieldInnerCircleRight6a"/>
+		<Quad v1="midFieldInnerCircleRight6a" v2="midFieldInnerCircleRight6b" v3="midFieldInnerCircleRight7b" v4="midFieldInnerCircleRight7a"/>
+		<Quad v1="midFieldInnerCircleRight7a" v2="midFieldInnerCircleRight7b" v3="midFieldInnerCircleRight8b" v4="midFieldInnerCircleRight8a"/>
+		<Quad v1="midFieldInnerCircleRight8a" v2="midFieldInnerCircleRight8b" v3="midFieldInnerCircleRight9b" v4="midFieldInnerCircleRight9a"/>
+		<Quad v1="midFieldInnerCircleRight9a" v2="midFieldInnerCircleRight9b" v3="midFieldInnerCircleRight10b" v4="midFieldInnerCircleRight10a"/>
+		<Quad v1="midFieldInnerCircleRight10a" v2="midFieldInnerCircleRight10b" v3="midFieldInnerCircleRight11b" v4="midFieldInnerCircleRight11a"/>
+		<Quad v1="midFieldInnerCircleRight11a" v2="midFieldInnerCircleRight11b" v3="midFieldInnerCircleRight12b" v4="midFieldInnerCircleRight12a"/>
+		<Quad v1="midFieldInnerCircleRight12a" v2="midFieldInnerCircleRight12b" v3="midFieldInnerCircleRight13b" v4="midFieldInnerCircleRight13a"/>
+		<Quad v1="midFieldInnerCircleRight13a" v2="midFieldInnerCircleRight13b" v3="midFieldInnerCircleRight14b" v4="midFieldInnerCircleRight14a"/>
+		<Quad v1="midFieldInnerCircleRight14a" v2="midFieldInnerCircleRight14b" v3="midFieldInnerCircleRight15b" v4="midFieldInnerCircleRight15a"/>
+		<Quad v1="midFieldInnerCircleRight15a" v2="midFieldInnerCircleRight15b" v3="midFieldInnerCircleRight16b" v4="midFieldInnerCircleRight16a"/>
+		<Quad v1="midFieldInnerCircleRight16a" v2="midFieldInnerCircleRight16b" v3="midFieldInnerCircleRight17b" v4="midFieldInnerCircleRight17a"/>
+		<Triangle v1="midFieldInnerCircleRight17a" v2="midFieldInnerCircleRight17b" v3="midFieldInnerCircleRight18a"/>
+
+		<fQuad v1="midFieldInnerCircleLeft2a" v2="midFieldInnerCircleLeft2b" v3="midFieldInnerCircleLeft3ba" v4="midFieldInnerCircleLeft3a"/>
+		<fQuad v1="midFieldInnerCircleLeft3a" v2="midFieldInnerCircleLeft3bb" v3="midFieldInnerCircleLeft4b" v4="midFieldInnerCircleLeft4a"/>
+		<fQuad v1="midFieldInnerCircleLeft4a" v2="midFieldInnerCircleLeft4b" v3="midFieldInnerCircleLeft5b" v4="midFieldInnerCircleLeft5a"/>
+		<fQuad v1="midFieldInnerCircleLeft5a" v2="midFieldInnerCircleLeft5b" v3="midFieldInnerCircleLeft6b" v4="midFieldInnerCircleLeft6a"/>
+		<fQuad v1="midFieldInnerCircleLeft6a" v2="midFieldInnerCircleLeft6b" v3="midFieldInnerCircleLeft7b" v4="midFieldInnerCircleLeft7a"/>
+		<fQuad v1="midFieldInnerCircleLeft7a" v2="midFieldInnerCircleLeft7b" v3="midFieldInnerCircleLeft8b" v4="midFieldInnerCircleLeft8a"/>
+		<fQuad v1="midFieldInnerCircleLeft8a" v2="midFieldInnerCircleLeft8b" v3="midFieldInnerCircleLeft9b" v4="midFieldInnerCircleLeft9a"/>
+		<fQuad v1="midFieldInnerCircleLeft9a" v2="midFieldInnerCircleLeft9b" v3="midFieldInnerCircleLeft10b" v4="midFieldInnerCircleLeft10a"/>
+		<fQuad v1="midFieldInnerCircleLeft10a" v2="midFieldInnerCircleLeft10b" v3="midFieldInnerCircleLeft11b" v4="midFieldInnerCircleLeft11a"/>
+		<fQuad v1="midFieldInnerCircleLeft11a" v2="midFieldInnerCircleLeft11b" v3="midFieldInnerCircleLeft12b" v4="midFieldInnerCircleLeft12a"/>
+		<fQuad v1="midFieldInnerCircleLeft12a" v2="midFieldInnerCircleLeft12b" v3="midFieldInnerCircleLeft13b" v4="midFieldInnerCircleLeft13a"/>
+		<fQuad v1="midFieldInnerCircleLeft13a" v2="midFieldInnerCircleLeft13b" v3="midFieldInnerCircleLeft14b" v4="midFieldInnerCircleLeft14a"/>
+		<fQuad v1="midFieldInnerCircleLeft14a" v2="midFieldInnerCircleLeft14b" v3="midFieldInnerCircleLeft15b" v4="midFieldInnerCircleLeft15a"/>
+		<fQuad v1="midFieldInnerCircleLeft15a" v2="midFieldInnerCircleLeft15b" v3="midFieldInnerCircleLeft16b" v4="midFieldInnerCircleLeft16a"/>
+		<fQuad v1="midFieldInnerCircleLeft16a" v2="midFieldInnerCircleLeft16b" v3="midFieldInnerCircleLeft17b" v4="midFieldInnerCircleLeft17a"/>
+		<fTriangle v1="midFieldInnerCircleLeft17a" v2="midFieldInnerCircleLeft17b" v3="midFieldInnerCircleLeft18a"/>
+
+      </GraphicalRepresentation>
+      <PhysicalRepresentation/>
+    </ComplexShape>
+  </Macro>
+
+  <!-- <fQuad v1="midFieldInnerCircleCrossFL" v2="midFieldInnerCircleCrossFR" v3="midFieldInnerCircleCrossBR" v4="midFieldInnerCircleCrossBL"/> -->
+
+  <Macro name="graycarpet">
+    <Compound>
+      <Elements>
+        <ComplexShape name="graycarpet">
+          <Material name="Carpet"/>
+          <Appearance ref="field-grey"/>
+          <GraphicalRepresentation vertexList="carpet coords">
+            <Quad v1="greyCarpetRightXCorner"
+		  v2="greyCarpetLeftXCorner"
+		  v3="greyCarpetLeftYCorner"
+		  v4="greyCarpetRightYCorner"/>
+            <GraphicalAttributes>
+              <SmoothSurface value="false"/>
+              <CombinePrimitives value="true"/>
+            </GraphicalAttributes>
+          </GraphicalRepresentation>
+          <PhysicalRepresentation>
+            <SimpleBox name="back" length="8.4" width="7.4" height="0.5">
+              <Translation x="0.0" y="0.0" z="-0.25"/>
+              <PhysicalAttributes>
+                <Mass value="10"/>
+              </PhysicalAttributes>
+            </SimpleBox>
+            <SimpleBox name="side1" length="8.4" width="0.5" height="0.5">
+              <Translation y="-3.45" z="0.25"/>
+              <PhysicalAttributes>
+                <Mass value="10"/>
+              </PhysicalAttributes>
+            </SimpleBox>
+            <SimpleBox name="side2" length="8.4" width="0.5" height="0.5">
+              <Translation y="3.45" z="0.25"/>
+              <PhysicalAttributes>
+                <Mass value="10"/>
+              </PhysicalAttributes>
+            </SimpleBox>
+            <SimpleBox name="side3" length="0.5" width="7.4" height="0.5">
+              <Translation x="4.45" z="0.25"/>
+              <PhysicalAttributes>
+                <Mass value="10"/>
+              </PhysicalAttributes>
+            </SimpleBox>
+            <SimpleBox name="side4" length="0.5" width="7.4" height="0.5">
+              <Translation x="-4.45" z="0.25"/>
+              <PhysicalAttributes>
+                <Mass value="10"/>
+              </PhysicalAttributes>
+            </SimpleBox>
+          </PhysicalRepresentation>
+        </ComplexShape>
+      </Elements>
+    </Compound>
+  </Macro>
+
+  <Macro name="whiteLineAroundFieldLong">
+    <Compound>
+      <Elements>
+        <ComplexShape name="whiteLineAroundField">
+          <Material name="Carpet"/>
+          <Appearance ref="field-white"/>
+          <GraphicalRepresentation vertexList="carpet coords">
+            <Quad v1="whiteLineAroundFieldLongRightXCorner"
+		   v2="whiteLineAroundFieldLongLeftXCorner"
+		   v3="whiteLineAroundFieldLongLeftYCorner"
+		   v4="whiteLineAroundFieldLongRightYCorner"/>
+            <GraphicalAttributes>
+              <SmoothSurface value="false"/>
+              <CombinePrimitives value="true"/>
+            </GraphicalAttributes>
+          </GraphicalRepresentation>
+          <PhysicalRepresentation/>
+        </ComplexShape>
+      </Elements>
+    </Compound>
+  </Macro>
+
+  <Macro name="whiteLineAroundFieldShort">
+    <Compound>
+      <Elements>
+        <ComplexShape name="whiteLineAroundField">
+          <Material name="Carpet"/>
+          <Appearance ref="field-white"/>
+          <GraphicalRepresentation vertexList="carpet coords">
+            <Quad v1="whiteLineAroundFieldShortRightXCorner"
+		   v2="whiteLineAroundFieldShortLeftXCorner"
+		   v3="whiteLineAroundFieldShortLeftYCorner"
+		   v4="whiteLineAroundFieldShortRightYCorner"/>
+            <GraphicalAttributes>
+              <SmoothSurface value="false"/>
+              <CombinePrimitives value="true"/>
+            </GraphicalAttributes>
+          </GraphicalRepresentation>
+          <PhysicalRepresentation/>
+        </ComplexShape>
+      </Elements>
+    </Compound>
+  </Macro>
+
+  <Macro name="crowd">
+    <Compound>
+      <Elements>
+        <ComplexShape name="crowd">
+          <Appearance ref="crowd"/>
+          <GraphicalRepresentation vertexList="crowd coords">
+            <Quad v1="crowdBehindOwnGoalRightBottom"
+	          v2="crowdBehindOwnGoalRightTop"
+	          v3="crowdBehindOwnGoalLeftTop"
+	          v4="crowdBehindOwnGoalLeftBottom" />
+	    <GraphicalAttributes>
+              <SmoothSurface value="false"/>
+	    </GraphicalAttributes>
+          </GraphicalRepresentation>
+          <PhysicalRepresentation/>
+        </ComplexShape>
+      </Elements>
+    </Compound>
+  </Macro>
+  
+  <Macro name="field">
+    <Compound>
+      <Elements>        
+
+
+	<Use macroName="whiteLineAroundFieldLong" instanceName="whiteLine">
+          <Translation x="0.0" y="2.7125" z=".0"/>
+	</Use>
+	<Use macroName="whiteLineAroundFieldLong" instanceName="whiteLine">
+          <Translation x="0.0" y="-2.7125" z=".0"/>
+	</Use>
+	<Use macroName="whiteLineAroundFieldShort" instanceName="whiteLine">
+          <Translation x="3.7125" y=".0" z=".0"/>
+	</Use>
+	<Use macroName="whiteLineAroundFieldShort" instanceName="whiteLine">
+          <Translation x="-3.7125" y=".0" z=".0"/>
+	</Use>
+
+        <Use macroName="graycarpet" instanceName="greyCarpet yellow all">
+	  <Translation x="0.0" y="0.0" z="-0.001"/>
+	</Use>
+        
+        <!--
+         <Use macroName="greencarpet" instanceName="greenCarpet green all"/>
+        -->
+        
+        <!-- Field squirrel -->
+        <Use macroName="fieldWithoutStripes" instanceName="fieldWithoutStripes green"/>
+        <Use macroName="fieldWithoutStripes" instanceName="fieldWithoutStripes green">
+         <Rotation x="0" y="0" z="180"/>
+        </Use>
+        
+        <!-- Field Lines and Crosses -->
+        <Use macroName="midFieldLine" instanceName="midFieldLine"/>
+        <Use macroName="midFieldLine" instanceName="midFieldLine">
+         <Rotation x="0" y="0" z="180"/>
+        </Use>
+         
+        <Use macroName="fieldLines" instanceName="fieldLines white"/>
+
+        <Use macroName="fieldLines" instanceName="fieldLines white"> 
+          <Rotation x="0" y="0" z="180"/>
+        </Use>
+
+        <Use macroName="cross" instanceName="cross white"/>
+
+        <Use macroName="cross" instanceName="cross white">
+          <Translation x="1.2" y="0" z="0"/>
+        </Use>  
+
+        <Use macroName="cross" instanceName="cross white">
+          <Translation x="-1.2" y="0" z="0"/>
+        </Use>  
+
+        <Use macroName="quarter circle 40" instanceName="quarter circle 40"/>
+        <Use macroName="quarter circle 40" instanceName="quarter circle 40">
+          <Rotation x="0" y="0" z="180"/>
+        </Use>
+
+        <Use macroName="support triangles" instanceName="outer own goal">
+          <Translation x="-3" y="0" z="0"/>
+        </Use>
+        <Use macroName="support triangles" instanceName="outer opponent goal">
+          <Rotation x="0" y="0" z="180"/>
+          <Translation x="3" y="0" z="0"/>
+        </Use>
+        <Use macroName="goal" instanceName="own goal">
+          <Translation x="-3.05" y="0" z="0"/>
+          <SubstituteAllSurfaces with="field-yellow"/>
+        </Use>
+        <Use macroName="goal" instanceName="opponent goal">
+          <Rotation x="0" y="0" z="180"/>
+          <Translation x="3.05" y="0" z="0"/>
+          <SubstituteAllSurfaces with="field-blue"/>
+        </Use>
+ 	<Use macroName="crowd" instanceName="crowd1">
+	  <Translation x="-4.0" y="0" z="0"/>
+	</Use>
+	<Use macroName="crowd" instanceName="crowd2">
+	  <Translation x="4.0" y="0" z="0"/>
+	  <Rotation x="0" y="0" z="180"/>
+	</Use>
+	<Use macroName="crowd" instanceName="crowd3">
+	  <Translation x="0" y="3.0" z="0"/>
+	  <Rotation x="0" y="0" z="-90"/>
+	</Use>
+	<Use macroName="crowd" instanceName="crowd4">
+	  <Translation x="0" y="-3.0" z="0"/>
+	  <Rotation x="0" y="0" z="90"/>
+	</Use>
+        <Use macroName="net" instanceName="own net">
+          <Translation x="-3" y="0" z="0"/>
+        </Use>
+        <Use macroName="net" instanceName="opponent net">
+          <Rotation x="0" y="0" z="180"/>
+          <Translation x="3" y="0" z="0"/>
+        </Use>
+      </Elements>
+    </Compound>
+  </Macro>
+</RoSiIncludeFile>

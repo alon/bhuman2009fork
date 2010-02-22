@@ -1,0 +1,71 @@
+option display_left_eye
+{
+  common decision 
+  {
+    if(!locator.ground_contact && fall_down_state == upright)
+      goto picked_up;
+    else if(ball.time_since_last_seen <= 250 && goal.time_since_last_seen_any_goal <= 250)
+      goto goal_and_ball_were_seen;
+    else if(ball.time_since_last_seen <= 250) 
+      goto ball_was_seen;
+    else if(goal.time_since_last_seen_any_goal <= 250)
+      goto goal_was_seen;
+    else if(true)
+      goto nothing_seen;
+  }
+
+  
+  initial state nothing_seen 
+  {
+    action 
+    {
+      led_request.faceLeftBlue  = led_request.state.off;
+      led_request.faceLeftGreen = led_request.state.off;
+      led_request.faceLeftRed   = led_request.state.off;
+    }
+  }
+  
+  
+  state picked_up
+  {
+    action
+    {
+      led_request.faceLeftBlue  = led_request.state.on;
+      led_request.faceLeftGreen = led_request.state.off;
+      led_request.faceLeftRed   = led_request.state.off;
+    }
+  }
+  
+  
+  state ball_was_seen 
+  {
+    action 
+    {
+      led_request.faceLeftBlue  = led_request.state.on;
+      led_request.faceLeftGreen = led_request.state.on;
+      led_request.faceLeftRed   = led_request.state.on;
+    }
+  }
+  
+  
+  state goal_was_seen 
+  {
+    action 
+    {
+      led_request.faceLeftBlue  = led_request.state.off;
+      led_request.faceLeftGreen = led_request.state.on;
+      led_request.faceLeftRed   = led_request.state.off;
+    }
+  }
+  
+  
+  state goal_and_ball_were_seen
+  {
+    action 
+    {
+      led_request.faceLeftBlue  = led_request.state.off;
+      led_request.faceLeftGreen = led_request.state.off;
+      led_request.faceLeftRed   = led_request.state.on;
+    }
+  }
+}

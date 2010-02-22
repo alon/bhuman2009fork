@@ -1,0 +1,17 @@
+<?lua
+
+template = "Templates/updateVcProjFile"
+platform = "windows"
+baseFile = "SimRobotCore.vcproj"
+files = matchrecursive("..\\SimRobotCore\\*.cpp", "..\\SimRobotCore\\*.h")
+root = "..\\SimRobotCore"
+
+newFiles = {}
+for i, file in pairs(files) do
+  if path.getbasename(path.getdirname(file)) ~= "Linux" then
+    table.insert(newFiles, file)
+  end
+end
+files = newFiles
+
+?>

@@ -1,0 +1,3 @@
+Please close all running instances of VisualStudio to avoid installation conflicts because of locked files.
+The YABSL compiler creates an autocompletion file (yabsl.api) that is copied to the scite api directory and to the VisualStudio IDE directory each time it is invoked. These files are used by vsyabsl and SciTE for autocompletion.
+This installer copies and registers 2 .dll files that contain the yabsl language service for VisualStudio. After the next restart of VisualStudio .yabsl files should be displayed with syntax highlighting and autocompletion via CTRL-SPACE should work.

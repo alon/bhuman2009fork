@@ -1,0 +1,83 @@
+<?lua
+
+excludes = { "Images", "Logs", "Scenes", "Keys" }
+externals = { "../Build/$(COMPONENT)/Linux/$(CONFIG)/bhuman", "../Build/libbhuman/Linux/Release/libbhuman.so" }
+
+-- force platform (for / separated paths)
+platform = "linux"
+
+-- build exclude hash table
+for i, exclude in ipairs(excludes) do
+  excludes[exclude] = true
+end
+
+-- create file list
+lfs.chdir("../Config")
+files = matchfiles("*")
+for i, dir in pairs(matchdirs("*")) do
+  if excludes[path.getbasename(dir)] == nil then
+    table.expand(matchrecursive(dir .. "/*"), files)
+  end
+end
+for i, file in pairs(files) do
+  files[i] = string.sub(file, 3)
+end
+
+?>
+
+LOCATION ?= Default
+COMPONENT ?= Nao
+CONFIG ?= Debug
+TARGET := ../Build/remotecache
+
+export LOCATION
+export COMPONENT
+export CONFIG
+
+.PHONY: all clean remotecache remotecache_prebuild source settings
+
+all: remotecache
+
+clean:
+	-@rm -rf $(TARGET)
+
+remotecache: remotecache_prebuild <?lua for i, file in pairs(files) do echo("$(TARGET)/" .. file .. " ") end ?> <?lua for i, file in pairs(externals) do echo("$(TARGET)/" .. path.getbasename(file) .. " ") end ?> source settings
+
+remotecache_prebuild:
+	@echo "------ Preparing $$COMPONENT ($$CONFIG) ------"
+	@[ -f $(TARGET)/source.cfg ] && read OLDCOMPONENTCONFIG OLDHOSTNAME < "$(TARGET)/source.cfg";\
+  [ "$$OLDCOMPONENTCONFIG" != "$$COMPONENT$$CONFIG" ] && rm -f $(TARGET)/bhuman;\
+  exit 0
+  
+source:
+	@echo $$COMPONENT$$CONFIG $$HOSTNAME > $(TARGET)/source.cfg
+
+settings: $(TARGET)/settings.cfg
+	@echo "settings.cfg:"; rm -f $(TARGET)/settings.cfg; sed -e 's/\r//' < ../Config/settings.cfg | while read KEY VAL; do\
+    case $$KEY in\
+      "location")\
+        [ ! -z $$LOCATION ] && VAL=$$LOCATION\
+      ;;\
+      "teamColor")\
+        [ ! -z $$TEAM ] && VAL=$$TEAM\
+      ;;\
+      "playerNumber")\
+        [ ! -z $$PLAYER ] && VAL=$$PLAYER\
+      ;;\
+    esac;\
+    echo "  $$KEY $$VAL";\
+    echo "$$KEY $$VAL" >> $(TARGET)/settings.cfg;\
+  done
+
+<?lua for i, file in pairs(files) do ?>
+$(TARGET)/<?lua=file?>: ../Config/<?lua=file?>
+	@echo "<?lua=file?>"
+	@if [ ! -f $(TARGET)/<?lua=path.getdirname(file)?> ]; then mkdir -p $(TARGET)/<?lua=path.getdirname(file)?>; fi && cp ../Config/<?lua=file?> $(TARGET)/<?lua=file?>
+
+<?lua end ?>
+<?lua for i, file in pairs(externals) do ?>
+$(TARGET)/<?lua=path.getbasename(file)?>: <?lua=file?>
+	@echo "<?lua=path.getbasename(file)?>"
+	@cp <?lua=file?> $(TARGET)/<?lua=path.getbasename(file)?>
+
+<?lua end ?>

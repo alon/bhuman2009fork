@@ -1,0 +1,107 @@
+option display_state
+{
+  common decision
+  {
+    if(game.penalty != none)
+    {
+      goto state_penalized;
+    }
+    else if(game.state == _initial)
+    {
+      goto state_initial;
+    }
+    else if(game.state == finished)
+    {
+      goto state_finished;
+    }
+    else if(game.state == ready)
+    {
+      goto state_ready;
+    }
+    else if(game.state == set)
+    {
+      goto state_set;
+    }
+    else if(game.state == playing)
+    {
+      goto state_playing;
+    }
+  }
+  
+  
+  initial state nothing
+  {
+    action
+    {
+      led_request.chestRed   = led_request.state.off;
+      led_request.chestGreen = led_request.state.off;
+      led_request.chestBlue  = led_request.state.off;
+    }
+  }
+  
+  
+  state state_penalized
+  {
+    action
+    {
+      led_request.chestRed   = led_request.state.on;
+      led_request.chestGreen = led_request.state.off;
+      led_request.chestBlue  = led_request.state.off;
+    }
+  }
+  
+  
+  state state_initial
+  {
+    action
+    {
+      led_request.chestRed   = led_request.state.off;
+      led_request.chestGreen = led_request.state.off;
+      led_request.chestBlue  = led_request.state.off;
+    }
+  }
+  
+  
+  state state_finished
+  {
+    action
+    {
+      led_request.chestRed   = led_request.state.off;
+      led_request.chestGreen = led_request.state.off;
+      led_request.chestBlue  = led_request.state.off;
+    }
+  }
+  
+  
+  state state_ready
+  {
+    action
+    {
+      led_request.chestRed   = led_request.state.off;
+      led_request.chestGreen = led_request.state.off;
+      led_request.chestBlue  = led_request.state.on;
+    }
+  }
+  
+  
+  state state_set
+  {
+    action
+    {
+      led_request.chestRed   = led_request.state.on;
+      led_request.chestGreen = led_request.state.on;
+      led_request.chestBlue  = led_request.state.off;
+    }
+  }
+  
+  
+  state state_playing
+  {
+    action
+    {
+      led_request.chestRed   = led_request.state.off;
+      led_request.chestGreen = led_request.state.on;
+      led_request.chestBlue  = led_request.state.off;
+    }
+  }
+}

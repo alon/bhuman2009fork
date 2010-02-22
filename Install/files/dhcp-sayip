@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# Says IP Address if network cable is plugged in.
+# INSTALL: copy this file to /etc/udhcpc.d/99bhuman
+
+[ -z "$1" ] && echo "Error: should be called from udhcpc" && exit 1
+[ -z "$interface" ] && echo "Error: should be called from udhcpc" && exit 1
+
+SOUND_PREFIX_BHUMAN="/media/userdata/Config/Sounds/"
+SOUND_PREFIX_NAOQI="/opt/naoqi/data/wav/"
+SOUND_SUFFIX=".wav"
+SOUND_PLAYER="aplay -q "
+FILE_IP="/var/run/bhuman/${interface}_ip"
+
+sayip_naoqi() {
+    WORDS=`echo "$ip" | sed -e 's/1/1 /g; s/2/2 /g; s/3/3 /g; s/4/4 /g; s/5/5 /g; s/6/6 /g; s/7/7 /g; s/8/8 /g; s/9/9 /g; s/0/0 /g;  s/\./point /g;'`
+    for WORD in my_internet_address_is $WORDS; do
+        $SOUND_PLAYER "${SOUND_PREFIX_NAOQI}${WORD}${SOUND_SUFFIX}"
+    done
+}
+
+sayip_bhuman() {
+    WORDS=`echo "$ip" | sed -e 's/\./dot /g; s/1/one /g; s/2/two /g; s/3/three /g; s/4/four /g; s/5/five /g; s/6/six /g; s/7/seven /g; s/8/eight /g; s/9/nine /g; s/0/zero /g;'`
+    for WORD in my_address $WORDS; do
+        $SOUND_PLAYER "${SOUND_PREFIX_BHUMAN}${WORD}${SOUND_SUFFIX}"
+    done
+}
+
+
+sayip() {
+    if [ ! -d $SOUND_PREFIX_BHUMAN ]; then
+	sayip_naoqi
+    else
+	sayip_bhuman
+    fi
+}
+
+lostip() {
+    if [ ! -d $SOUND_PREFIX_BHUMAN ]; then
+        $SOUND_PLAYER "${SOUND_PREFIX_NAOQI}stop_jingle${SOUND_SUFFIX}"
+    else
+        $SOUND_PLAYER "${SOUND_PREFIX_BHUMAN}network${SOUND_SUFFIX}"
+    fi
+}
+
+case "$1" in
+        deconfig)
+                if [ -f "$FILE_IP" ]; then
+                        rm "$FILE_IP"
+			lostip
+                fi
+                ;;
+
+        bound)
+		if [ -f "/var/run/bhuman/eth0_ip" ] && [ "$interface" == "wlan0" ]; then
+			# Wait a few seconds
+			sleep 10
+                fi
+                if [ ! -d /var/run/bhuman ]; then
+			mkdir -p /var/run/bhuman
+		fi
+                rm -r "$FILE_IP"
+                echo "$ip" > "$FILE_IP"
+		sayip
+                ;;
+esac
+
+exit 0

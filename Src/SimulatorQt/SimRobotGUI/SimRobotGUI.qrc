@@ -1,0 +1,31 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+  <file>icons/DragPlane.png</file>
+  <file>icons/Simulator.png</file>
+  <file>icons/application_fit.png</file>
+  <file>icons/arrow_rotate_clockwise.png</file>
+  <file>icons/brick.png</file>
+  <file>icons/bricks.png</file>
+  <file>icons/camera.png</file>
+  <file>icons/chart_line.png</file>
+  <file>icons/chart_organisation_grey.png</file>
+  <file>icons/control_play_blue.png</file>
+  <file>icons/control_start_blue.png</file>
+  <file>icons/control_step_blue.png</file>
+  <file>icons/folder.png</file>
+  <file>icons/folder_page.png</file>
+  <file>icons/layers.png</file>
+  <file>icons/opening_angle.png</file>
+  <file>icons/page_copy.png</file>
+  <file>icons/sitemap.png</file>
+  <file>icons/textfield.png</file>
+  <file>icons/transmit_go.png</file>
+  <file>icons/disk.png</file>
+  <file>icons/arrow_redo.png</file>
+  <file>icons/arrow_undo.png</file>
+  <file>icons/cut.png</file>
+  <file>icons/page_paste.png</file>
+  <file>icons/dock_close.png</file>
+  <file>icons/dock_restore.png</file>
+</qresource>
+</RCC>

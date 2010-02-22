@@ -1,0 +1,15 @@
+/* initial state missing */
+option alpha
+{
+	state beta
+	{
+  		subsequent-option {
+  			alpha();
+  		}
+
+		decision-tree {
+			transition-to-state(beta);
+		}
+		
+	}
+}

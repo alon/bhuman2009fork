@@ -1,0 +1,69 @@
+/** The base option for the head control behavior */
+option head_control
+{
+  common decision
+  {
+    if(head.control_mode == none)
+      goto none;
+
+    else if(head.control_mode == search_ball)
+      goto search_ball;
+
+    else if(head.control_mode == look_straight_ahead)
+      goto look_straight_ahead;
+    else if(head.control_mode == look_down)
+      goto look_down;
+    else if(head.control_mode == look_at_ball_and_goal_and_around)
+      goto look_at_ball_and_goal_and_around;
+
+    else if(head.control_mode == look_scan_area_in_front)
+      goto look_scan_area_in_front;      
+  }
+
+  initial state none
+  {
+    action
+    {
+    }
+  }
+
+  state look_scan_area_in_front
+  {
+    action
+    {
+      look_scan_area_in_front();
+    }
+  }
+  
+  state search_ball
+  {
+    action
+    {
+      search_ball();
+    }
+  }
+
+  state look_at_ball_and_goal_and_around
+  {
+    action
+    {
+      look_at_ball_and_goal_and_around();
+    }
+  }
+
+  state look_straight_ahead
+  {
+    action
+    {
+      look_up();
+    }
+  }
+  
+  state look_down
+  {
+    action
+    {
+      look_down();
+    }
+  }
+}

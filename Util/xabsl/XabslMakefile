@@ -1,0 +1,192 @@
+# XabslMakefile
+#
+# Generates the documentation and intermediate code for a Xabsl project.
+#
+# author: Martin Lötzsch, Max Risler
+# 
+# This Makefile should be included into a custom Makefile inside the directory, where the Xabsl sources are.
+# Inside this custom Makefile these Variables have to be set:
+# All paths are relative to the source files and the custom Makefile.
+#
+# AGENTS_FILE:            File containing agent definitions
+#
+# XABSL_OUTPUT_DIR:       Directory where the intermediate code shall be generated
+# XABSL_TEMP_DIR:         Directory where XABSL compiler will store temporary files
+# INTERMEDIATE_CODE:      The filename of the intermediate code to be generated
+# XML_OUTPUT_DIR:         Directory where the xml files should be generated
+# DOC_OUTPUT_DIR:         Directory for the documentation output
+#
+# XABSL_COMPILER_DIR:     Directory which contains the Xabsl compiler
+# XABSL_COMPILER_OPTIONS: Additional optional parameters for the XABSL compiler
+#
+# XSLT:                   An XSLT processor that can process XInclude statements (with necessary parameters)
+# DOT:                    Path of the dot tool 
+# DOTML_DIR:              Directory that contains the DotML Schemas and XSLT stylesheets
+# XABSL_XSL_DIR:          Directory which contains the Xabsl XSLT Stylesheets
+                   
+
+# General documentation output files
+DOC_INDEX_HTML   = $(DOC_OUTPUT_DIR)/index.html
+DOC_AGENTS_HTML = $(DOC_OUTPUT_DIR)/agents.html
+DOC_SYMBOLS_INDEX_HTML = $(DOC_OUTPUT_DIR)/symbols.html
+DOC_OPTION_INDEX_HTML = $(DOC_OUTPUT_DIR)/options.html
+DOC_BASIC_BEHAVIOR_INDEX_HTML = $(DOC_OUTPUT_DIR)/basic-behaviors.html
+DOC_STYLES_CSS   = $(DOC_OUTPUT_DIR)/styles.css
+
+
+# Documentation XSLT Stylesheets
+DOC_INDEX_XSL    = $(XABSL_XSL_DIR)/generate-documentation.index.xsl
+DOC_MENU_XSL     = $(XABSL_XSL_DIR)/generate-documentation.menu.xsl
+DOC_SYMBOLS_XSL  = $(XABSL_XSL_DIR)/generate-documentation.symbols.xsl
+DOC_SYMBOLS_INDEX_XSL = $(XABSL_XSL_DIR)/generate-documentation.symbols-index.xsl
+DOC_AGENTS_XSL    = $(XABSL_XSL_DIR)/generate-documentation.agents.xsl
+DOC_BASIC_BEHAVIORS_XSL = $(XABSL_XSL_DIR)/generate-documentation.basic-behaviors.xsl
+DOC_BASIC_BEHAVIOR_INDEX_XSL = $(XABSL_XSL_DIR)/generate-documentation.basic-behavior-index.xsl
+DOC_OPTION_XSL   = $(XABSL_XSL_DIR)/generate-documentation.option.xsl
+DOC_OPTION_INDEX_XSL = $(XABSL_XSL_DIR)/generate-documentation.option-index.xsl
+DOC_OPTION_TREE_XSL = $(XABSL_XSL_DIR)/generate-documentation.option-tree.xsl
+DOC_PSEUDO_CODE_XSL = $(XABSL_XSL_DIR)/generate-documentation.pseudo-code.xsl
+DOC_PARAMETERS_XSL = $(XABSL_XSL_DIR)/generate-documentation.parameters.xsl
+REMOVE_COMMENTS_XSL = $(XABSL_XSL_DIR)/remove-comments.xsl
+
+# XML output files
+XML_SYMBOL_FILES          := $(shell bash -c "shopt -s nullglob;echo $(XML_OUTPUT_DIR)/Symbols/*.xml")
+XML_BASIC_BEHAVIOR_FILES  := $(shell bash -c "shopt -s nullglob;echo $(XML_OUTPUT_DIR)/BasicBehaviors/*.xml")
+XML_OPTION_FILES          := $(shell bash -c "shopt -s nullglob;echo $(XML_OUTPUT_DIR)/Options/*.xml")
+XML_FILES = $(XML_OUTPUT_DIR)/agents.xml $(XML_OUTPUT_DIR)/options.xml $(XML_OUTPUT_DIR)/symbol-and-basic-behavior-files.dtd $(XML_SYMBOL_FILES) $(XML_BASIC_BEHAVIOR_FILES) $(XML_OPTION_FILES)
+
+# Documentation output files
+DOC_SYMBOL_FILES         = $(shell echo $(XML_SYMBOL_FILES)         |sed "s%[^ ]*/%%g;s%\([^ ]*\)\.xml%$(DOC_OUTPUT_DIR)/symbols.\1.html%g")
+DOC_BASIC_BEHAVIOR_FILES = $(shell echo $(XML_BASIC_BEHAVIOR_FILES) |sed "s%[^ ]*/%%g;s%\([^ ]*\)\.xml%$(DOC_OUTPUT_DIR)/basic-behaviors.\1.html%g")
+DOC_OPTION_FILES         = $(shell echo $(XML_OPTION_FILES)         |sed "s%[^ ]*/%%g;s%\([^ ]*\)\.xml%$(DOC_OUTPUT_DIR)/option.\1.html%g")
+
+# Generate intermediate code, documentation
+all: $(XABSL_OUTPUT_DIR)/$(INTERMEDIATE_CODE) DOCUMENTATION
+
+# Some shortcuts for common targets:
+DOC:    DOCUMENTATION	
+
+rebuild: clean
+	@make all
+
+# Removes the documentation output directory, the intermediate code, the xml output directory and temp directory.	
+clean:
+	@rm -f $(XABSL_TEMP_DIR)/xabsl.*.dump
+	@rm -f $(XABSL_OUTPUT_DIR)/$(INTERMEDIATE_CODE)
+	@rm -rf $(XML_OUTPUT_DIR)
+	@rm -rf $(DOC_OUTPUT_DIR)
+
+# Call xabsl compiler for generating intermediate code
+# Since there is an unknown number of source files this step is always done, xabsl compiler is responsible for rebuilding only necessary files
+IC : $(XABSL_OUTPUT_DIR)/$(INTERMEDIATE_CODE)
+
+# Generate intermediate code
+$(XABSL_OUTPUT_DIR)/$(INTERMEDIATE_CODE) : $(SOURCES)
+	@echo compiling to intermediate code $(XABSL_OUTPUT_DIR)/$(INTERMEDIATE_CODE)
+	@make -s -C $(XABSL_COMPILER_DIR)
+	@ruby $(XABSL_COMPILER_DIR)/xabsl.rb $(XABSL_COMPILER_OPTIONS) -I $(XABSL_TEMP_DIR) -i $(XABSL_OUTPUT_DIR)/$(INTERMEDIATE_CODE) $(AGENTS_FILE)
+
+# Call xabsl compiler for generating xml code
+# Since there is an unknown number of source files this step is always done, xabsl compiler is responsible for rebuilding only necessary files
+XML :
+	@echo compiling to xml output in $(XML_OUTPUT_DIR)
+	@make -s -C $(XABSL_COMPILER_DIR)
+	@ruby $(XABSL_COMPILER_DIR)/xabsl.rb $(XABSL_COMPILER_OPTIONS) -I $(XABSL_TEMP_DIR) -x $(XML_OUTPUT_DIR) $(AGENTS_FILE)
+
+$(XML_OUTPUT_DIR)/agents.xinclude-processed.xml: $(XML_FILES) \
+                                                 $(REMOVE_COMMENTS_XSL)
+	@if test -f $(XML_OUTPUT_DIR)/agents.xinclude-processed.xml; then rm -f $(XML_OUTPUT_DIR)/agents.xinclude-processed.xml; fi 
+	@echo generating `pwd`/$(XML_OUTPUT_DIR)/agents.xinclude-processed.xml 
+	@$(XSLT) -o $(XML_OUTPUT_DIR)/agents.xinclude-processed.xml $(REMOVE_COMMENTS_XSL) $(XML_OUTPUT_DIR)/agents.xml
+	
+# Generates a intermediate xml file for the option trees of all options
+$(XML_OUTPUT_DIR)/option-tree.xml: $(DOC_OPTION_TREE_XSL) $(XML_OUTPUT_DIR)/agents.xinclude-processed.xml
+	@echo generating $@
+	@$(XSLT) -o $(XML_OUTPUT_DIR)/option-tree.xml $(DOC_OPTION_TREE_XSL) $(XML_OUTPUT_DIR)/agents.xinclude-processed.xml
+
+# Generate documentation in two steps, first generate xml output, next generate html files
+# Building in separate steps is necessary since first step generates files needed by second
+DOCUMENTATION:
+	@make -f $(firstword $(MAKEFILE_LIST)) -s XML
+	@make -f $(firstword $(MAKEFILE_LIST)) -s HTML 
+
+# Documenation needs and output directory, the .css file, and index pages and a page for each symbols, basic-behaviors, and options file.
+HTML: $(DOC_OUTPUT_DIR) \
+      $(DOC_OUTPUT_DIR)/svg \
+      $(XML_OUTPUT_DIR)/option-tree.xml \
+      $(DOC_STYLES_CSS) \
+      $(DOC_INDEX_HTML) \
+      $(DOC_SYMBOLS_INDEX_HTML) \
+      $(DOC_BASIC_BEHAVIOR_INDEX_HTML) \
+      $(DOC_OPTION_INDEX_HTML) \
+      $(DOC_AGENTS_HTML) \
+      $(DOC_SYMBOL_FILES) \
+      $(DOC_BASIC_BEHAVIOR_FILES) \
+      $(DOC_OPTION_FILES)
+              
+
+# Generic rule for symbol documentation
+$(DOC_OUTPUT_DIR)/symbols.%.html: $(XML_OUTPUT_DIR)/Symbols/%.xml $(DOC_MENU_XSL) $(DOC_SYMBOLS_XSL) 
+	@echo generating $@
+	@$(XSLT) -o $@ $(DOC_SYMBOLS_XSL) $<
+	
+# Generic rule for option documentation               
+$(DOC_OUTPUT_DIR)/option.%.html: $(XML_OUTPUT_DIR)/Options/%.xml $(DOC_OPTION_XSL) $(DOC_PSEUDO_CODE_XSL) $(DOC_PARAMETERS_XSL) $(DOC_MENU_XSL)
+	@echo generating $@
+	@$(XSLT) --path $(XML_OUTPUT_DIR) --stringparam option-tree-xml option-tree.xml -o $@.temp $(DOC_OPTION_XSL) $< 
+	@$(XSLT) -o $@ $(DOTML_DIR)/embed-svg-graphics.xsl $@.temp
+	@DOTML_DIR=$(DOTML_DIR) DOT=$(DOT) DOTML_XSLT="$(XSLT) (XSL) (INPUT)" $(DOTML_DIR)/generate-svg-graphics.bash $@.temp $(DOC_OUTPUT_DIR)
+	@rm $@.temp 
+
+# Generic rule for basic behavior documentation
+$(DOC_OUTPUT_DIR)/basic-behaviors.%.html: $(XML_OUTPUT_DIR)/BasicBehaviors/%.xml $(DOC_MENU_XSL) $(DOC_BASIC_BEHAVIORS_XSL) $(DOC_PARAMETERS_XSL)
+	@echo generating $@
+	@$(XSLT) -o $@ $(DOC_BASIC_BEHAVIORS_XSL) $<
+	
+# Generates the index page
+$(DOC_INDEX_HTML): $(DOC_MENU_XSL) $(DOC_INDEX_XSL) $(XML_OUTPUT_DIR)/agents.xinclude-processed.xml
+	@echo generating $@
+	@$(XSLT) -o $(DOC_INDEX_HTML) $(DOC_INDEX_XSL) $(XML_OUTPUT_DIR)/agents.xinclude-processed.xml
+
+# Generates the option index page
+$(DOC_OPTION_INDEX_HTML): $(XML_OUTPUT_DIR)/options.xml $(DOC_OPTION_INDEX_XSL) $(DOC_MENU_XSL)
+	@echo generating $@
+	@$(XSLT) -o $(DOC_OPTION_INDEX_HTML) $(DOC_OPTION_INDEX_XSL) $(XML_OUTPUT_DIR)/options.xml 
+
+# Generates the agent index page
+$(DOC_AGENTS_HTML): $(DOC_AGENTS_XSL) $(DOC_MENU_XSL) $(XML_OUTPUT_DIR)/option-tree.xml $(XML_OUTPUT_DIR)/agents.xinclude-processed.xml
+	@echo generating $@
+	@$(XSLT) --path $(XML_OUTPUT_DIR) --stringparam option-tree-xml option-tree.xml -o $@.temp $(DOC_AGENTS_XSL) $(XML_OUTPUT_DIR)/agents.xinclude-processed.xml 
+	@$(XSLT) -o $@ $(DOTML_DIR)/embed-svg-graphics.xsl $@.temp
+	@DOTML_DIR=$(DOTML_DIR) DOT=$(DOT) DOTML_XSLT="$(XSLT) (XSL) (INPUT)" $(DOTML_DIR)/generate-svg-graphics.bash $@.temp $(DOC_OUTPUT_DIR)
+	@rm $@.temp 
+
+# Generates the basic behavior index page
+$(DOC_BASIC_BEHAVIOR_INDEX_HTML): $(DOC_BASIC_BEHAVIOR_INDEX_XSL) $(DOC_MENU_XSL) $(XML_OUTPUT_DIR)/agents.xinclude-processed.xml
+	@echo generating $@
+	@$(XSLT) -o $(DOC_BASIC_BEHAVIOR_INDEX_HTML) $(DOC_BASIC_BEHAVIOR_INDEX_XSL) $(XML_OUTPUT_DIR)/agents.xinclude-processed.xml
+
+# Generates the symbols index page
+$(DOC_SYMBOLS_INDEX_HTML): $(DOC_SYMBOLS_INDEX_XSL) $(DOC_MENU_XSL) $(XML_OUTPUT_DIR)/agents.xinclude-processed.xml
+	@echo generating $@
+	@$(XSLT) -o $(DOC_SYMBOLS_INDEX_HTML) $(DOC_SYMBOLS_INDEX_XSL) $(XML_OUTPUT_DIR)/agents.xinclude-processed.xml
+
+# Copies documentation.css to the documentation output directory
+$(DOC_STYLES_CSS): $(XABSL_XSL_DIR)/documentation.css 
+	@cp $(XABSL_XSL_DIR)/documentation.css $(DOC_OUTPUT_DIR)/styles.css 
+
+# Generates the output directory for intermediate code
+$(XABSL_OUTPUT_DIR):
+	@mkdir -p $(XABSL_OUTPUT_DIR)
+
+# Generates the output directory for xml code
+$(XML_OUTPUT_DIR): 
+	@mkdir -p $(XML_OUTPUT_DIR)
+
+# Generates the output directory for documentation
+$(DOC_OUTPUT_DIR): 
+	@mkdir -p $(DOC_OUTPUT_DIR)
+	
+# The path where the SVG graphics generated for the documentation of options and agents are stored.
+$(DOC_OUTPUT_DIR)/svg: 
+	@mkdir -p $(DOC_OUTPUT_DIR)/svg

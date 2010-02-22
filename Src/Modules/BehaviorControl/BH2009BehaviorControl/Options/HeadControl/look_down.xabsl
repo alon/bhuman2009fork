@@ -1,0 +1,16 @@
+option look_down
+{
+  initial state down
+  {
+    decision
+    {
+      stay;
+    }
+    action
+    {
+      head.head_pan = 0;
+      head.head_tilt = - 5;
+      head.speed = 100;
+    }
+  }
+}

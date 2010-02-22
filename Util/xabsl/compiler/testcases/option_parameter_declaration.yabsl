@@ -1,0 +1,17 @@
+/* option parameter is declared twice */
+option alpha
+{
+	@gamma [0..1] "pounds";
+	@gamma [0..3.1415] "rad";
+
+	initial state beta {
+		
+		subsequent-option {
+			alpha(gamma = 0);
+		}
+	
+		decision-tree {
+			transition-to-state(beta);
+		}
+	}
+}

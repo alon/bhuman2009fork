@@ -1,0 +1,152 @@
+<?lua
+
+-- zbuildgen helper functions for updating qt vcproj files
+
+
+-- finds and returns all rcc files
+
+function qtFindRccFiles(files)
+  local qtRccFiles = {} 
+  for i, file in pairs(files) do
+    if path.getextension(file) == "qrc" then
+      table.insert(qtRccFiles, file)
+    end
+  end
+  return qtRccFiles
+end
+
+
+-- finds and returns all moc files
+
+function qtFindMocFiles(files)
+  local qtMocFiles = {}
+  for i, file in pairs(files) do
+    if path.getextension(file) == "h" then
+      for line in io.lines(file) do
+        if string.find(line, "Q_OBJECT") then
+          table.insert(qtMocFiles, file)
+          break
+        end
+      end
+    end
+  end
+  return qtMocFiles
+end
+
+
+-- finds and returns all resource files
+
+function qtFindResFiles(files)
+  local resfiles = {}
+  for i, depfile in pairs(files) do
+    local extension = string.lower(path.getextension(depfile))
+    if extension ~= "cpp" and extension ~= "cxx" and extension ~= "cc" and extension ~= "c" and
+       extension ~= "hpp" and extension ~= "hxx" and extension ~= "hh" and extension ~= "h" then 
+      table.insert(resfiles, depfile)
+    end
+  end
+  return resfiles
+end
+
+
+-- builds the rcc command line
+
+function qtBuildRccCommand(file, tool, config)
+
+  return qtRcc .. " -name " .. path.dropextension(path.getbasename(file)) .. " " .. file .. " -o " .. tool.output
+end
+
+
+-- builds the moc command line
+
+function qtBuildMocCommand(file, tool, config)
+
+  local defines, includepaths = "", ""
+  for i, define in pairs(config.defines) do defines = defines .. " -D" .. define; end
+  for i, includepath in pairs(config.includepaths) do includepaths = includepaths .. " -I" .. includepath; end
+
+  return qtMoc .. defines .. " -D_MSC_VER=1500 " .. includepaths .. " " .. file .. " -o " .. tool.output
+  
+end 
+
+
+-- adds all rcc files to customBuildTool list
+
+function qtAddRccFiles(qtRccFiles, qtResFiles)
+
+  for i, file in pairs(qtRccFiles) do
+    local output = qtGenDir .. "\\qrc_" .. path.dropextension(path.getbasename(file)) .. ".cpp"
+    local dependencies = { qtRcc }
+    for i, file in pairs(qtResFiles) do
+      table.insert(dependencies, file)
+    end    
+    local tool = {
+      file = file,
+      command = qtBuildRccCommand,
+      description = path.getbasename(file) .. " (Qt rcc)",
+      dependencies = dependencies,
+      output = output,
+    }
+    table.insert(customBuildTools, tool)
+    local tool = {
+      filter = ".Qt",
+      file = output,
+    }
+    table.insert(customBuildTools, tool)
+  end
+
+end
+
+
+-- adds all moc files to customBuildTool list
+
+function qtAddMocFiles(qtMocFiles)
+
+  for i, file in pairs(qtMocFiles) do
+    local output = qtGenDir .. "\\moc_" .. path.dropextension(path.getbasename(file)) .. ".cpp"
+    local tool = {
+      file = file,
+      command = qtBuildMocCommand,
+      description = path.getbasename(file) .. " (Qt moc)",
+      dependencies = { qtMoc },
+      output = output,
+    }
+    table.insert(customBuildTools, tool)
+    local tool = {
+      filter = ".Qt",
+      file = output,
+    }
+    table.insert(customBuildTools, tool)
+  end
+  
+end
+
+
+-- perform Qt extensions
+
+if baseFile and files then
+
+  if customBuildTools == nil then
+    customBuildTools = {}
+  end
+
+  local tbl = {}
+  table.expand(files, tbl)
+  files = tbl
+  table.sort(files)
+  
+  local qtRccFiles = qtFindRccFiles(files)
+  local qtMocFiles = qtFindMocFiles(files)
+  local qtResFiles = qtFindResFiles(files)
+  
+  qtAddRccFiles(qtRccFiles, qtResFiles)
+  qtAddMocFiles(qtMocFiles)
+
+end
+
+
+-- and finally update the vcproj file
+
+include("updateVcProjFile.zbuild")
+
+?>

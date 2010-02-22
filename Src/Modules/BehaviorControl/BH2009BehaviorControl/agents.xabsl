@@ -1,0 +1,59 @@
+/***
+Title: B-Human Soccer 2009
+Platform: Nao.
+
+___IN ALPHABETICAL ORDER____, symbols first
+*/
+
+include "../CommonSymbols/math_symbols.xabsl";
+include "../CommonSymbols/motion_symbols.xabsl";
+include "../CommonSymbols/sound_symbols.xabsl";
+include "../CommonSymbols/key_symbols.xabsl";
+
+include "Symbols/ball_symbols.xabsl";
+include "Symbols/fall_down_symbols.xabsl";
+include "Symbols/field_symbols.xabsl";
+include "Symbols/game_symbols.xabsl";
+include "Symbols/goal_symbols.xabsl";
+include "Symbols/head_symbols.xabsl";
+include "Symbols/head_control_symbols.xabsl";
+include "Symbols/led_symbols.xabsl";
+include "Symbols/locator_symbols.xabsl";
+include "Symbols/obstacle_symbols.xabsl";
+include "Symbols/role_symbols.xabsl";
+include "Symbols/soccer_symbols.xabsl";
+include "Symbols/team_symbols.xabsl";
+
+
+include "Options/Debugging/official_button_interface.xabsl";
+include "Options/Debugging/display_control.xabsl";
+include "Options/Debugging/display_ears.xabsl";
+include "Options/Debugging/display_kickoff.xabsl";
+include "Options/Debugging/display_left_eye.xabsl";
+include "Options/Debugging/display_right_eye.xabsl";
+include "Options/Debugging/display_state.xabsl";
+include "Options/Debugging/display_team_color.xabsl";
+
+/* New HeadControl */
+include "Options/HeadControl/head_control.xabsl";
+include "Options/HeadControl/look_up.xabsl";
+include "Options/HeadControl/look_down.xabsl";
+include "Options/HeadControl/look_at_ball_and_goal_and_around.xabsl";
+include "Options/HeadControl/look_scan_area_in_front.xabsl";
+include "Options/HeadControl/search_ball.xabsl";
+
+include "Options/Skills/go_to_ball.xabsl";
+include "Options/Skills/kick.xabsl";
+include "Options/Skills/special_action.xabsl";
+include "Options/Skills/stand_up.xabsl";
+
+
+include "Options/Soccer/pre_initial_state.xabsl";
+include "Options/Soccer/start_soccer.xabsl";
+include "Options/Soccer/body_control.xabsl";
+include "Options/Soccer/Striker/playing_striker.xabsl";
+
+
+
+/** RoboCup Winner 2009 B-Human Soccer Agent */
+agent soccer("Soccer", pre_initial_state);

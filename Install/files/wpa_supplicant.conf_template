@@ -1,0 +1,7 @@
+network={
+        ssid="template"
+	key_mgmt=NONE
+	wep_key0="template"
+	wep_tx_keyidx=0
+	priority=5
+}

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="9,00"
+	Name="libbhuman"
+	ProjectGUID="{165FFCFB-4721-4C30-A2FE-86A21F5CF89F}"
+	RootNamespace="libbhuman"
+	Keyword="MakeFileProj"
+	TargetFrameworkVersion="196613"
+	>
+	<Platforms>
+		<Platform
+			Name="Win32"
+		/>
+	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
+	<Configurations>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="../Build/libbhuman/Linux/$(ConfigurationName)"
+			IntermediateDirectory="../Build/libbhuman/Linux/$(ConfigurationName)"
+			ConfigurationType="0"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="bash -c &quot;../Src/SimulatorQt/Util/zbuildgen/Win32/bin/zbuildgen.exe libbhuman.make.zbuild &amp;&amp; make -j 2 -f libbhuman.make Release PATH=crosstool:/bin:/usr/bin&quot;"
+				ReBuildCommandLine="bash -c &quot;../Src/SimulatorQt/Util/zbuildgen/Win32/bin/zbuildgen.exe libbhuman.make.zbuild &amp;&amp; make -f libbhuman.make clean &amp;&amp; make -j 2 -f libbhuman.make Release PATH=crosstool:/bin:/usr/bin&quot;"
+				CleanCommandLine="bash -c &quot;../Src/SimulatorQt/Util/zbuildgen/Win32/bin/zbuildgen.exe libbhuman.make.zbuild &amp;&amp; make -f libbhuman.make clean PATH=crosstool:/bin:/usr/bin&quot;"
+				Output="../Build/libbhuman/Linux/$(ConfigurationName)/libbhuman.so"
+				PreprocessorDefinitions="NDEBUG"
+				IncludeSearchPath="../Util/alcommon/include;../Util/alcommon/interface;../Util/alcommon/soap"
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<File
+			RelativePath="..\Src\libbhuman\bhuman.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\Src\libbhuman\bhuman.h"
+			>
+		</File>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>

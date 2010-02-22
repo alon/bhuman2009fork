@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Scintilla xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <globals>
+    
+	  	<value name="comment-font">Courier New</value>
+		<value name="keyword-color">blue</value>
+		<value name="operator-color">purple</value>		
+		<value name="code-color">black</value>
+
+  </globals>
+  <style-classes>
+	  <style-class name="default" for="0x000000" back="0xFFFFFF" size="10" font="Courier New"/>
+  </style-classes>
+  <keyword-classes>
+	  <keyword-class name="xabsl">
+		  option initial state decision common action if else target goto
+		  agent include target
+	  </keyword-class>	
+  </keyword-classes>
+  <languages>
+  <language name="xabsl">
+      <lexer name="cpp" key="3" />
+      <file-extensions>xabsl</file-extensions>
+      <use-keywords>
+        <keyword key="0" class="xabsl" />
+      </use-keywords>
+      <use-styles>
+        <style name="DEFAULT" key="0" back="white" fore="black" />
+        <style name="COMMENT" key="1" back="white" fore="DarkOliveGreen" />
+        <style name="COMMENTLINE" key="2" back="white" fore="DarkOliveGreen" />
+        <style name="COMMENTDOC" key="3" back="white" fore="DarkOliveGreen" />
+        <style name="NUMBER" key="4" back="white" fore="DarkViolet" />
+        <style name="KEYWORD" key="5" back="white" fore="DarkBlue" bold="true" />
+        <style name="STRING" key="6" back="white" fore="Maroon" bold="true" />
+        <style name="CHARACTER" key="7" back="white" fore="black" />
+        <style name="UUID" key="8" back="white" fore="DarkGreen" />
+        <style name="PREPROCESSOR" key="9" back="white" fore="megenta" />
+        <style name="OPERATOR" key="10" back="white" fore="Olive" />
+        <style name="IDENTIFIER" key="11" back="white" fore="black" />
+        <style name="STRINGEOL" key="12" back="white" fore="black" />
+        <style name="VERBATIM" key="13" back="white" fore="black" />
+        <style name="REGEX" key="14" back="white" fore="purple" />
+        <style name="COMMENTLINEDOC" key="15" back="white" fore="black" />
+        <style name="WORD2" key="16" back="white" fore="black" />
+        <style name="COMMENTDOCKEYWORD" key="17" back="white" fore="black" />
+        <style name="COMMENTDOCKEYWORDERROR" key="18" back="white" fore="black" />
+        <style name="STYLE_LINENUMBER" key="33" back="white" fore="black" />
+        <style name="DOCUMENT_DEFAULT" key="32" back="white" fore="black" />
+      </use-styles>
+    </language>
+  </languages>
+</Scintilla>

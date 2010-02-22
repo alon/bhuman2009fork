@@ -1,0 +1,239 @@
+/** Scan mode for scanning for beacons and goals */
+option look_at_ball_and_goal_and_around
+{
+  initial state move_head_to_ball
+  {
+    decision
+    {
+      if(state_time > 2000)
+        goto move_head_to_left_overview_point;
+      else if(head.position_reached || ball.was_seen)
+        goto look_at_ball;
+      else
+        stay;
+    }
+    action
+    {
+      head.head_pan = head.look_at_point.head_pan(x = ball.x, y = ball.y, z = 0, offset_in_image.x = 0, offset_in_image.y = 0);
+      head.head_tilt = head.look_at_point.head_tilt(x = ball.x, y = ball.y, z = 0, offset_in_image.x = 0, offset_in_image.y = 0);
+      head.speed = 300;
+    }
+  }
+
+  state look_at_ball
+  {
+    decision
+    {
+      if(state_time > 1000 && !ball.was_seen)
+        goto scan;       
+      else if(state_time > 2000)
+      {
+        if(abs(value = locator.opponent_goal.angle) > 100)
+          goto look_at_own_goal;
+        else
+          goto look_at_opponent_goal;
+      }
+      else
+        stay;
+    }
+    action
+    {
+      head.head_pan = head.look_at_point.head_pan(x = ball.x, y = ball.y, z = 0, offset_in_image.x = 0, offset_in_image.y = 0);
+      head.head_tilt = head.look_at_point.head_tilt(x = ball.x, y = ball.y, z = 0, offset_in_image.x = 0, offset_in_image.y = 0);
+      head.speed = 75;
+    }
+  }
+  
+  state look_at_ball_a_second_time
+  {
+    decision
+    {
+      if(state_time > 1000 && !ball.was_seen)
+        goto scan;       
+      else if(state_time > 2000)
+      {
+        goto move_head_to_left_overview_point;
+      }
+      else
+        stay;
+    }
+    action
+    {
+      head.head_pan = head.look_at_point.head_pan(x = ball.x, y = ball.y, z = 0, offset_in_image.x = 0, offset_in_image.y = 0);
+      head.head_tilt = head.look_at_point.head_tilt(x = ball.x, y = ball.y, z = 0, offset_in_image.x = 0, offset_in_image.y = 0);
+      head.speed = 75;
+    }
+  }
+  
+  state look_at_ball_a_third_time
+  {
+    decision
+    {
+      if(state_time > 1000 && !ball.was_seen)
+        goto scan;       
+      else if(state_time > 2000)
+      {
+        goto look_around_right_step3;
+      }
+      else
+        stay;
+    }
+    action
+    {
+      head.head_pan = head.look_at_point.head_pan(x = ball.x, y = ball.y, z = 0, offset_in_image.x = 0, offset_in_image.y = 0);
+      head.head_tilt = head.look_at_point.head_tilt(x = ball.x, y = ball.y, z = 0, offset_in_image.x = 0, offset_in_image.y = 0);
+      head.speed = 75;
+    }
+  }
+
+  state look_at_opponent_goal
+  {
+    decision
+    {
+    if(state_time > 2000)
+      goto look_at_ball_a_second_time;
+    else
+      stay;
+    }
+    action
+    {
+      head.head_pan = locator.opponent_goal.angle;
+      head.head_tilt = head.max_head_tilt_up_for_target_head_pan(intendedTilt = 40);
+      head.speed = 75;
+    }
+  }
+
+  state look_at_own_goal
+  {
+    decision
+    {
+    if(state_time > 2000)
+      goto look_at_ball_a_second_time;
+    else
+      stay;
+    }
+    action
+    {
+      head.head_pan = locator.own_goal.angle;
+      head.head_tilt = head.max_head_tilt_up_for_target_head_pan(intendedTilt = 40);
+      head.speed = 75;
+    }
+  }
+  
+  state move_head_to_left_overview_point
+  {
+    decision
+    {
+      if(head.position_reached || state_time > 2000)
+        goto look_around_right_step1;
+      else
+        stay;
+    }
+    action
+    {
+      head.head_pan = 90;
+      head.head_tilt = 20;
+      head.speed = 100;
+    }
+  }
+  
+  state look_around_right_step1
+  {
+    decision
+    {
+      if(state_time > 400)
+        goto look_around_right_step2;
+      else
+        stay;
+    }
+    action
+    {
+      head.head_pan = 55;
+      head.head_tilt = 20;
+      head.speed = 100;
+    }
+  }
+  
+  state look_around_right_step2
+  {
+    decision
+    {
+      if(state_time > 400)
+        goto look_at_ball_a_third_time;
+      else
+        stay;
+    }
+    action
+    {
+      head.head_pan = 15;
+      head.head_tilt = 40;
+      head.speed = 100;
+    }
+  }
+  
+  state look_around_right_step3
+  {
+    decision
+    {
+      if(head.position_reached || state_time > 1000)
+        goto look_around_right_step4;
+      else
+        stay;
+    }
+    action
+    {
+      head.head_pan = -15;
+      head.head_tilt = 40;
+      head.speed = 100;
+    }
+  }
+  
+  state look_around_right_step4
+  {
+    decision
+    {
+      if(state_time > 400)
+        goto look_around_right_step5;
+      else
+        stay;
+    }
+    action
+    {
+      head.head_pan = -55;
+      head.head_tilt = 20;
+      head.speed = 100;
+    }
+  }
+  
+  state look_around_right_step5
+  {
+    decision
+    {
+      if(state_time > 400)
+        goto move_head_to_ball;
+      else
+        stay;
+    }
+    action
+    {
+      head.head_pan = -90;
+      head.head_tilt = 20;
+      head.speed = 100;
+    }
+  }
+  
+  state scan
+  {
+    decision
+    {
+      if(ball.was_seen)
+        goto look_at_ball;
+      else
+        stay;
+    }
+    action
+    {
+      look_scan_area_in_front();
+    }
+  }
+}

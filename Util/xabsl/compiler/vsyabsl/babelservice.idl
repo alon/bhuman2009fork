@@ -1,0 +1,891 @@
+
+/***************************************************************************
+         Copyright (c) Microsoft Corporation, All rights reserved.             
+***************************************************************************/
+
+cpp_quote("")
+cpp_quote("/***************************************************************************")
+cpp_quote("         Copyright (c) Microsoft Corporation, All rights reserved.          ")
+cpp_quote("***************************************************************************/")
+cpp_quote("")
+
+/*---------------------------------------------------------
+BabelServiceLib:
+  Interface specification for the Babel language services.  
+  
+  Midl will convert this file to 
+  - a header file [babelservice.h]
+  - a GUID definition file [babelservice_i.c].
+
+  command line:
+  - midl /h babelservice.h /char unsigned /notlb ..\babelservice.idl
+---------------------------------------------------------*/  
+[
+  uuid(4E71BA42-5C36-11d3-B3FD-006008D1BF8C),
+  version(1.0),
+  helpstring("BabelService 1.0 Type Library")
+]
+library BabelServiceLib
+{
+  importlib("stdole32.tlb");
+  importlib("stdole2.tlb");
+
+  /*---------------------------------------------------------
+  The Babel Core interfaces
+  ---------------------------------------------------------*/
+  interface IColorSink;
+  interface IParseSink;
+  interface IBabelService;
+  interface IBabelPackage;
+  interface IBabelProject;
+
+  /*---------------------------------------------------------
+  The Babel Scope interfaces
+  ---------------------------------------------------------*/
+  interface INames;
+  interface IMethods;
+  interface IDeclarations;
+  interface IScope;
+
+
+  /*---------------------------------------------------------
+  Severity:
+    The severity of an error. 
+    Used by Babel to select an appropiate bitmap 
+    in the task window.
+  ---------------------------------------------------------*/
+  enum Severity 
+  {
+    SevHint,
+    SevWarning,
+    SevError,
+    SevFatal
+  };
+
+  /*---------------------------------------------------------
+  ParseReason:
+    The reason why the parser is called.
+    A service can be optimized by only doing work that is 
+    needed given the reason. An [IScope] for example only
+    needs to be build when the reason is [ReasonCheck].
+    The methods in the [IParseSink] contain documentation
+    about which methods can be called for each reason.
+  ---------------------------------------------------------*/
+  enum ParseReason
+  {
+    ReasonColorize,
+    ReasonCheck,
+    ReasonMemberSelect,
+    ReasonCompleteWord,
+    ReasonQuickInfo,
+    ReasonMethodTip,
+    ReasonMatchBraces,
+    ReasonHighlightBraces,
+    ReasonAutos,
+    ReasonCodeSpan
+  };
+
+  /*---------------------------------------------------------
+  CharClass:
+    The class of the current character. 
+    Used to determine the word extent and search ranges.
+    The color class normally coincides with the [CharClass]
+    but that doesn't have to be so. The main difference is
+    that the [CharClass] is fixed and the color classes can
+    be customized.
+  ---------------------------------------------------------*/
+  enum CharClass
+  {
+    CharDefault     = 0,
+    CharText        = CharDefault,
+    CharKeyword,
+    CharIdentifier,
+    CharString,
+    CharLiteral,
+
+    CharOperator,
+    CharDelimiter,
+    CharEmbedded,
+
+    CharWhiteSpace,
+    CharLineComment,
+    CharComment,
+
+    CharDefaultLast = CharComment
+  };
+
+  /*---------------------------------------------------------
+  TriggerClass:
+    If a character has (a) trigger(s) associated with it, it may
+    fire one of the following actions when it is entered by a user:
+    [TriggerMemberSelect]  a member selection tip window
+    [TriggerMatchBraces]   highlight matching braces
+    [TriggerMethodTip]     a method tip window
+    
+    The triggers exist for speed reasons: the (fast) lexer 
+    determines when a (slow) parse might be needed. 
+    The [TriggerMethodTip] trigger is subdivided in 4 
+    other triggers. It is the best to be as specific as possible;
+    it is better to return [TriggerParamStart] than [TriggerParam]
+    (or [TriggerMethodTip]) 
+  ---------------------------------------------------------*/
+  typedef long TriggerClass;
+
+  enum DefaultTriggerClass
+  {
+    TriggerNone             = 0,
+    TriggerMemberSelect     = 0x01,
+    TriggerMatchBraces      = 0x02,
+
+    TriggerMethodTip        = 0xf0,
+    TriggerParamStart       = 0x10,
+    TriggerParamNext        = 0x20,
+    TriggerParamEnd         = 0x40,
+    TriggerParam            = 0x80
+  };
+
+  /*---------------------------------------------------------
+  ColorClass:
+    Determines the color class of a character, ie. a keyword,
+    identifier or something else. At the end, the user defines
+    the "real" color of each color class in the [options] menu.
+  ---------------------------------------------------------*/
+  typedef long ColorClass;
+
+  /*---------------------------------------------------------
+  DefaultColorClass:
+    These default color classes are always available. If a 
+    client doesn't need custom color classes, it can set
+    attribute "RequestStockColors" to 0 and use these defaults.
+    Otherwise, one has to implement [BabelService::GetColorInfo]
+  ---------------------------------------------------------*/
+  enum DefaultColorClass
+  {
+    ClassDefault    = 0,
+    ClassText       = ClassDefault,
+    ClassKeyword,
+    ClassComment,
+    ClassIdentifier,
+    ClassString,
+    ClassNumber,
+    ClassDefaultLast = ClassNumber,
+  };
+
+
+  /*---------------------------------------------------------
+  Default Scope:
+    The following enumerations: [ScopeKind], [ScopeAccess],
+    [ScopeStorage], [IconGroupSize], [ScopeIconGroup], 
+    [ScopIconItem] and [ScopeIcon] are only needed when using
+    the default scope builder. This is provided as an extra
+    service but you can always implement your own language
+    specific [IScope] implemention.
+  ---------------------------------------------------------*/    
+
+  /*---------------------------------------------------------
+  ScopeKind:
+    The kind of scope that is opened. These kinds have no
+    semantic significance. They are only used to determine
+    the bitmaps used when displaying scope information.
+	
+    except for:		
+      a method info popup box is only showed for "ScopeProcedure"
+      parameters of a method are determined by "StorageParameter"		
+  ---------------------------------------------------------*/
+  enum ScopeKind
+  {
+    ScopeUnknown = 0,
+    ScopeModule,
+    ScopeClass,
+    ScopeInterface,
+    ScopeUnion,
+
+    ScopeProcedure,
+    ScopeVariable,
+
+    ScopeBlock
+  };
+
+  /*---------------------------------------------------------
+  ScopeAccess:
+  ---------------------------------------------------------*/
+  enum ScopeAccess
+  {
+    AccessPrivate = 0,
+    AccessProtected,
+    AccessPublic
+  };
+
+  /*---------------------------------------------------------
+  ScopeStorage:
+    Together with a [ScopeKind] this determines the object.
+    For example, a method has a kind [ScopeProcedure] and
+    a storage [StorageMember]. 
+  ---------------------------------------------------------*/
+  enum ScopeStorage
+  {
+    StorageConstant = 0,
+    StorageStatic,
+    StorageMember,
+    StorageVirtual,
+    StorageParameter,
+    StorageResult,
+    StorageLocal,
+    StorageType,
+    StorageNone,
+    StorageOther
+  };
+
+  /*---------------------------------------------------------
+  Icons:
+    There are 180 default icons available. 
+    There are 30 groups of 6 icons. The first 27 groups
+    have 6 variants of a certain icon. For example, the
+    first group [IconGroupClass] has a class icon shown
+    as normal [IconItemNormal], with a little key [IconItemProtected],
+    with a lock [IconItemPrivate] etc.
+    These icons can be indexed as: [IconGroupXXX * IconGroupSize + IconItemXXX]
+    The last 3 groups consist of 18 random icons which have
+    their indices in the [ScopeIcon] enumerations.
+
+    You can use your own icons by implementing 
+    [BabelService::GetImageList]
+  ---------------------------------------------------------*/
+  const int IconGroupSize = 6;
+
+  enum ScopeIconGroup
+  {
+    IconGroupClass = 0,
+    IconGroupType,
+    IconGroupDelegate,
+    IconGroupType2,
+    IconGroupType3,
+    IconGroupEvent,
+    IconGroupResource,
+    IconGroupFieldBlue,
+    IconGroupInterface,
+    IconGroupTextLine,
+    IconGroupScript,
+    IconGroupScript2,
+    IconGroupMethod,
+    IconGroupMethod2,
+    IconGroupDiagram,
+    IconGroupNameSpace,
+    IconGroupFormula,
+    IconGroupProperty,
+    IconGroupStruct,
+    IconGroupTemplate,
+    IconGroupOpenSquare,
+    IconGroupBits,
+    IconGroupChannel,
+    IconGroupFieldRed,
+    IconGroupUnion,
+    IconGroupForm,
+    IconGroupFieldYellow,
+    IconGroupMisc1,
+    IconGroupMisc2,
+    IconGroupMisc3
+  };
+
+  enum ScopeIconItem 
+  {
+    IconItemPublic,
+    IconItemInternal,
+    IconItemSpecial,
+    IconItemProtected,
+    IconItemPrivate,
+    IconItemShortCut,
+    IconItemNormal  = IconItemPublic
+  };
+
+  enum ScopeIconMisc
+  {
+    IconBlackBox = 162,   /* (IconGroupMisc1 * IconGroupSize) */
+    IconLibrary,
+    IconProgram,
+    IconWebProgram,
+    IconProgramEmpty,
+    IconWebProgramEmpty,
+
+    IconComponents,
+    IconEnvironment,
+    IconWindow,
+    IconFolderOpen,
+    IconFolder,
+    IconArrowRight,
+
+    IconAmbigious,
+    IconShadowClass,
+    IconShadowMethodPrivate,
+    IconShadowMethodProtected,
+    IconShadowMethod,
+    IconInCompleteSource
+  };
+
+
+  /*---------------------------------------------------------
+  INames:
+    The [INames] interface is an abstraction over qualified
+    names (ie. [Stack.Push]). It represent a list of 
+    name/selector pairs for which the last selector may 
+    be empty.
+  ---------------------------------------------------------*/    
+  [ object
+  , uuid(4E71BA45-5C36-11d3-B3FD-006008D1BF8C)
+  , helpstring("INames Interface")
+  , oleautomation
+  , dual
+  ]
+  interface INames : IDispatch
+  {
+    /*---------------------------------------------------------
+    GetCount: return the number or name/selector pairs
+    ---------------------------------------------------------*/
+    HRESULT GetCount( [out,ref,retval] long* count );
+
+    /*---------------------------------------------------------
+    GetName: return name of the name/selector pair at [index]
+    ---------------------------------------------------------*/
+    HRESULT GetName( [in] long index, [out,ref,retval] BSTR* name );
+
+    /*---------------------------------------------------------
+    GetSelector: return selector of the name/selector pair at [index]
+    ---------------------------------------------------------*/
+    HRESULT GetSelector( [in] long index, [out,ref,retval] BSTR* selector );
+  };
+  
+  /*---------------------------------------------------------
+  IDeclarations:
+    This interface is an abstraction of the "List Members" 
+    window in Visual Studio. It is a set of name/glyph/description
+    triples. 
+  ---------------------------------------------------------*/    
+  [ object
+  , uuid(4E71BA46-5C36-11d3-B3FD-006008D1BF8C)
+  , helpstring("IDeclarations Interface")
+  , oleautomation
+  , dual
+  ]
+  interface IDeclarations : IDispatch
+  {
+    /*---------------------------------------------------------
+    GetCount: return the number of elements
+    ---------------------------------------------------------*/
+    HRESULT GetCount      ( [out,ref,retval] long* count );
+
+    /*---------------------------------------------------------
+    GetName: return [name] of the triple at [index]
+      ie. "Push"
+    ---------------------------------------------------------*/
+    HRESULT GetName       ( [in] long index, [out,ref,retval] BSTR* name );
+
+    /*---------------------------------------------------------
+    GetDescription: return [description] of the triple at [index]
+      ie. "void Stack.Push( Object* element )"
+    ---------------------------------------------------------*/
+    HRESULT GetDescription( [in] long index, [out,ref,retval] BSTR* description );    
+
+    /*---------------------------------------------------------
+    GetGlyph: return [glyph] of the triple at [index]
+      ie. (IconGroupMethod*6 + IconItemPublic)
+    ---------------------------------------------------------*/
+    HRESULT GetGlyph      ( [in] long index, [out,ref,retval] long* glyph );
+
+    /*---------------------------------------------------------
+    GetBestMatch: return the [index] of the best match for [text].
+      If the match is unique, [uniqueMatch] should be true.
+    ---------------------------------------------------------*/    
+    HRESULT GetBestMatch( [in] BSTR text, [out,ref] long* index, [out,ref] VARIANT_BOOL* uniqueMatch );
+  };
+  
+
+  /*---------------------------------------------------------
+  IMethods:
+    This interface is an abstraction over the "Method Info"
+    window in Visual Studio. It is a set of method records
+    where each record contains the name of the method,
+    the parameters and type information. It is a set of methods
+    since there might be many (overloaded) methods with
+    the same name.
+  ---------------------------------------------------------*/    
+  [ object
+  , uuid(4E71BA47-5C36-11d3-B3FD-006008D1BF8C)
+  , helpstring("IMethods Interface")
+  , oleautomation
+  , dual
+  ]
+  interface IMethods : IDispatch
+  {
+    /*---------------------------------------------------------
+    GetName: return [name] of the method(s)
+      ie. "Push"
+    ---------------------------------------------------------*/    
+    HRESULT GetName ( [out,ref,retval] BSTR* name  );
+    
+    /*---------------------------------------------------------
+    GetCount: return the number or method records.
+    ---------------------------------------------------------*/    
+    HRESULT GetCount( [out,ref,retval] long* count );
+
+    /*---------------------------------------------------------
+    GetDescription: return the [description] of the method at [index]
+      The [description] is a string containing all available information 
+      about this method.
+    ---------------------------------------------------------*/    
+    HRESULT GetDescription( [in] long index, [out,ref,retval] BSTR* description );    
+
+    /*---------------------------------------------------------
+    GetType: return the return [type] of the method at [index]
+      ie. "void"
+    ---------------------------------------------------------*/    
+    HRESULT GetType( [in] long index, [out,ref,retval] BSTR* type );
+    
+    /*---------------------------------------------------------
+    GetParameterCount: return number of parameters of the method at [index]
+    ---------------------------------------------------------*/    
+    HRESULT GetParameterCount( [in] long index, [out,ref,retval] long* count );
+
+    /*---------------------------------------------------------
+    GetParameterInfo: return the [name], [display] and [description] of
+      a [parameter] of a method at [index].
+      The [description] is again a string with all available information.
+      The [display] is a string with the complete parameter declaration,
+      normally the type and name, ie. "Object* element".
+    ---------------------------------------------------------*/    
+    HRESULT GetParameterInfo ( [in] long index, 
+                               [in] long parameter, 
+                               [out,unique] BSTR* name,
+                               [out,unique] BSTR* display,
+                               [out,unique] BSTR* description );
+  };
+  
+  
+
+  /*---------------------------------------------------------
+  IScope:
+    This interface is an abstraction over a symbol tree of
+    a source file. An [IScope] is build during a parse over
+    a source file ([ReasonCheck]). 
+  ---------------------------------------------------------*/    
+  [ object
+  , uuid(4E71BA44-5C36-11d3-B3FD-006008D1BF8C)
+  , helpstring("IScope Interface")
+  , oleautomation
+  , dual
+  ]
+  interface IScope : IDispatch
+  {
+    /*---------------------------------------------------------
+    GetDeclarations: return the declarations in a scope given
+      a context: a [line], a column [idx] and a qualified name [names].
+      If [names] is NULL or empty, all visible declarations at
+      [line],[idx] should be returned. If a qualified name is given,
+      only the declarations that belong to that name.
+      ie. if "Stack." is passed, only members of the "Stack" class
+      are returned. If no location is known, [line] and [idx] are
+      both 0.
+    ---------------------------------------------------------*/
+    HRESULT GetDeclarations( [in] long line, 
+                             [in] long idx, 
+                             [in,unique] INames* names,
+                             [out,ref,retval] IDeclarations** decls );  
+    /*---------------------------------------------------------
+    GetDataTipText: return the "pop up" (or "Quick Info") text
+      given a certain context.
+    ---------------------------------------------------------*/    
+    HRESULT GetDataTipText ( [in] long line, 
+                             [in] long idx, 
+                             [in,unique] INames* names,
+                             [out,ref,retval] BSTR* text );  
+
+    /*---------------------------------------------------------
+    GetMethods: return the "Method Info" for a method. 
+    ---------------------------------------------------------*/
+    HRESULT GetMethods     ( [in] long line,
+                             [in] long idx,
+                             [in,unique] INames* names,
+                             [out,ref,retval] IMethods** imethods );
+
+    /*---------------------------------------------------------
+    Narrow: return the "innermost" name that encloses a 
+      certain locations [line],[idx]. The [startLine] should
+      contain the line number where the scope of [name] starts.
+      This method is called by the debugger to show the scope
+      in which a breakpoint is set.
+    ---------------------------------------------------------*/    
+    HRESULT Narrow         ( [in] long line,
+                             [in] long idx,
+                             [out,ref] BSTR* name,
+                             [out,ref] long* startLine );
+  };
+
+
+  /*---------------------------------------------------------
+  IColorSink:
+    This service interface is passed as an argument to [BabelService::ColorLine]
+    Its main use is to set the color class of each
+    character but it is also used to pass the character class
+    and trigger information.
+  ---------------------------------------------------------*/
+  [ object
+  , uuid(4E71BA43-5C36-11d3-B3FD-006008D1BF8C)
+  , helpstring("IColorSink Interface")
+  , oleautomation
+  , dual
+  ]
+  interface IColorSink : IDispatch
+  {       
+    /*---------------------------------------------------------
+    Colorize:   
+      Set the colorclasses for a range of characters in a line.
+      The [startIdx] and [endIdx]  arguments specify the character 
+      index in the line. (in constrast to columns, this means that 
+      '\t' characters are treated as single character). 
+      The indices are 0 based, ie. the first character has index 0.
+    ---------------------------------------------------------*/
+    [helpstring("method Colorize")] 
+    HRESULT Colorize( [in] long startIdx,
+                      [in] long endIdx,
+                      [in] ColorClass colorClass,
+                      [in] enum CharClass charClass,
+                      [in] TriggerClass trigger );
+  };
+
+
+
+
+  /*---------------------------------------------------------
+  IParseSink:
+    This service interface is passed as an argument to [BabelService::ParseSource]
+    It is used to return information gathered
+    during parsing to the VS environment.  It is mainly used to 
+    send (warning/error) messages. Most methods should only be
+    called if a certain reason is set. Each method contains 
+    a set of reasons during which they can be called.
+  ---------------------------------------------------------*/
+  [ object
+  , uuid(4E71BA40-5C36-11d3-B3FD-006008D1BF8C)
+  , helpstring("IParseSink Interface")
+  , oleautomation
+  , dual
+  ]
+  interface IParseSink : IDispatch
+  {
+    /*---------------------------------------------------------
+    ErrorMessage: [ReasonCheck]
+      Send a [message] to the VS enviroment. The kind of message
+      is specified through the severity [sev]. 
+    ---------------------------------------------------------*/
+    [helpstring("ErrorMessage")] 
+    HRESULT ErrorMessage( [in] long startLine, [in] long endLine, 
+                          [in] long startIdx,  [in] long endIdx,
+                          [in] enum Severity sev, [in] BSTR message );
+
+    /*---------------------------------------------------------
+    MatchPair/Triple:  [Reason HighLightBraces/MatchBraces]
+      Whenever a matching pair is parsed, this method is called
+      with the text span of both the left and right item. The
+      information is used when a user types "ctrl-]" in VS
+      to find a matching brace and when auto-highlight matching
+      braces is enabled.
+    ---------------------------------------------------------*/    
+    HRESULT MatchPair( [in] long startLine1, [in] long startIdx1,
+                       [in] long endLine1,   [in] long endIdx1, 
+                       [in] long startLine2, [in] long startIdx2,
+                       [in] long endLine2,   [in] long endIdx2 );
+
+    HRESULT MatchTriple( [in] long startLine1, [in] long startIdx1,
+                         [in] long endLine1,   [in] long endIdx1, 
+                         [in] long startLine2, [in] long startIdx2,
+                         [in] long endLine2,   [in] long endIdx2,
+                         [in] long startLine3, [in] long startIdx3,
+                         [in] long endLine3,   [in] long endIdx3 );
+
+    /*---------------------------------------------------------
+    Member Selection: [Reason MemberSelect,CompleteWord,QuickInfo,
+                              MethodTip,Autos]
+      [StartName] is called for each name that is parsed ("Stack").
+      [QualifyName] is called for each qualification with both
+      the text span of the selector (".")  and the text span 
+      of the name ("Push").
+    ---------------------------------------------------------*/    
+    HRESULT StartName  ( [in] long line, [in] long startIdx, [in] long endIdx );
+    HRESULT QualifyName( [in] long lineSelector,
+                         [in] long startIdxSelector, [in] long endIdxSelector,
+                         [in] long line, [in] long startIdx, [in] long endIdx );
+
+    
+    /*---------------------------------------------------------
+    AutoExpression: [ReasonAutos]
+      Called for each expression that might be interesting for
+      a user in the "Auto Debugging" window. All names that are
+      set using [StartName] and [QualifyName] are already automatically
+      added to the "Auto" window! This means that [AutoExpression]
+      is rarely used.
+    ---------------------------------------------------------*/    
+    HRESULT AutoExpression( [in] long startLine, [in] long startIdx, 
+                            [in] long endLine, [in] long endIdx );    
+
+    
+    /*---------------------------------------------------------
+    CodeSpan: [ReasonCodeSpan]
+      Called for each region that contains "executable" code.
+      This is used to validate breakpoints. Comments etc. is
+      automatically taken care of. Normally this method is called
+      when a procedure is started/ended.
+    ---------------------------------------------------------*/    
+    HRESULT CodeSpan( [in] long startLine, [in] long startIdx, 
+                      [in] long endLine, [in] long endIdx );
+    
+    /*---------------------------------------------------------
+    Method Info: [ReasonMethodTip]
+      [StartParameters] is called when the parameters of a method
+                        are started, ie. "(".
+      [Parameter] is called on the start of a new parameter, ie. ",".
+      [EndParameter] is called on the end of the paramters, ie. ")".
+    ---------------------------------------------------------*/    
+    HRESULT StartParameters( [in] long line, [in] long idx );
+    HRESULT Parameter      ( [in] long line, [in] long idx );
+    HRESULT EndParameters  ( [in] long line, [in] long idx );
+
+    /*---------------------------------------------------------
+    Context:
+      [GetPackage] returns the Babel Visual Studio package.
+      [GetProject] returns the project that the current source
+        is associated with, iff the project supports the [IBabelProject]
+        interface.
+      [GetFileName] returns the filename of the current source.
+    ---------------------------------------------------------*/            
+    HRESULT GetPackage( [out,ref,retval] IBabelPackage** package );
+    HRESULT GetProject( [out,ref,retval] IBabelProject** project );
+    HRESULT GetFileName( [out,ref,retval] BSTR* filePath );
+    					     
+    /*---------------------------------------------------------
+    Scope Builder:
+      The babel package provides a default implementation
+      of the [IScope] interface which can be used through the
+      following methods. If you want to provide your own
+      [IScope] implementation, don't call these methods and
+      return the scope trough the [scope] parameter of the
+      [IBabelService::ParseSource] method.
+    ---------------------------------------------------------*/  
+    
+    /*---------------------------------------------------------
+    AddScope: [ReasonCheck]
+      Return a new lexical scope. The [name], [type], [display]
+      and [description] can all be NULL. [merge] is used to merge
+      identically named declarations, used for forward decls.
+      If [glyph] is -1 or too large, the icon is automatically
+      selected using the [kind], [access] and [storage].
+    ---------------------------------------------------------*/        
+    HRESULT AddScope( [in] long startLine, [in] long startIdx,
+                      [in] long endLine,   [in] long endIdx,
+                      [in] enum ScopeKind kind,
+                      [in] enum ScopeAccess access,
+                      [in] enum ScopeStorage storage,
+		      [in] long glyph,
+                      [in] BSTR name,     [in] BSTR type,
+                      [in] BSTR display,  [in] BSTR description,
+                      [in] VARIANT_BOOL merge
+                    );                       
+    	
+    /*---------------------------------------------------------
+    AddInclude: [ReasonCheck]
+      Include the scope of [name] literally in the current
+      scope. Used for inheritance for example.
+    ---------------------------------------------------------*/        
+    HRESULT AddInclude( [in] long startLine, [in] long startIdx,
+			[in] long endLine,   [in] long endIdx,
+			[in] enum ScopeAccess access, 
+                        [in] BSTR name );
+
+    /*---------------------------------------------------------
+    AddExtern: [ReasonCheck]
+      Add an external scope. Used for include files or imported
+      modules. A scope can for example be retrieved using
+      [IBabelProject::SearchFile] or [IBabelPackage::LoadScope].
+    ---------------------------------------------------------*/        
+    HRESULT AddExtern(  [in] long startLine, [in] long startIdx,
+		        [in] long endLine,   [in] long endIdx,
+		        [in,unique] IScope* scope );
+  };
+
+
+  /*---------------------------------------------------------
+  IBabelService:
+    By implementing this interface, a client gets a full language 
+    service automatically provided by Visual Studio.
+  ---------------------------------------------------------*/
+  [ object
+  , uuid(4E71BA41-5C36-11d3-B3FD-006008D1BF8C)
+  , helpstring("IBabelService Interface")
+  , oleautomation
+  , dual
+  ]
+  interface IBabelService : IDispatch
+  {
+    /*---------------------------------------------------------
+    Init: First method called. [language] contains the language
+        that the user selected in Visual Studio.
+    ---------------------------------------------------------*/        
+    [helpstring( "Init: first method called, [language] contains the VS user selected language" )]
+    HRESULT Init( [in] LCID language, [in] long reserved );
+    
+    /*---------------------------------------------------------
+    Done: last method called. Release all resources.
+    ---------------------------------------------------------*/       
+    [helpstring("Done: last method called" )]
+    HRESULT Done();
+    
+    /*---------------------------------------------------------
+    ColorCount: return the number of custom color classes.
+      Return 6 if you want to use the default color classes.
+    ---------------------------------------------------------*/        
+    [helpstring( "ColorCount: return the number of custom color classes" )]
+    HRESULT ColorCount( [out,ref,retval] ColorClass* count );
+
+    /*---------------------------------------------------------
+      GetColorInfo:
+        Retrieve color information for a specific color class.
+        This method is only called if the attribute
+        [RequestStockColors] is set to 0.
+      pre: 
+        [index] < [ColorCount()]
+      returns: 
+        a [description] of the color class ("keyword")
+        and an initial CSS [style] for this color class, for example
+        "color: blue; font-weight: bold"
+    ---------------------------------------------------------*/
+    [helpstring("GetColorInfo: get color class information")]
+    HRESULT GetColorInfo( [in]  ColorClass index, 
+                          [out,ref] BSTR* description,
+                          [out,ref] BSTR* style );
+
+    /*---------------------------------------------------------
+      ColorLine: 
+        colorize a line [line]. Colors can be set through the
+        [sink] that is passed too. The [state] can be used by
+        the client in anyway it wants; it always corresponds to
+        the state that was set at the end of the previous line.
+        [state] is 0 if no state is known (start of the file).
+      pre:          
+        [sink] may be NULL in order to just retrieve the 
+        new state at the end of the line
+    ----------------------------------------------------------*/
+    [helpstring("ColorLine: colorize a line")]    
+    HRESULT ColorLine( [in] BSTR line, 
+                       [in,unique] IColorSink* sink,
+                       [in,out,ref] long* state 
+                     );
+    
+    /*---------------------------------------------------------
+      ParseSource:
+        parses the program source in [text]. The reason
+        for calling [ParseSource] is passed in [reason].
+        The [sink] contains lots of services and call backs
+        that can be called during parsing. If the reason
+        is [ReasonCheck] an [IScope] should be build 
+        and returned through the [scope] parameter. 
+    ---------------------------------------------------------*/
+    [helpstring("ParseSource: parse the source")] 
+    HRESULT ParseSource( [in] BSTR text, 
+                         [in,unique] IParseSink* sink,
+                         [in] enum ParseReason reason,
+                         [in] long reserved,
+                         [out,unique,retval] IScope** scope 
+                        );
+
+    /*---------------------------------------------------------
+      GetMethodFormat:
+        Used for formatting method data tips.
+        [typePrefixed] is [true] if the return type should be
+        in front of the name: [long foo()] and [false]
+        if it comes last: [foo() as long].
+        [parStart],[parSep] and [parEnd] give the parameter start
+        token, the seperator and end token respectively. 
+        [typeStart] and [typeEnd] surround the return type.
+        All parameters can be set to NULL in which case they
+        default to a C-style formatting.
+    ---------------------------------------------------------*/
+    [helpstring("GetMethodFormat: return format tokens for method data tips")]
+    HRESULT GetMethodFormat( [out,ref] BSTR* parStart,
+                             [out,ref] BSTR* parSep, 
+                             [out,ref] BSTR* parEnd,
+                             [out,ref] BSTR* typeStart, 
+                             [out,ref] BSTR* typeEnd,
+                             [out,ref] VARIANT_BOOL* typePrefixed );
+
+    /*---------------------------------------------------------
+      GetCommentFormat:
+        Used for (un)commenting selected text.
+        [lineStart] is the token used to start line comments (//)
+        [blockStart] is the token used to start block comments
+        [blockEnd] is the token used to end block comments
+        if [useLineComments]  is true, selected text is commented
+        using line comments, otherwise it is commented using
+        block comments.
+    ---------------------------------------------------------*/
+    [helpstring("GetCommentFormat: return format tokens for comments")]
+    HRESULT GetCommentFormat( [out,ref] BSTR* lineStart, 
+                              [out,ref] BSTR* blockStart,
+                              [out,ref] BSTR* blockEnd,
+                              [out,ref] VARIANT_BOOL* useLineComments );
+
+    
+    /*---------------------------------------------------------
+    GetImageList: return a set of custom glyphs. If [E_NOTIMPL]
+      is returned, the default glyphs are available.
+    ---------------------------------------------------------*/        
+    [helpstring("GetImageList: return HIMAGELIST for glyphs")]
+    HRESULT GetImageList( [out,ref] long* imageListHandle,
+                          [out,ref] long* glyphCount );
+  };
+
+
+  /*---------------------------------------------------------
+  IBabelPackage:
+    Internal interface to the Babel Package. Retrieved 
+    through [IParseSink::GetPackage].
+
+    service guid = 58645F93-4EC7-4aa4-92FB-09625D04FC77
+  ---------------------------------------------------------*/
+  [ object
+  , uuid(58645F94-4EC7-4aa4-92FB-09625D04FC77)
+  , helpstring("IBabelPackage Interface")
+  , oleautomation
+  , dual
+  ]
+  interface IBabelPackage : IDispatch
+  {
+    /*---------------------------------------------------------
+    LoadScope: The Babel package will try to load a scope
+      for the source at [fileName]. [reserved] should be 0.
+      If the [fileName] can be loaded by a Babel service,
+      it will be parsed and its [IScope] will be returned.
+    ---------------------------------------------------------*/        
+    [helpstring("LoadScope: load a scope for a file. [reserved] should always be 0.")]
+    HRESULT LoadScope( [in]        long reserved,
+                       [in]        BSTR fileName, 
+                       [in,unique] IBabelProject* project,
+                       [out,ref,retval] IScope** scope );
+  }  
+
+  /*---------------------------------------------------------
+  IBabelProject:    
+    An interface that Visual Studio projects can implement.
+    Retrieved through [IParseSink::GetProject].
+  ---------------------------------------------------------*/
+  [ object
+  , uuid(58645F95-4EC7-4aa4-92FB-09625D04FC77)
+  , helpstring("IBabelProject Interface")
+  , oleautomation
+  , dual
+  ]
+  interface IBabelProject : IDispatch
+  {
+    /*---------------------------------------------------------
+    SearchFile: search a file with the local project settings.
+    ---------------------------------------------------------*/        
+    HRESULT SearchFile( [in] BSTR fileName, [out,ref,retval] BSTR* filePath );
+  }  
+};

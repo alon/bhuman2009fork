@@ -1,0 +1,7 @@
+# stock fstab - you probably want to override this with a machine specific one
+
+rootfs               /                    auto       defaults              1  1
+tmpfs                /var/volatile        tmpfs      defaults              0  0
+/dev/sda2            /media/userdata      vfat       defaults,noatime      0  0
+/dev/sdb2            /media/userdata      vfat       defaults,noatime      0  0
+

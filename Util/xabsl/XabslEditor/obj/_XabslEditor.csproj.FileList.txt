@@ -1,0 +1,14 @@
+.\XabslEditor.exe.config
+.\XabslEditor.exe
+.\XabslEditor.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\XabslEditor.Properties.Resources.resources
+obj\Debug\XabslEditor.AboutXablsEditor.resources
+obj\Debug\XabslEditor.ConfigurationDlg.resources
+obj\Debug\XabslEditor.ExceptionDialog.resources
+obj\Debug\XabslEditor.Find.resources
+obj\Debug\XabslEditor.MainForm.resources
+obj\Debug\XabslEditor.SearchInOptions.resources
+obj\Debug\_XabslEditor.csproj.GenerateResource.Cache
+obj\Debug\XabslEditor.exe
+obj\Debug\XabslEditor.pdb

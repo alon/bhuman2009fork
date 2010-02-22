@@ -1,0 +1,36 @@
+option display_ears
+{
+  initial state no_obstacle
+  {
+    decision
+    {
+      if(obstacle.distance_to_closest_obstacle < 500)
+        goto obstacle_in_front;
+      else
+        stay;
+    }
+    
+    action 
+    {
+      led_request.earLeft.connectedPlayers = on;
+      led_request.earRight.battery = on;
+    }
+  }
+  
+  state obstacle_in_front
+  {
+    decision
+    {
+      if(obstacle.distance_to_closest_obstacle > 500)
+        goto no_obstacle;
+      else
+        stay;
+    }
+    
+    action 
+    {
+      led_request.earLeft.connectedPlayers = on;
+      led_request.earRight.battery = blinking;
+    }
+  }
+}

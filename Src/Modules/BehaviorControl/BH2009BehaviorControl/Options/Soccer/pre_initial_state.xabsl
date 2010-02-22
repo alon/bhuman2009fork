@@ -1,0 +1,44 @@
+/** The root option of the BH2009 soccer behavior */
+option pre_initial_state
+{
+  initial state sit_down
+  {
+    decision
+    {
+      if(key.chest_button_pressed_and_released || soccer.disable_pre_initial)
+        goto stand_up;
+      else
+        stay;
+    }
+    action 
+    {
+      motion.type = special_action;
+      motion.special_action = play_dead;
+    }
+  }
+
+
+  state stand_up
+  {
+    decision
+    {
+      if(state_time > 1500)
+        goto start_behavior;
+      else
+        stay;
+    }
+    action 
+    {
+      motion.type = stand;
+    }
+  }
+
+  state start_behavior
+  {
+    action 
+    {
+      start_soccer();
+    }
+  }
+
+}

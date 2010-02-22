@@ -1,0 +1,280 @@
+<?lua --[[
+
+This template creates a Makefile for libraries or applications with multiple configurations
+from a specification like this:
+
+template = "Makefile"
+name = "name"
+files = { "file1", "file2", ... }
+distFiles = { "file1", "file2", ... } or nil
+distVersion = "<version>" or nil
+zbuildgen = "path/to/zbuildgen" (to use $(ZBUILDGEN) as custom build tools) or nil
+configs = {
+  {
+    name = "configname1",
+    objdir = "objdir",
+    defines = { "DEFINE1", "DEFINE2", ... },
+    includepaths = { "includepath1", "includepath2", ... },
+    buildflags = "buildflags",
+    linkflags = "linkflags",
+    type = "lib", "dll", "utility" or "app" (nil),  
+    output = nil or "targetfilename"
+    preBuildCommands = { "command1", "command2", ... }
+    postBuildCommands = { "command1", "command2", ... }
+    preLinkCommands = { "command1", "command2", ... }
+  },
+  ...
+}
+customBuildTools = {
+  {
+    file = "file",
+    configs = nil or { "config1", "config2", ... }
+    command = "command" or { "command1", "command", ... } or a function with (file, tool, config) arguments
+    description = "any output string",
+    dependencies = { "file1", "file2", ... },
+    output = "outputfile" or { "outputfile1", "outputfile2", ... },
+  },
+  ...
+}
+
+--]] ?>
+<?lua if configs then ?>
+<?lua
+
+-- some helper functions
+
+function formatTable(tab, sep, prefix, suffix, func, funcparam)
+
+  local res
+  if prefix == nil then
+    prefix = ""
+  end
+  if suffix == nil then
+    suffix = ""
+  end
+  if func == nil then
+    func = function(v) return v; end
+  end
+  if type(tab) == "table" then
+    for i, val in pairs(tab) do
+      if res then
+        res = res .. sep .. prefix .. func(val, funcparam) .. suffix
+      else
+        res = prefix .. func(val, funcparam) .. suffix
+      end
+    end
+  elseif type(tab) == "string" then
+    res = prefix .. func(tab, funcparam) .. suffix
+  end
+  return res
+end
+
+
+--
+
+function formatPath(path, config)
+  if path == nil then
+    return nil
+  end
+  local objdirvar = "$(" .. string.upper(config.name) .. "_OBJDIR)"
+  local t = { 
+    ConfigurationName=config.name, 
+    OutDir=objdirvar, IntDir=objdirvar, ObjDir=objdirvar,
+    SolutionDir="$(SOLUTIONDIR)" }
+  return string.gsub(path, "%$[(](%w+)[)]", t)
+end
+
+
+--
+
+function quoteEscape(str)
+  local res = string.gsub(str, "\\", "\\\\")
+  return string.gsub(res, "\"", "\\\"")
+end
+
+
+-- set default values
+if zbuildgen == nil then
+  zbuildgen = "zbuildgen"
+end
+
+-- set default values
+if customBuildTools == nil then
+  customBuildTools = {}
+end
+customBuildTargets = {}
+
+-- 
+if distFiles then
+  local tbl = {}
+  table.expand(distFiles, tbl)
+  distFiles = tbl
+end
+
+-- create object file list
+objects = {}
+if files then
+  local tbl = {}
+  table.expand(files, tbl)
+  files = tbl
+  table.sort(files)
+  for i, file in pairs(files) do
+    if file ~= files[i + 1] then -- this avoids duplicated targets
+      local extension = path.getextension(file)
+      if extension == "cpp" or extension == "cxx" or extension == "cc" or extension == "c" then 
+        objects[i] = path.dropextension(path.getbasename(file)) .. ".o"
+      end
+    end
+  end
+end
+
+-- create dist file directory list
+distDirs = {}
+if distFiles then
+  local tbl = {}
+  table.expand(distFiles, tbl)
+  distFiles = tbl
+  table.sort(distFiles)
+  for i, file in pairs(distFiles) do
+    local dirname = path.getdirname(file)
+    distDirs[dirname] = dirname
+  end
+end
+
+?>
+
+SOLUTIONDIR ?= .
+CONFIG ?= <?lua=configs[1].name?>
+ZBUILDGEN ?= <?lua=zbuildgen?>
+
+<?lua for i, config in pairs(configs) do CONFIG = string.upper(config.name) ?>
+
+<?lua=CONFIG?>_OBJDIR := <?lua=formatPath(config.objdir, config)?>
+<?lua=CONFIG?>_DEFINES := <?lua=formatTable(config.defines, " ", "-D\"", "\"")?>
+<?lua=CONFIG?>_INCLUDEPATHS := <?lua=formatTable(config.includepaths, " ", "-I\"", "\"", formatPath, config)?>
+<?lua if config.output then ?>
+<?lua=CONFIG?>_TARGET := <?lua=config.output?>
+<?lua else ?>
+<?lua if config.type == "lib" then ?>
+<?lua=CONFIG?>_TARGET := lib<?lua=name?>.a
+<?lua elseif config.type == "dll" then ?>
+<?lua=CONFIG?>_TARGET := lib<?lua=name?>.so
+<?lua else ?>
+<?lua=CONFIG?>_TARGET := <?lua=name?>
+<?lua end ?>
+<?lua end ?>
+<?lua=CONFIG?>_DEPENDENCIES := <?lua=formatTable(config.dependencies, " ", nil, nil, formatPath, config)?>
+<?lua=CONFIG?>_CUSTOMTARGETS := <?lua for file, tool in pairs(customBuildTools) do echo(formatTable(tool.output, "", nil, " ", formatPath, config)); end ?>
+<?lua=CONFIG?>_LIBPATHS := <?lua=formatTable(config.libpaths, " ", "-L\"", "\"", formatPath, config)?>
+<?lua=CONFIG?>_LIBS = <?lua=formatTable(config.libs, " ", "-l")?>
+<?lua=CONFIG?>_CFLAGS := $(CFLAGS) -MMD $(<?lua=CONFIG?>_DEFINES) $(<?lua=CONFIG?>_INCLUDEPATHS) <?lua=formatPath(config.buildflags, config)?>
+<?lua=CONFIG?>_CXXFLAGS := $(CFLAGS) $(CXXFLAGS) -MMD $(<?lua=CONFIG?>_DEFINES) $(<?lua=CONFIG?>_INCLUDEPATHS) <?lua=formatPath(config.buildflags, config)?>
+<?lua=CONFIG?>_LDFLAGS := $(LDFLAGS) <?lua=formatPath(config.linkflags, config)?> $(<?lua=CONFIG?>_LIBPATHS) $(<?lua=CONFIG?>_LIBS)
+
+<?lua=CONFIG?>_OBJECTS := \
+<?lua for i, object in pairs(objects) do ?>
+	$(<?lua=CONFIG?>_OBJDIR)/<?lua=object?> \
+<?lua end ?>
+
+<?lua end ?>
+
+.PHONY: all clean <?lua for i, config in pairs(configs) do echo("prebuild_" .. config.name .. " " .. config.name .. " "); end ?> <?lua if distFiles then echo("dist") end ?>
+
+all: $(CONFIG)
+
+clean:
+	@echo "Cleaning <?lua=name?>..."
+<?lua for i, config in pairs(configs) do CONFIG = string.upper(config.name) ?>
+	-@rm -rf $(<?lua=CONFIG?>_OBJDIR)
+<?lua for i, tool in pairs(customBuildTools) do ?>
+<?lua=formatTable(tool.output, "\n", "\t-@rm -rf ", nil, formatPath, config)?>
+<?lua end ?>
+<?lua end ?>
+
+<?lua for i, config  in pairs(configs) do CONFIG = string.upper(config.name) ?>
+$(<?lua=CONFIG?>_OBJDIR)/$(<?lua=CONFIG?>_TARGET): $(<?lua=CONFIG?>_OBJECTS) $(<?lua=CONFIG?>_DEPENDENCIES) $(<?lua=CONFIG?>_OBJDIR)/.dir
+<?lua echo(formatTable(config.preLinkCommands, "", "\n\t@", nil, formatPath, config)) ?>
+<?lua if config.type == "lib" then ?>
+	@echo Creating library...
+	@rm -f $@
+	@$(AR) cqs $@ $(<?lua=CONFIG?>_OBJECTS)
+<?lua elseif config.type == "utility" then ?>
+	@touch $@
+<?lua else ?>
+	@echo Linking <?lua=name?>...
+	@$(CXX) -o $@ $(<?lua=CONFIG?>_OBJECTS) $(<?lua=CONFIG?>_LDFLAGS) 
+<?lua end ?>
+<?lua echo(formatTable(config.postBuildCommands, "", "\n\t@", nil, formatPath, config))?>
+
+<?lua end ?>
+
+<?lua for i, config in pairs(configs) do CONFIG = string.upper(config.name) ?>
+prebuild_<?lua=config.name?>: $(<?lua=CONFIG?>_OBJDIR)/.dir
+	@echo "------ Building <?lua=name?> (<?lua=config.name?>) ------"
+<?lua echo(formatTable(config.preBuildCommands, "", "\n\t@", nil, formatPath, config))?>
+
+<?lua=config.name?>: prebuild_<?lua=config.name?> $(<?lua=CONFIG?>_OBJDIR)/$(<?lua=CONFIG?>_TARGET) $(<?lua=CONFIG?>_CUSTOMTARGETS)
+
+$(<?lua=CONFIG?>_OBJDIR)/.dir: 
+	-@mkdir -p $(<?lua=CONFIG?>_OBJDIR) && touch $(<?lua=CONFIG?>_OBJDIR)/.dir
+
+<?lua end ?>
+
+<?lua for i, config  in pairs(configs) do CONFIG = string.upper(config.name) ?>
+<?lua for i, object in pairs(objects) do ?>
+$(<?lua=CONFIG?>_OBJDIR)/<?lua=object?>: <?lua=formatPath(files[i], config)?> $(<?lua=CONFIG?>_OBJDIR)/.dir
+	@echo "<?lua=path.getbasename(files[i])?>"
+<?lua if path.getextension(files[i]) == "c" then ?>
+	@$(CC) $(<?lua=CONFIG?>_CFLAGS) -o $@ -c $<
+<?lua else ?>
+	@$(CXX) $(<?lua=CONFIG?>_CXXFLAGS) -o $@ -c $<
+<?lua end ?>
+
+<?lua end ?>
+
+<?lua for i, tool in pairs(customBuildTools) do 
+  if tool.configs == nil or table.contains(tool.configs, config.name) then
+    local target = formatTable(tool.output, " ", nil, nil, formatPath, config)
+    if customBuildTargets[target] == nil then
+      customBuildTargets[target] = true
+ ?>
+<?lua=target?>: <?lua=tool.file?> <?lua=formatTable(tool.dependencies, " ", nil, nil, formatPath, config)?> $(<?lua=CONFIG?>_OBJDIR)/.dir
+	@echo "<?lua=quoteEscape(tool.description)?>"
+<?lua if type(tool.command) == "function" then echo(formatTable(tool.command(tool.file, tool, config), "", "\n\t@", nil, formatPath, config)); else echo(formatTable(tool.command, "", "\n\t@", nil, formatPath, config)); end ?>
+
+<?lua end end end ?>
+<?lua end ?>
+
+# do nothing on obsolete dependencies
+%.h: ;
+%.hh: ;
+%.hxx: ;
+%.hpp: ;
+%.c: ;
+%.cc: ;
+%.cxx: ;
+%.cpp: ;
+%.d: ;
+
+<?lua for i, config in pairs(configs) do CONFIG = string.upper(config.name) ?>
+-include $(<?lua=CONFIG?>_OBJECTS:%.o=%.d)
+<?lua end ?>
+
+<?lua end ?>
+
+<?lua if distFiles then ?>
+dist:
+	@echo "------ Creating <?lua=name?>-<?lua=distVersion?> ------"
+	-@rm -rf "<?lua=name?>-<?lua=distVersion?>" "<?lua=name?>-<?lua=distVersion?>.tar.gz"
+<?lua for i, dir in pairs(distDirs) do ?>
+	-@mkdir -p "<?lua=name?>-<?lua=distVersion?>/<?lua=dir?>"
+<?lua end ?>
+<?lua for i, file in pairs(distFiles) do ?>
+	@echo "<?lua=path.getbasename(file)?>"
+	@cp -dpR "<?lua=file?>" "<?lua=name?>-<?lua=distVersion?>/<?lua=file?>"
+<?lua end ?>
+	@tar -chozf "<?lua=name?>-<?lua=distVersion?>.tar.gz" "<?lua=name?>-<?lua=distVersion?>"
+	-@rm -rf "<?lua=name?>-<?lua=distVersion?>"
+<?lua else ?>
+dist: ;
+<?lua end ?>

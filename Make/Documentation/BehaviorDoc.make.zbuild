@@ -1,0 +1,27 @@
+
+<?lua
+
+behaviors = {}
+for i, file in pairs(matchfiles("../Behavior/*.make.zbuild")) do
+  table.insert(behaviors, path.dropextension(path.dropextension(path.getbasename(file))))
+end
+
+?>
+
+.PHONY: all Release prebuild
+
+all: Release
+
+prebuild:
+	@echo "------ Building BehaviorDoc (Release) ------"
+
+Release: prebuild
+<?lua for i, behavior in pairs(behaviors) do ?>
+	@make --no-print-directory -C ../Behavior -f <?lua=behavior?>.make DOC
+<?lua end ?>
+
+clean:
+	@echo "Cleaning BehaviorDoc..."
+<?lua for i, behavior in pairs(behaviors) do ?>
+	@make --no-print-directory -C ../Behavior -f <?lua=behavior?>.make clean
+<?lua end ?>

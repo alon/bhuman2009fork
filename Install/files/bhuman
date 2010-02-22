@@ -1,0 +1,50 @@
+#!/bin/sh
+
+NAME=$1
+FLAGS=$2
+DIR=/media/userdata
+
+usage()
+{
+  echo "usage: $0 [<name>] [<flags>] - Starts the last deployed or named bhuman version."
+  exit 1
+}
+
+error()
+{
+  echo "$1"
+  exit 1
+}
+
+[ x$NAME = xDefault ] && NAME=""
+[ ! -z $NAME ] && DIR="/media/userdata/Saves/$NAME"
+
+[ ! -d "$DIR" ] && error "There is no bhuman version called $NAME."
+
+if [ ! -z $NAME ]; then
+  echo "Copying colortables..."
+  for name in $(find "$DIR/Config" -name '*.c64'); do
+    mv "$name" "$name.bak" || exit
+  done
+  for name in $(find /media/userdata/Config/ -name '*.c64'); do
+    echo $(echo $name | sed -e s:/media/userdata/::)
+    DEST="$(echo $name | sed -e s:/media/userdata:$DIR:)"
+    cp "$name" "$DEST" || exit
+  done
+  echo "Copying settings.cfg"
+  cp "/media/userdata/Config/settings.cfg" "$DIR/Config/settings.cfg"
+  echo ""
+fi
+
+echo "Current Config"
+cat "$DIR/Config/settings.cfg" || exit
+echo ""
+
+# this should fix a freaky cygwin bug
+if [ ! -x "$DIR/Config/bhuman" ]; then
+  chmod u+x "$DIR/Config/bhuman" || exit
+fi
+
+export GT_DIR=$DIR
+"$DIR/Config/bhuman" -c "$DIR" -w $FLAGS
+

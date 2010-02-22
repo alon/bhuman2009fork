@@ -1,0 +1,4 @@
+This library has been built by Tim Laue 
+(timlaue@informatik.uni-bremen.de) using the source
+package of gsl version 1.9 from
+http://david.geldreich.free.fr/dev.html

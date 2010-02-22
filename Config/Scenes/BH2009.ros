@@ -1,0 +1,67 @@
+<Simulation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="RoSi.xsd" xmlns:xi="http://www.w3.org/2003/XInclude">
+
+<xi:include href="OpenGLSettings.rsi"/>
+<xi:include href="Ball.rsi"/>
+<xi:include href="Field2009SPL.rsi"/>
+<xi:include href="Nao.rsi"/>
+
+  <LightDefinition name="simplelight">
+    <AmbientColor r="0.5" g="0.5" b="0.5" a="1.0"/>
+    <DiffuseColor r="0.9" g="0.9" b="0.9" a="1.0"/>
+    <SpecularColor r="1.0" g="1.0" b="1.0" a="1.0"/>
+    <Position x="0.0" y="0.0" z="9.0" w="1.0"/>
+  </LightDefinition>
+  
+  <AppearanceDefinition name="background">
+    <Color r="0.5" g="0.5" b="0.5" a="1.0"/>
+  </AppearanceDefinition>
+
+  <Scene name="RoboCup" description="The humanoid robot Nao by Aldebaran Robotics.">
+    <Background ref="background"/>
+    <Light ref="simplelight"/>
+    <DefaultAppearance ref="field-grey"/>
+    <GlobalPhysicalParameters gravity="-9.81" erp="0.8" cfm="0.001"/>
+    <SimulationParameters stepLength="0.02" standardLength="1.0"/>
+
+    <Elements>
+
+      <Compound name="robots">
+        <Elements>
+          <Use macroName="Nao-red" instanceName="robot3">
+            <Translation x="0.9" />
+	  <Rotation z="180"    />
+          </Use>
+          <!--Use macroName="Nao-red" instanceName="robot2">
+            <Translation x="-0.3" y = "-1"/>
+          </Use>
+          <Use macroName="Nao-red" instanceName="robot3">
+            <Translation x="-0.3" y = "1"/>
+          </Use>
+          <Use macroName="Nao-blue" instanceName="robot4">
+            <Translation x="0.3"/>
+          </Use>
+          <Use macroName="Nao-blue" instanceName="robot5">
+            <Translation x="0.3" y = "1"/>
+          </Use>
+          <Use macroName="Nao-blue" instanceName="robot6">
+            <Translation x="0.3" y = "-1"/>
+          </Use-->
+        </Elements>
+      </Compound>
+
+      <Compound name="extras">
+      </Compound>
+          
+      <Compound name="balls">
+        <Elements>
+          <Use macroName="ball" instanceName="ball">
+            <Translation x="0.0" y="0.0" z="1.0"/>
+          </Use>
+        </Elements>
+      </Compound>
+
+      <Use macroName="field" instanceName="field"/>
+
+    </Elements>
+  </Scene>
+</Simulation>

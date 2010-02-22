@@ -1,0 +1,42 @@
+option playing_striker
+{
+  common decision
+  {
+    if(ball.time_since_last_seen > 8000)
+      goto search_for_ball;
+    else if(ball.time_since_last_seen < 2000 && ball.x > 0 && ball.x <= 220 && abs(value = ball.y) < 200 && abs( value = locator.opponent_goal.angle) < 15)
+      goto kick;
+    else if(ball.was_seen)
+      goto go_to_ball;
+   }
+
+
+initial state go_to_ball
+  {
+    action
+    {
+      go_to_ball();
+    }
+  }
+
+state kick
+  {
+    action
+    {
+      kick();
+    }
+  }
+
+state search_for_ball
+  {
+    action
+    {
+      head.control_mode = search_ball;
+      motion.type = walk;
+      motion.walk_speed.x = 0;
+      motion.walk_speed.y = 0;
+      motion.walk_speed.rot = -25;
+    }
+  }
+
+}

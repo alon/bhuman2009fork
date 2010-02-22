@@ -1,0 +1,24 @@
+namespace test("Test")
+{
+	enum output brot{weissbrot, schwarzbrot }
+}
+
+
+/* a domain symbol is expected */
+option alpha
+{
+	@gamma;
+
+	initial state beta {
+
+		subsequent-option {
+			alpha(gamma = 0);
+		}
+	
+	    brot = @gamma;
+
+		decision-tree {
+			transition-to-state(beta);
+		}
+	}
+}

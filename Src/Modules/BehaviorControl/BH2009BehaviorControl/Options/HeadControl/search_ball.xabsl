@@ -1,0 +1,58 @@
+option search_ball
+{
+  initial state look_down
+  {
+    decision
+    {
+      if (ball.was_seen)
+        goto look_at_ball;
+      else if (head.position_reached || state_time > 763)
+        goto look_up;
+      else
+        stay;
+    }
+    action
+    {
+      head.head_pan = 0;
+      head.head_tilt = -30;
+      head.speed = 75;
+    }
+  }
+  
+  state look_up
+  {
+    decision
+    {
+      if (ball.was_seen)
+        goto look_at_ball;
+      else if (head.position_reached || state_time > 763)
+        goto look_down;
+      else
+        stay;
+    }
+    action
+    {
+      head.head_pan = 0;
+      head.head_tilt = 30;
+      head.speed = 75;
+    }  
+  }
+  
+  state look_at_ball
+  {
+    decision
+    {
+      if (!ball.was_seen || state_time > 5000)
+        goto look_up;
+      else
+        stay;
+    }    
+    action
+    {
+      head.head_pan = head.look_at_point.head_pan(x = ball.x, y = ball.y, z = 0, offset_in_image.x = 0, offset_in_image.y = 0);
+      head.head_tilt = head.look_at_point.head_tilt(x = ball.x, y = ball.y, z = 0, offset_in_image.x = 0, offset_in_image.y = 0);
+      head.speed = 75;
+    }
+  }
+
+}

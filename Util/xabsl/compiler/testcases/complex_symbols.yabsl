@@ -1,0 +1,10 @@
+namespace test("Test")
+{
+	enum output direction {
+		north, south, east, west
+	}
+
+	float input current_time "ms";
+	
+	enum input speed { slow, fast }
+}

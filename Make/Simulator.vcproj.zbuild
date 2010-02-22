@@ -1,0 +1,115 @@
+<?lua
+
+template = "../Src/SimulatorQt/Make/Templates/updateVcProjFile"
+platform = "windows"
+baseFile = "Simulator.vcproj"
+files = { 
+  matchrecursive("..\\Src\\Modules\\*.cpp", "..\\Src\\Modules\\*.h"),
+  matchfiles("..\\Src\\Platform\\*.h"),
+  matchfiles("..\\Src\\Platform\\Win32\\*.cpp", "..\\Src\\Platform\\Win32\\*.h"),
+  matchfiles("..\\Src\\Platform\\Win32Linux\\*.cpp", "..\\Src\\Platform\\Win32Linux\\*.h"),
+  matchfiles("..\\Src\\Platform\\SimRobotQt\\*.cpp", "..\\Src\\Platform\\SimRobotQt\\*.h"),
+  matchrecursive("..\\Src\\Processes\\*.cpp", "..\\Src\\Processes\\*.h"),
+  matchrecursive("..\\Src\\Representations\\*.cpp", "..\\Src\\Representations\\*.h"),
+  matchrecursive("..\\Src\\Tools\\*.cpp", "..\\Src\\Tools\\*.h"),
+  matchrecursive("..\\Src\\URC\\*.cpp", "..\\Src\\URC\\*.h"),
+  matchfiles("..\\Src\\SimulatorQt\\SimRobotGUI\\resource.h", "..\\Src\\SimulatorQt\\SimRobotGUI\\SimRobotGUI.rc", "..\\Src\\SimulatorQt\\SimRobotGUI\\icons\\*.ico"),
+  { "CognitionModules.cfg.build", "MotionModules.cfg.build" }, 
+}
+excludes = { 
+  "..\\Src\\URC\\UniversalResourceCompiler.cpp",
+  "..\\Src\\Platform\\Win32\\ConsoleRoboCupCtrl.cpp",
+  "..\\Src\\Platform\\Win32\\ConsoleRoboCupCtrl.h",
+  "..\\Src\\Platform\\Win32\\LocalRobot.cpp",
+  "..\\Src\\Platform\\Win32\\LocalRobot.h",
+  "..\\Src\\Platform\\Win32\\LogPlayer.cpp",
+  "..\\Src\\Platform\\Win32\\LogPlayer.h",
+  "..\\Src\\Platform\\Win32\\Oracle.cpp",
+  "..\\Src\\Platform\\Win32\\Oracle.h",
+  "..\\Src\\Platform\\Win32\\RemoteRobot.cpp",
+  "..\\Src\\Platform\\Win32\\RemoteRobot.h",
+  "..\\Src\\Platform\\Win32\\RoboCupClient.cpp",
+  "..\\Src\\Platform\\Win32\\RoboCupClient.h",
+  "..\\Src\\Platform\\Win32\\RoboCupCtrl.cpp",
+  "..\\Src\\Platform\\Win32\\RoboCupCtrl.h",
+  "..\\Src\\Platform\\Win32\\RoboCupServerCtrl.cpp",
+  "..\\Src\\Platform\\Win32\\RoboCupServerCtrl.h",
+  "..\\Src\\Platform\\Win32\\Robot.cpp",
+  "..\\Src\\Platform\\Win32\\Robot.h",
+  "..\\Src\\Platform\\Win32\\RobotConsole.cpp",
+  "..\\Src\\Platform\\Win32\\RobotConsole.h",
+  "..\\Src\\Platform\\Win32\\TeamRobot.cpp",
+  "..\\Src\\Platform\\Win32\\TeamRobot.h",
+  "..\\Src\\Platform\\Win32\\ProcessFramework.cpp",
+  "..\\Src\\Platform\\Win32\\ProcessFramework.h",
+  "..\\Src\\Platform\\Win32\\SystemCall.cpp",
+  "..\\Src\\Platform\\Win32\\SystemCall.h",
+  "..\\Src\\Platform\\Win32\\Receiver.cpp",
+  "..\\Src\\Platform\\Win32\\Receiver.h",
+  "..\\Src\\Platform\\Win32\\Sender.cpp",
+  "..\\Src\\Platform\\Win32\\Sender.h",
+  }
+root = "..\\Src"
+copyfiles = {
+  "..\\Src\\SimulatorQt\\Util\\libxml2\\Win32\\bin\\libxml2.dll",
+  "..\\Src\\SimulatorQt\\Util\\ode\\Win32\\dll\\ode_single.dll",
+  "..\\Src\\SimulatorQt\\Util\\ode\\Win32\\dll\\ode_singled.dll",
+  "..\\Src\\SimulatorQt\\Util\\qt\\Win32\\bin\\QtCore4.dll",
+  "..\\Src\\SimulatorQt\\Util\\qt\\Win32\\bin\\QtGui4.dll",
+  "..\\Src\\SimulatorQt\\Util\\qt\\Win32\\bin\\QtOpenGL4.dll",
+  "..\\Src\\SimulatorQt\\Util\\glew\\Win32\\bin\\glew32.dll",
+  "..\\Src\\SimulatorQt\\SimRobotCore\\Simulation\\RoSi.xsd",
+}
+
+customBuildTools = {
+  {
+    filter = ".h2cfg",
+    file = "CognitionModules.cfg.build",
+    command = "..\\Src\\SimulatorQt\\Util\\zbuildgen\\Win32\\bin\\zbuildgen.exe CognitionModules.cfg.build -o ..\\Config\\Processes\\CognitionModules.cfg",
+    description = "CognitionModules.cfg.build (h2cfg)",
+    dependencies = { "..\\Src\\Modules\\CognitionModules.h" },
+    output = "..\\Config\\Processes\\CognitionModules.cfg",
+  },
+  {
+    filter = ".h2cfg",
+    file = "MotionModules.cfg.build",
+    command = "..\\Src\\SimulatorQt\\Util\\zbuildgen\\Win32\\bin\\zbuildgen.exe MotionModules.cfg.build -o ..\\Config\\Processes\\MotionModules.cfg",
+    description = "MotionModules.cfg.build (h2cfg)",
+    dependencies = { "..\\Src\\Modules\\MotionModules.h" },
+    output = "..\\Config\\Processes\\MotionModules.cfg",
+  },
+}
+
+for i, file in pairs(copyfiles) do
+  local tool = {
+    filter = ".copy",
+    file = file,
+    command = "copy " .. file .. " \"..\\Build\\Simulator\\Win32\\$(ConfigurationName)\"",
+    description = file .. " (copy)",
+    output = "..\\Build\\Simulator\\Win32\\$(ConfigurationName)\\" .. path.getbasename(file),
+  }
+  table.insert(customBuildTools, tool)
+end
+
+
+-- build final file list from files and excludes
+
+newFiles = {}
+for i, filelist in pairs(files) do
+  for i, file in pairs(filelist) do
+    local exclude = false
+    for i, exfile in pairs(excludes) do
+      if exfile == file then
+        exclude = true
+        break
+      end
+    end
+    if not exclude then
+      table.insert(newFiles, file)
+    end
+  end
+end
+files = newFiles
+
+
+?>

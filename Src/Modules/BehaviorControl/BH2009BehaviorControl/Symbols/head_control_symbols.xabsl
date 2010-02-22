@@ -1,0 +1,53 @@
+/** Symbols which are used for controlling the head movement. */
+namespace head_control_symbols("Head Control Symbols")
+{
+  /** The head motion control modes for the keeper. */
+  enum head.control_mode internal
+  {
+    /* Needed for new HeadControl */
+    none,
+
+    search_ball,
+    look_straight_ahead,
+    look_down,
+    look_at_ball_and_goal_and_around,
+    look_scan_area_in_front    
+  };
+
+  enum head.control_mode internal head.control_mode;
+
+  /** whether the desired head position has been reached. */
+  bool input head.position_reached;
+
+  /** whether the desired head position can been reached. */
+  bool input head.position_unreachable;
+
+  float input head.look_at_point.head_pan(
+    /** the robot relative x coordinate of the position to look at */
+    float x [mm];
+    /** the robot relative y coordinate of the position to look at */
+    float y [mm];
+    /** the robot relative z coordinate of the position to look at */
+    float z [mm];
+    /** the pixel offset in the image in x direction */
+    float offset_in_image.x [pixel];
+    /** the pixel offset in the image in y direction */
+    float offset_in_image.y [pixel];
+  );
+  float input head.look_at_point.head_tilt(
+    /** the robot relative x coordinate of the position to look at */
+    float x [mm];
+    /** the robot relative y coordinate of the position to look at */
+    float y [mm];
+    /** the robot relative z coordinate of the position to look at */
+    float z [mm];
+    /** the pixel offset in the image in x direction */
+    float offset_in_image.x [pixel];
+    /** the pixel offset in the image in y direction */
+    float offset_in_image.y [pixel];
+  );
+  float input head.max_head_tilt_up_for_target_head_pan(
+    /** the intended head tilt */
+    float intendedTilt [degree];
+  );
+}

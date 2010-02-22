@@ -1,0 +1,3 @@
+#!/bin/sh
+
+cp /opt/naoqi/modules/lib/autoload.bh /opt/naoqi/modules/lib/autoload.ini

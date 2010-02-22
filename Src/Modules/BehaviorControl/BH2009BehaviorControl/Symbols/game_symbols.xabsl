@@ -1,0 +1,76 @@
+/* Symbols for accessing the data from the game controller object */
+namespace game_symbols("Game Control Symbols") {
+
+  /* Enumeration for team colors */
+  enum game.team_color
+  {
+    blue,
+    red
+  };
+  
+  /* Enumeration for game states */
+  enum game.state
+  {
+    _initial,
+    ready,
+    set,
+    playing,
+    finished
+  };
+  
+  /* Enumeration for penalty mode */
+  enum game.penalty
+  {
+    none,
+    ball_holding,
+    goalie_pushing,
+    player_pushing,
+    illegal_defender,
+    illegal_defense,
+    obstruction,
+    req_for_pickup,
+    leaving,
+    damage,
+    manual
+  };
+
+  /* Own team color */
+  enum game.team_color output game.team_color;
+
+  /* Player number (one based) */
+  enum team.mate input game.player_number;
+
+  /* Current Penalty mode */
+  enum game.penalty output game.penalty;
+
+  /* Remaining penalty time */
+  float input game.penalty.remaining_time [secs];
+
+  /* State of the game */
+  enum game.state output game.state;
+
+  /* Kickoff team */
+  enum game.team_color output game.kickoff_team;
+
+  /* The color of the opponent team. */
+  enum game.team_color input game.opponent_team_color;
+
+  /* Number of our scored goals */
+  float input game.own_score [0-x];
+
+  /* Number of our scored goals */
+  float input game.opponent_score [0-x];
+
+  /* Remaining game time */
+  float input game.remaining_time;
+
+  /* ??? */
+  bool output game.startup;
+  
+  /*  time since switching to playing state */
+  float input game.time_since_playing_started;
+
+  /* decision if kickoff is in progress*/
+  bool input game.kickoff_in_progress;
+}
+

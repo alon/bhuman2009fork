@@ -1,0 +1,59 @@
+<?lua if linux then ?>
+<?lua
+
+template = "Templates/QtMakefile"
+files = matchrecursive("../SimRobotGUI/*.cpp", "../SimRobotGUI/*.h", "../SimRobotGUI/*.qrc", "../SimRobotGUI/*.png")
+
+qtMoc = "moc-qt4"
+qtRcc = "rcc"
+qtGenDir = "$(IntDir)"
+
+configs = {
+  {
+    name = "Debug",
+    objdir = "$(SolutionDir)/../Build/SimRobotGUI/Linux/Debug",
+    defines = { "DEBUG", "_DEBUG", "QT_SHARED", "QT_OPENGL_LIB", "QT_GUI_LIB", "QT_CORE_LIB" },
+    includepaths = {
+      "../",
+      "../SimRobotCore",
+
+      "../Util/glew/Linux/include",
+      "../Util/gsl/Linux/include",
+      "../Util/libxml2/Linux/include",
+      "../Util/ode/Linux/include",
+      "../Util/qhull/Linux/include",
+
+      "/usr/include/qt4/QtCore",
+      "/usr/include/qt4/QtGui",
+      "/usr/include/qt4/QtOpenGL",
+      "/usr/include/qt4",
+    },
+    buildflags = "-pipe -Wall -W -Wno-unused-parameter -Wno-non-virtual-dtor -Wno-deprecated -Wno-ignored-qualifiers -g",
+    type = "lib",
+  }, 
+  {
+    name = "Release",
+    objdir = "$(SolutionDir)/../Build/SimRobotGUI/Linux/Release",
+    defines = { "NDEBUG", "QT_NO_DEBUG", "QT_SHARED", "QT_OPENGL_LIB", "QT_GUI_LIB", "QT_CORE_LIB" },
+    includepaths = {
+      "../",
+      "../SimRobotCore",
+
+      "../Util/glew/Linux/include",
+      "../Util/gsl/Linux/include",
+      "../Util/libxml2/Linux/include",
+      "../Util/ode/Linux/include",
+      "../Util/qhull/Linux/include",
+
+      "/usr/include/qt4/QtCore",
+      "/usr/include/qt4/QtGui",
+      "/usr/include/qt4/QtOpenGL",
+      "/usr/include/qt4",
+    },
+    buildflags = "-pipe -Wall -W -Wno-unused-parameter -Wno-non-virtual-dtor -Wno-deprecated -Wno-ignored-qualifiers -Wno-unused  -O3 -fomit-frame-pointer",
+    type = "lib",
+  },
+}
+
+?>
+<?lua end ?>

@@ -1,0 +1,35 @@
+.SILENT:
+GT_DIR = ../..
+XABSL_DIR = $(GT_DIR)/Util/xabsl
+
+ifeq ($(ComSpec)$(COMSPEC),)
+XSLT = xsltproc --xinclude
+DOT = dot
+else
+XSLT = xsltproc.exe --xinclude 
+DOT = $(GT_DIR)/Util/dot-1.9.0/dot.exe
+endif
+
+DOTML_DIR = $(GT_DIR)/Util/dotml-1.1
+XABSL_COMPILER_DIR = $(XABSL_DIR)/compiler
+XABSL_XSL_DIR = $(XABSL_DIR)/xsl
+
+XABSL_OUTPUT_DIR = $(GT_DIR)/Config/Xabsl
+INTERMEDIATE_CODE = <?lua=target?>
+DOC_OUTPUT_DIR = $(GT_DIR)/Doc/Reference/<?lua=name?>BehaviorControl
+XABSL_TEMP_DIR = $(GT_DIR)/Build/Xabsl/B<?lua=name?>BehaviorControl
+XML_OUTPUT_DIR = $(XABSL_TEMP_DIR)
+XABSL_COMPILER_OPTIONS = -V -a $(GT_DIR)/Build/Xabsl/xabsl.api
+
+AGENTS_FILE          = $(GT_DIR)/Src/Modules/BehaviorControl/<?lua=name?>BehaviorControl/agents.xabsl
+
+SOURCES = <?lua
+
+platform = "posix"
+files = matchrecursive("../../Src/Modules/BehaviorControl/" .. name .. "BehaviorControl/*.xabsl");
+table.sort(files)
+echo(table.concat(files, " "))
+
+?>
+
+include $(XABSL_DIR)/XabslMakefile

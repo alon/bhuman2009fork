@@ -1,0 +1,17 @@
+/* comment */
+option alpha
+{
+	@gamma;
+
+	initial state beta
+	{
+  		subsequent-option {
+  			alpha(gamma = @gamma);
+  		}
+
+		decision-tree {
+			transition-to-state(beta);
+		}
+		
+	}
+}

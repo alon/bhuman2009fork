@@ -1,0 +1,41 @@
+<?lua if linux then ?>
+<?lua
+
+template = "../Src/SimulatorQt/Make/Templates/Makefile"
+files = matchfiles("../Src/Modules/MotionControl/mof/*.mof")
+target = "$(SolutionDir)/../Config/specialActions.dat"
+urc = "../Build/URC/Linux/Debug/URC"
+
+dependencies = { urc }
+table.sort(files)
+for i, file in pairs(files) do
+  if path.getextension(file) == "mof" then
+    table.insert(dependencies, file)
+  end
+end
+
+customBuildTools = {}
+for i, file in pairs(files) do
+  if path.getextension(file) == "mof" then
+    local tool = {
+      file = file,
+      command = urc,
+      description = "*.mof (URC)",
+      dependencies = dependencies,
+      output = target,
+    }
+    table.insert(customBuildTools, tool)
+    break
+  end
+end
+
+configs = {
+  {
+    name = "Release",
+    objdir = "$(SolutionDir)/../Build/SpecialActions/Linux/Release",
+    type = "utility",
+  }
+}
+
+?>
+<?lua end ?>

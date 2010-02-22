@@ -1,0 +1,11 @@
+/** Symbols for accessing the obstacle/freespace perception */
+namespace obstacle_symbols("Obstacle Symbols") 
+{
+  float input obstacle.distance_to_left_obstacle "mm";
+  float input obstacle.distance_to_right_obstacle "mm";
+  float input obstacle.distance_to_center_left_obstacle "mm";
+  float input obstacle.distance_to_center_right_obstacle "mm";
+  float input obstacle.distance_to_closest_obstacle "mm";
+  float input obstacle.distance_to_closest_left "mm";
+  float input obstacle.distance_to_closest_right "mm";
+}

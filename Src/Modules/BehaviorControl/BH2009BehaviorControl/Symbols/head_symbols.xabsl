@@ -1,0 +1,26 @@
+
+/** Symbols for how to move the head */
+namespace head_symbols("Head Symbols")
+{
+  /** the target neck tilt joint angle. */
+  float output head.neck_tilt [deg];
+
+  /** the currently executed neck tilt joint angle. */
+  float input head.executed_neck_tilt [deg];
+
+  /** the target head pan joint angle. */
+  float output head.head_pan [deg];
+
+  /** the currently executed head pan joint angle. */
+  float input head.executed_head_pan [deg];
+
+  /** the target head tilt joint angle. */
+  float output head.head_tilt [deg];
+
+  /** the currently executed head tilt joint angle. */
+  float input head.executed_head_tilt [deg];
+
+  /** the maximum speed of the head joints. */
+  float output head.speed [deg/s];
+
+}

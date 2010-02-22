@@ -1,0 +1,11 @@
+--- init.d/rc.org	2009-05-14 16:57:30.000000000 +0200
++++ init.d/rc	2009-05-14 16:57:30.000000000 +0200
+@@ -17,6 +17,8 @@
+ 
+ . /etc/default/rcS
+ export VERBOSE
++export GT_DIR=/media/userdata
++export HISTFILE=/media/userdata/.ash_history
+ 
+ #
+ # Start script or program.

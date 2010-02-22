@@ -1,0 +1,27 @@
+<?lua
+
+template = "../Src/SimulatorQt/Make/Templates/updateVcProjFile"
+platform = "windows"
+baseFile = "Nao.vcproj"
+files = { 
+  matchrecursive("..\\Src\\Modules\\*.cpp", "..\\Src\\Modules\\*.h"),
+  matchfiles("..\\Src\\Platform\\*.h"),
+  matchfiles("..\\Src\\Platform\\linux\\*.cpp", "..\\Src\\Platform\\linux\\*.h"),
+  matchfiles("..\\Src\\Platform\\Win32Linux\\*.cpp", "..\\Src\\Platform\\Win32Linux\\*.h"),
+  matchrecursive("..\\Src\\Processes\\*.cpp", "..\\Src\\Processes\\*.h"),
+  matchrecursive("..\\Src\\Representations\\*.cpp", "..\\Src\\Representations\\*.h"),
+  matchrecursive("..\\Src\\Tools\\*.cpp", "..\\Src\\Tools\\*.h"),
+}
+root = "..\\Src"
+
+-- build final file list from files and excludes
+
+newFiles = {}
+for i, filelist in pairs(files) do
+  for i, file in pairs(filelist) do
+    table.insert(newFiles, file)
+  end
+end
+files = newFiles
+
+?>

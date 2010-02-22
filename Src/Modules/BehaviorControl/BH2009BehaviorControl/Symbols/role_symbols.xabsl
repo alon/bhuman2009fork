@@ -1,0 +1,36 @@
+/** Symbols for easy dynamic role choosing. */
+namespace role_symbols("Role Symbols") {
+
+  /* Enumeration for player roles. */
+  enum role.role
+  {
+    undefined,
+    keeper,
+    supporter,
+    striker,
+    defender
+  };
+
+  
+  /** Count of connected team mates. (not including self) */
+  float input role.connected_players;
+  
+  /** Whether the robot lost the connection to the team mates. */
+  bool input role.lost_connection;
+  
+  /** Flag to determine whether this striker is in a penalty shootout */
+  bool output role.is_penalty_striker;
+  
+  /** Flag to determine whether this keeper is in a penalty shootout */
+  bool output role.is_penalty_keeper;
+  
+  /** Flag whether the template generation in self localistion is limited to a specific area */
+  bool output role.is_localisation_limit_active;
+  
+  /** Dynamic soccer role. */
+  enum role.role output role.role;
+  
+  /** The role defined by player number. */
+  enum role.role input role.native_role;
+}
+

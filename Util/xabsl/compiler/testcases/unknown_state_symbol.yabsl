@@ -1,0 +1,14 @@
+/* unknown state symbol */
+option alpha
+{
+	initial state beta {
+		
+		subsequent-option {
+			alpha();
+		}
+	
+		decision-tree {
+			transition-to-state(non_existent);
+		}
+	}
+}

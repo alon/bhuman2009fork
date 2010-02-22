@@ -1,0 +1,1754 @@
+<!--
+*
+* Schema definition for a robot simulation
+*
+*
+-->
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<!--
+  *
+  * Some tool elements, which are used by other elements
+  *
+  -->
+	<xs:complexType name="Triple">
+		<xs:annotation>
+			<xs:documentation>Three numbers</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="x" type="xs:double" default="0.0"/>
+		<xs:attribute name="y" type="xs:double" default="0.0"/>
+		<xs:attribute name="z" type="xs:double" default="0.0"/>
+	</xs:complexType>
+	<xs:complexType name="Quadrupel">
+		<xs:annotation>
+			<xs:documentation>Four numbers</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="x" type="xs:double" use="required"/>
+		<xs:attribute name="y" type="xs:double" use="required"/>
+		<xs:attribute name="z" type="xs:double" use="required"/>
+		<xs:attribute name="w" type="xs:double" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="Double">
+		<xs:annotation>
+			<xs:documentation>Simple Double</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="value" type="xs:double" use="required"/>
+	</xs:complexType>
+	<xs:simpleType name="Double0.0To1.0">
+		<xs:annotation>
+			<xs:documentation>
+        A xs:double value of the range [0.0 ... 1.0]
+      </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="0.0"/>
+			<xs:maxInclusive value="1.0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="AxisType">
+		<xs:annotation>
+			<xs:documentation>Desciption of an axis, containing the three elements of the vector and the minimum and maximum value</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Deflection" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The deflection of an axis</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:attribute name="min" type="xs:double" use="required"/>
+					<xs:attribute name="max" type="xs:double" use="required"/>
+					<xs:attribute name="fullScaleDeflectionCFM" type="Double0.0To1.0" use="optional"/>
+					<xs:attribute name="fullScaleDeflectionERP" type="Double0.0To1.0" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:choice minOccurs="0">
+				<xs:element ref="AngularMotor"/>
+				<xs:element ref="VelocityMotor"/>
+				<xs:element name="Friction">
+					<xs:annotation>
+						<xs:documentation>The friction inside a joint</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:attribute name="value" type="xs:double" use="required"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:choice>
+		</xs:sequence>
+		<xs:attribute name="x" type="xs:double" default="0.0"/>
+		<xs:attribute name="y" type="xs:double" default="0.0"/>
+		<xs:attribute name="z" type="xs:double" default="0.0"/>
+		<xs:attribute name="cfm" type="Double0.0To1.0" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="SuspensionAxisType">
+		<xs:annotation>
+			<xs:documentation>Desciption of an axis, containing the three elements of the vector and the minimum and maximum value</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Deflection" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The deflection of an axis</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:attribute name="min" type="xs:double" use="required"/>
+					<xs:attribute name="max" type="xs:double" use="required"/>
+					<xs:attribute name="fullScaleDeflectionCFM" type="Double0.0To1.0" use="optional"/>
+					<xs:attribute name="fullScaleDeflectionERP" type="Double0.0To1.0" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:choice minOccurs="0">
+				<xs:element ref="AngularMotor"/>
+				<xs:element ref="VelocityMotor"/>
+				<xs:element name="Friction">
+					<xs:annotation>
+						<xs:documentation>The friction inside a joint</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:attribute name="value" type="xs:double" use="required"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:choice>
+		</xs:sequence>
+		<xs:attribute name="x" type="xs:double" use="required"/>
+		<xs:attribute name="y" type="xs:double" use="required"/>
+		<xs:attribute name="z" type="xs:double" use="required"/>
+		<xs:attribute name="cfm" type="Double0.0To1.0" use="optional"/>
+		<xs:attribute name="suspensionCFM" type="Double0.0To1.0" use="optional"/>
+		<xs:attribute name="suspensionERP" type="Double0.0To1.0" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="RGBColor">
+		<xs:annotation>
+			<xs:documentation>A color in standard 24 Bit RGB</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="r" type="xs:unsignedByte" use="required"/>
+		<xs:attribute name="g" type="xs:unsignedByte" use="required"/>
+		<xs:attribute name="b" type="xs:unsignedByte" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="RGB">
+		<xs:annotation>
+			<xs:documentation>A color in OpenGL standard 24 Bit RGB</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="r" type="Double0.0To1.0" use="required"/>
+		<xs:attribute name="g" type="Double0.0To1.0" use="required"/>
+		<xs:attribute name="b" type="Double0.0To1.0" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="RGBAColor">
+		<xs:annotation>
+			<xs:documentation>A color in OpenGL standard 32 Bit RGBA</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="r" type="Double0.0To1.0" use="required"/>
+		<xs:attribute name="g" type="Double0.0To1.0" use="required"/>
+		<xs:attribute name="b" type="Double0.0To1.0" use="required"/>
+		<xs:attribute name="a" type="Double0.0To1.0" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="UnboundedRGBAColor">
+		<xs:annotation>
+			<xs:documentation>A color in OpenGL standard 32 Bit RGBA</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="r" type="xs:double" use="required"/>
+		<xs:attribute name="g" type="xs:double" use="required"/>
+		<xs:attribute name="b" type="xs:double" use="required"/>
+		<xs:attribute name="a" type="xs:double" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="TextureGen">
+		<xs:annotation>
+			<xs:documentation>Paramters for automatic texture coordinates generation</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="mode" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="OBJECT_LINEAR"/>
+					<xs:enumeration value="EYE_LINEAR"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="s" type="xs:double" use="required"/>
+		<xs:attribute name="t" type="xs:double" use="required"/>
+		<xs:attribute name="r" type="xs:double" use="optional"/>
+		<xs:attribute name="q" type="xs:double" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="Texture">
+		<xs:annotation>
+			<xs:documentation>The Definition of a texture element</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="file" type="xs:string" use="required"/>
+		<xs:attribute name="mode" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="GL_MODULATE"/>
+					<xs:enumeration value="GL_REPLACE"/>
+					<xs:enumeration value="GL_DECAL"/>
+					<xs:enumeration value="GL_ADD"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="wrapS" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="GL_CLAMP"/>
+					<xs:enumeration value="GL_CLAMP_TO_EDGE"/>
+					<xs:enumeration value="GL_CLAMP_TO_BORDER"/>
+					<xs:enumeration value="GL_MIRRORED_REPEAT"/>
+					<xs:enumeration value="GL_REPEAT"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="wrapT" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="GL_CLAMP"/>
+					<xs:enumeration value="GL_CLAMP_TO_EDGE"/>
+					<xs:enumeration value="GL_CLAMP_TO_BORDER"/>
+					<xs:enumeration value="GL_MIRRORED_REPEAT"/>
+					<xs:enumeration value="GL_REPEAT"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="wrapR" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="GL_CLAMP"/>
+					<xs:enumeration value="GL_CLAMP_TO_EDGE"/>
+					<xs:enumeration value="GL_CLAMP_TO_BORDER"/>
+					<xs:enumeration value="GL_MIRRORED_REPEAT"/>
+					<xs:enumeration value="GL_REPEAT"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="priority" type="Double0.0To1.0" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="CubeMap">
+		<xs:annotation>
+			<xs:documentation>The Definition of cube element with 6 textures</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="PosX_Texture" type="Texture"/>
+			<xs:element name="NegX_Texture" type="Texture"/>
+			<xs:element name="PosY_Texture" type="Texture"/>
+			<xs:element name="NegY_Texture" type="Texture"/>
+			<xs:element name="PosZ_Texture" type="Texture"/>
+			<xs:element name="NegZ_Texture" type="Texture"/>
+		</xs:sequence>
+		<xs:attribute name="mode" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="NORMAL_MAP"/>
+					<xs:enumeration value="REFLECTION_MAP"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="useAsDirectTextures" type="xs:boolean" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="SimpleCubeMap">
+		<xs:annotation>
+			<xs:documentation>The Definition of cube element of 6 surfaces using 1 texture</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Single_Texture" type="Texture"/>
+		</xs:sequence>
+		<xs:attribute name="mode" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="NORMAL_MAP"/>
+					<xs:enumeration value="REFLECTION_MAP"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:simpleType name="HalfAngle">
+		<xs:annotation>
+			<xs:documentation>The half of an angle in degrees [0...180]</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="180"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="CutoffAngle">
+		<xs:annotation>
+			<xs:documentation>Angle definition for spot light cutoff angles</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="value" type="HalfAngle" use="required"/>
+	</xs:complexType>
+	<xs:element name="OpeningAngles">
+		<xs:annotation>
+			<xs:documentation>Two angles for an imaging sensor (Camera or DistanceSensor)</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+      <xs:attribute name="x" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:double">
+              <xs:minInclusive value="1"/>
+              <xs:maxInclusive value="350"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="y" use="optional">
+        <xs:simpleType>
+          <xs:restriction base="xs:double">
+            <xs:minInclusive value="1"/>
+            <xs:maxInclusive value="200"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Range">
+		<xs:annotation>
+			<xs:documentation>A near and a far clipping distance</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="near" type="xs:double" use="required"/>
+			<xs:attribute name="far" type="xs:double" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Mapping">
+		<xs:annotation>
+			<xs:documentation>A mapping to a range of values</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="min" type="xs:double" use="required"/>
+			<xs:attribute name="max" type="xs:double" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Resolution">
+		<xs:annotation>
+			<xs:documentation>The resolution of a one or two dimensional sensor (DistanceSensor or Camera)</xs:documentation>
+		</xs:annotation>
+    <xs:complexType>
+      <xs:attribute name="x" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:unsignedInt">
+            <xs:minInclusive value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="y" use="optional">
+        <xs:simpleType>
+          <xs:restriction base="xs:unsignedInt">
+            <xs:minInclusive value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+	</xs:element>
+	<xs:element name="Exposure">
+		<xs:annotation>
+			<xs:documentation>The exposure settings of a two dimensional sensor</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="time" type="xs:double" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Rotation" type="Triple">
+		<xs:annotation>
+			<xs:documentation>Describes an element's Rotation in 3D space</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="Translation" type="Triple">
+		<xs:annotation>
+			<xs:documentation>Describes an element's Translation in 3D space</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="Elements">
+		<xs:annotation>
+			<xs:documentation>Specifies a list of child elements connected to the joint.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element ref="BallJoint"/>
+				<xs:element ref="Hinge"/>
+				<xs:element ref="Slider"/>
+				<xs:element ref="PressureSensor"/>
+				<xs:element ref="UniversalJoint"/>
+				<xs:element ref="WheelSuspension"/>
+				<xs:element ref="Movable"/>
+				<xs:element ref="InteractiveButton"/>
+				<xs:element ref="Led"/>
+				<xs:element ref="Bumper"/>
+				<xs:element ref="DistanceSensor"/>
+				<xs:element ref="SingleDistanceSensor"/>
+				<xs:element ref="PositionSensor"/>
+				<xs:element ref="Compound"/>
+				<xs:element ref="Use"/>
+				<xs:element ref="ComplexShape"/>
+				<xs:element ref="Box"/>
+				<xs:element ref="Sphere"/>
+				<xs:element ref="Cylinder"/>
+				<xs:element ref="Camera"/>
+				<xs:element ref="Accelerometer"/>
+				<xs:element ref="Gyroscope"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="VertexList">
+		<xs:annotation>
+			<xs:documentation>A list of vertices</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Vertex" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Describes a vertex in 3D space</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:attribute name="name" type="xs:string" use="required"/>
+						<xs:attribute name="x" type="xs:double" use="required"/>
+						<xs:attribute name="y" type="xs:double" use="required"/>
+						<xs:attribute name="z" type="xs:double" use="required"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="VertexListWithTexCoords">
+		<xs:annotation>
+			<xs:documentation>A list of vertices with additional texture coordinates</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Vertex" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Describes a vertex in 3D space</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:attribute name="name" type="xs:string" use="required"/>
+						<xs:attribute name="x" type="xs:double" use="required"/>
+						<xs:attribute name="y" type="xs:double" use="required"/>
+						<xs:attribute name="z" type="xs:double" use="required"/>
+						<xs:attribute name="s" type="xs:double" use="required"/>
+						<xs:attribute name="t" type="xs:double" use="optional"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="PhysicalAttributes">
+		<xs:annotation>
+			<xs:documentation>A set of physical attributes</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Mass" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The mass of a physical object</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:attribute name="value" type="xs:double" use="required"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="CenterOfMass" type="Triple" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The center of the mass of a physical object</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Friction" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The friction of the physical surface</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:attribute name="direction1" type="xs:double" use="required"/>
+						<xs:attribute name="direction2" type="xs:double" use="optional"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Appearance">
+		<xs:annotation>
+			<xs:documentation>A set of graphical attributes</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="ref" type="xs:string" use="required"/>
+			<xs:attribute name="visible-to-user" type="xs:boolean" default="true"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Shader">
+		<xs:annotation>
+			<xs:documentation>The Usage of a Program to replace OpenGL fixed function pipeline</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="ref" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="LightBinding">
+		<xs:annotation>
+			<xs:documentation>A binding to a light definition</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="ref" type="xs:string" use="required"/>
+			<xs:attribute name="object" type="xs:string" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="EnvironmentMappingBinding">
+		<xs:annotation>
+			<xs:documentation>A binding to a objects position for dynamic rendering of environment maps</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="MotionBlurMethod">
+		<xs:annotation>
+			<xs:documentation>Force a specific motion blur method when using combined motion blur technique.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="OverwriteGraphicalShape">
+		<xs:annotation>
+			<xs:documentation>A tag used to change the graphical representation of a physical object</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:choice minOccurs="0" maxOccurs="unbounded">
+					<xs:element ref="SimpleBox" minOccurs="0"/>
+					<xs:element ref="SimpleSphere" minOccurs="0"/>
+					<xs:element ref="SimpleCylinder" minOccurs="0"/>
+				</xs:choice>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Material">
+		<xs:annotation>
+			<xs:documentation>The material of a physical object </xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="FrictionCoefficient">
+		<xs:annotation>
+			<xs:documentation>The friction coefficent of the material refering to anoter material</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="otherMaterial" type="xs:string" use="required"/>
+			<xs:attribute name="value" type="xs:double" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="RollingFrictionCoefficient">
+		<xs:annotation>
+			<xs:documentation>The rolling friction coefficent of the material refering to anoter material</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="otherMaterial" type="xs:string" use="required"/>
+			<xs:attribute name="value" type="xs:double" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="RestitutionCoefficient">
+		<xs:annotation>
+			<xs:documentation>
+        The coefficient of restitution of the material refering to another material for collision contacts [0.0...1.0]
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="otherMaterial" type="xs:string" use="required"/>
+			<xs:attribute name="value" type="Double0.0To1.0" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:simpleType name="SlipFactor">
+		<xs:annotation>
+			<xs:documentation>
+        A parameter to control the default slip behavior of the surfaces for collision contacts [0.0...]
+      </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="0.0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<!--
+
+  *
+
+  * Physical Objects
+
+  *
+
+  -->
+	<xs:element name="SimpleBox">
+		<xs:annotation>
+			<xs:documentation>A simple quadric object, not used as real scene element</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Translation" minOccurs="0"/>
+				<xs:element ref="Rotation" minOccurs="0"/>
+				<xs:choice>
+					<xs:element ref="Appearance" minOccurs="0"/>
+					<xs:element ref="Shader" minOccurs="0"/>
+					<xs:element ref="PhysicalAttributes" minOccurs="0"/>
+				</xs:choice>
+				<xs:choice minOccurs="0">
+					<xs:element ref="OverwriteGraphicalShape"/>
+				</xs:choice>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string"/>
+			<xs:attribute name="length" type="xs:double" use="required"/>
+			<xs:attribute name="width" type="xs:double" use="required"/>
+			<xs:attribute name="height" type="xs:double" use="required"/>
+			<xs:attribute name="canCollide" type="xs:boolean" use="optional" default="true"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SimpleCylinder">
+		<xs:annotation>
+			<xs:documentation>A simple standard cylinder, not used as real scene element</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Translation" minOccurs="0"/>
+				<xs:element ref="Rotation" minOccurs="0"/>
+				<xs:choice>
+					<xs:element ref="Appearance" minOccurs="0"/>
+					<xs:element ref="Shader" minOccurs="0"/>
+					<xs:element ref="PhysicalAttributes" minOccurs="0"/>
+				</xs:choice>
+			</xs:sequence>
+			<xs:attribute name="radius" type="xs:double" use="required"/>
+			<xs:attribute name="height" type="xs:double" use="required"/>
+			<xs:attribute name="name" type="xs:string"/>
+			<xs:attribute name="canCollide" type="xs:boolean" use="optional" default="true"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SimpleSphere">
+		<xs:annotation>
+			<xs:documentation>A very simple sphere, not used as real scene element</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Translation" minOccurs="0"/>
+				<xs:choice>
+					<xs:element ref="Appearance" minOccurs="0"/>
+					<xs:element ref="Shader" minOccurs="0"/>
+					<xs:element ref="PhysicalAttributes" minOccurs="0"/>
+				</xs:choice>
+			</xs:sequence>
+			<xs:attribute name="radius" type="xs:double" use="required"/>
+			<xs:attribute name="name" type="xs:string"/>
+			<xs:attribute name="canCollide" type="xs:boolean" use="optional" default="true"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Box">
+		<xs:annotation>
+			<xs:documentation>A quadric object</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Translation" minOccurs="0"/>
+				<xs:element ref="Rotation" minOccurs="0"/>
+				<xs:element ref="Appearance" minOccurs="0"/>
+				<xs:element ref="Shader" minOccurs="0"/>
+				<xs:element ref="Material" minOccurs="0"/>
+				<xs:element ref="PhysicalAttributes" minOccurs="0"/>
+				<xs:element ref="Elements" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string"/>
+			<xs:attribute name="length" type="xs:double" use="required"/>
+			<xs:attribute name="width" type="xs:double" use="required"/>
+			<xs:attribute name="height" type="xs:double" use="required"/>
+			<xs:attribute name="canCollide" type="xs:boolean" use="optional" default="true"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Cylinder">
+		<xs:annotation>
+			<xs:documentation>A standard cylinder</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Translation" minOccurs="0"/>
+				<xs:element ref="Rotation" minOccurs="0"/>
+				<xs:element ref="Appearance" minOccurs="0"/>
+				<xs:element ref="Shader" minOccurs="0"/>
+				<xs:element ref="Material" minOccurs="0"/>
+				<xs:element ref="PhysicalAttributes" minOccurs="0"/>
+				<xs:element ref="Elements" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="radius" type="xs:double" use="required"/>
+			<xs:attribute name="height" type="xs:double" use="required"/>
+			<xs:attribute name="name" type="xs:string"/>
+			<xs:attribute name="canCollide" type="xs:boolean" use="optional" default="true"/>
+      <xs:attribute name="capped" type="xs:boolean" use="optional" default="false"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Sphere">
+		<xs:annotation>
+			<xs:documentation>A simple sphere</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Translation" minOccurs="0"/>
+				<xs:element ref="Appearance" minOccurs="0"/>
+				<xs:element ref="Shader" minOccurs="0"/>
+				<xs:element ref="Material" minOccurs="0"/>
+				<xs:element ref="PhysicalAttributes" minOccurs="0"/>
+				<xs:element ref="Elements" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="radius" type="xs:double" use="required"/>
+			<xs:attribute name="name" type="xs:string"/>
+			<xs:attribute name="canCollide" type="xs:boolean" use="optional" default="true"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ComplexShape">
+		<xs:annotation>
+			<xs:documentation>Describes a complex shape which is assembled from a set of polygons</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Translation" minOccurs="0"/>
+				<xs:element ref="Rotation" minOccurs="0"/>
+				<xs:element ref="VertexList" minOccurs="0"/>
+				<xs:element ref="VertexListWithTexCoords" minOccurs="0"/>
+				<xs:element ref="Material" minOccurs="0"/>
+				<xs:element ref="PhysicalAttributes" minOccurs="0"/>
+				<xs:element ref="Appearance" minOccurs="0"/>
+				<xs:element ref="Shader" minOccurs="0"/>
+				<xs:element name="GraphicalRepresentation">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:choice minOccurs="0" maxOccurs="unbounded">
+								<xs:element name="Polygon">
+									<xs:annotation>
+										<xs:documentation>A polygon consisting of n vertices in 3D space (all vertices have to be in one plane)</xs:documentation>
+									</xs:annotation>
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="Vertex" minOccurs="3" maxOccurs="unbounded">
+												<xs:complexType>
+													<xs:attribute name="ref" type="xs:string" use="required"/>
+												</xs:complexType>
+											</xs:element>
+										</xs:sequence>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="TriangleStrip">
+									<xs:annotation>
+										<xs:documentation>A set of  n vertices in 3D space, which will be linked to triangles</xs:documentation>
+									</xs:annotation>
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="Vertex" minOccurs="3" maxOccurs="unbounded">
+												<xs:complexType>
+													<xs:attribute name="ref" type="xs:string" use="required"/>
+												</xs:complexType>
+											</xs:element>
+										</xs:sequence>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="Quad">
+									<xs:annotation>
+										<xs:documentation>a polygon of 4 vertices</xs:documentation>
+									</xs:annotation>
+									<xs:complexType>
+										<xs:attribute name="v1" type="xs:string" use="required"/>
+										<xs:attribute name="v2" type="xs:string" use="required"/>
+										<xs:attribute name="v3" type="xs:string" use="required"/>
+										<xs:attribute name="v4" type="xs:string" use="required"/>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="fQuad">
+									<xs:annotation>
+										<xs:documentation>a polygon of 4 vertices with flipped surface normal</xs:documentation>
+									</xs:annotation>
+									<xs:complexType>
+										<xs:attribute name="v1" type="xs:string" use="required"/>
+										<xs:attribute name="v2" type="xs:string" use="required"/>
+										<xs:attribute name="v3" type="xs:string" use="required"/>
+										<xs:attribute name="v4" type="xs:string" use="required"/>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="Triangle">
+									<xs:annotation>
+										<xs:documentation>a triangle of 3 vertices</xs:documentation>
+									</xs:annotation>
+									<xs:complexType>
+										<xs:attribute name="v1" type="xs:string" use="required"/>
+										<xs:attribute name="v2" type="xs:string" use="required"/>
+										<xs:attribute name="v3" type="xs:string" use="required"/>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="fTriangle">
+									<xs:annotation>
+										<xs:documentation>a triangle of 3 vertices with flipped surface normal</xs:documentation>
+									</xs:annotation>
+									<xs:complexType>
+										<xs:attribute name="v1" type="xs:string" use="required"/>
+										<xs:attribute name="v2" type="xs:string" use="required"/>
+										<xs:attribute name="v3" type="xs:string" use="required"/>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="GraphicalAttributes">
+									<xs:complexType>
+										<xs:choice minOccurs="0" maxOccurs="unbounded">
+											<xs:element name="SmoothSurface">
+												<xs:complexType>
+													<xs:attribute name="value" type="xs:boolean" use="required"/>
+												</xs:complexType>
+											</xs:element>
+											<xs:element name="FlipNormal">
+												<xs:complexType>
+													<xs:attribute name="value" type="xs:boolean" use="required"/>
+												</xs:complexType>
+											</xs:element>
+											<xs:element name="CombinePrimitives">
+												<xs:complexType>
+													<xs:attribute name="value" type="xs:boolean" use="required"/>
+												</xs:complexType>
+											</xs:element>
+										</xs:choice>
+									</xs:complexType>
+								</xs:element>
+							</xs:choice>
+						</xs:sequence>
+						<xs:attribute name="vertexList" type="xs:string" use="required"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="PhysicalRepresentation">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:choice minOccurs="0">
+								<xs:choice minOccurs="0">
+									<xs:element name="TriangleMesh"/>
+									<xs:element name="ObjectOrientedBoundingBox">
+										<xs:complexType>
+											<xs:attribute name="mass" type="xs:double" use="required"/>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="AxisAlignedBoundingBox">
+										<xs:complexType>
+											<xs:attribute name="mass" type="xs:double" use="required"/>
+										</xs:complexType>
+									</xs:element>
+								</xs:choice>
+								<xs:choice minOccurs="0" maxOccurs="unbounded">
+									<xs:element ref="SimpleSphere"/>
+									<xs:element ref="SimpleBox"/>
+									<xs:element ref="SimpleCylinder"/>
+								</xs:choice>
+							</xs:choice>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element ref="Elements" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+			<xs:attribute name="canCollide" type="xs:boolean" use="optional" default="true"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Plane">
+		<xs:annotation>
+			<xs:documentation>A infinite plane object</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Appearance" minOccurs="0"/>
+				<xs:element ref="Material" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string"/>
+			<xs:attribute name="a" type="xs:double" use="required"/>
+			<xs:attribute name="b" type="xs:double" use="required"/>
+			<xs:attribute name="c" type="xs:double" use="required"/>
+			<xs:attribute name="d" type="xs:double" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<!--
+
+  *
+
+  * Sensors
+
+  *
+
+  -->
+	<xs:element name="Bumper">
+		<xs:annotation>
+			<xs:documentation>A bumper sensor</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Translation" minOccurs="0"/>
+				<xs:element ref="Rotation" minOccurs="0"/>
+				<xs:element ref="Elements" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="InteractiveButton">
+		<xs:annotation>
+			<xs:documentation>A button which may be interactively clicked by the user</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Translation" minOccurs="0"/>
+				<xs:element ref="Rotation" minOccurs="0"/>
+				<xs:element ref="Elements" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+			<xs:attribute name="snapIn" type="xs:boolean" default="false"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Camera">
+		<xs:annotation>
+			<xs:documentation>This is a Camera</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Translation" minOccurs="0"/>
+				<xs:element ref="Rotation" minOccurs="0"/>
+				<xs:element ref="Resolution"/>
+				<xs:element ref="Exposure" minOccurs="0"/>
+				<xs:element ref="OpeningAngles"/>
+				<xs:element ref="Range"/>
+				<xs:choice>
+					<xs:element name="SphericalProjection"/>
+					<xs:element name="PerspectiveProjection"/>
+				</xs:choice>
+				<xs:element ref="Elements" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Accelerometer">
+		<xs:annotation>
+			<xs:documentation>This is a sensor for measuring accelerations in three axes</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Translation" minOccurs="0"/>
+				<xs:element ref="Rotation" minOccurs="0"/>
+				<xs:element name="Element" minOccurs="1" maxOccurs="1">
+					<xs:annotation>
+						<xs:documentation>Specifies one physical child element which is used for computing the value of the sensor.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:choice minOccurs="1" maxOccurs="1">
+							<xs:element ref="Box"/>
+							<xs:element ref="Sphere"/>
+							<xs:element ref="Cylinder"/>
+						</xs:choice>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Gyroscope">
+		<xs:annotation>
+			<xs:documentation>This is a sensor for measuring angular velocity around three axes</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Translation" minOccurs="0"/>
+				<xs:element ref="Rotation" minOccurs="0"/>
+				<xs:element name="Element" minOccurs="1" maxOccurs="1">
+					<xs:annotation>
+						<xs:documentation>Specifies one physical child element which is used for computing the value of the sensor.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:choice minOccurs="1" maxOccurs="1">
+							<xs:element ref="Box"/>
+							<xs:element ref="Sphere"/>
+							<xs:element ref="Cylinder"/>
+						</xs:choice>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DistanceSensor">
+		<xs:annotation>
+			<xs:documentation>A sensor for measuring distances</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Translation" minOccurs="0"/>
+				<xs:element ref="Rotation" minOccurs="0"/>
+				<xs:element ref="Resolution"/>
+				<xs:element ref="OpeningAngles"/>
+				<xs:element ref="Range"/>
+				<xs:choice>
+					<xs:element name="SphericalProjection"/>
+					<xs:element name="PerspectiveProjection"/>
+				</xs:choice>
+				<xs:element ref="Elements" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SingleDistanceSensor">
+		<xs:annotation>
+			<xs:documentation>A sensor for measuring a single distance</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Translation" minOccurs="0"/>
+				<xs:element ref="Rotation" minOccurs="0"/>
+				<xs:element ref="Range"/>
+				<xs:element ref="Elements" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="PositionSensor">
+		<xs:annotation>
+			<xs:documentation>A sensor returning its position in 3D space</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Translation" minOccurs="0"/>
+				<xs:element ref="Elements" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+  <xs:element name="PressureSensor">
+    <xs:annotation>
+      <xs:documentation>...</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Gain" type="Triple" minOccurs="0"/>
+        <xs:element name="Offset" type="Triple" minOccurs="0"/>
+        <xs:element ref="Elements"/>
+      </xs:sequence>
+      <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+	<!--
+
+  *
+
+  * Actuators
+
+  *
+
+  -->
+	<xs:element name="Hinge">
+		<xs:annotation>
+			<xs:documentation>A joint with one axis</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="AnchorPoint">
+					<xs:annotation>
+						<xs:documentation>The Translation of the hinge</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:complexContent>
+							<xs:extension base="Triple"/>
+						</xs:complexContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Axis" type="AxisType">
+					<xs:annotation>
+						<xs:documentation>The rotation axis in 3D-space</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="Elements"/>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="BallJoint">
+		<xs:annotation>
+			<xs:documentation>A joint based on a ball</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="AnchorPoint" type="Triple"/>
+				<xs:choice minOccurs="0" maxOccurs="3">
+					<xs:element ref="AngularMotor"/>
+				</xs:choice>
+				<xs:element ref="Elements"/>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Led">
+		<xs:annotation>
+			<xs:documentation>A colored Led (light emitting diode)</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Elements"/>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+			<xs:attribute name="appearanceWhenOn" type="xs:string" use="required"/>
+			<xs:attribute name="appearanceWhenOff" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Slider">
+		<xs:annotation>
+			<xs:documentation>...</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Axis" type="AxisType">
+					<xs:annotation>
+						<xs:documentation>The translation axis in 3D-space</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="Elements"/>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="UniversalJoint">
+		<xs:annotation>
+			<xs:documentation>...</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="AnchorPoint" type="Triple"/>
+				<xs:element name="Axis1" type="AxisType"/>
+				<xs:element name="Axis2" type="AxisType"/>
+				<xs:element ref="Elements"/>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="WheelSuspension">
+		<xs:annotation>
+			<xs:documentation>A special hinge joint with two axes (aka hinge2 joint in ODE)</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="AnchorPoint" type="Triple"/>
+				<xs:element name="Axis1" type="SuspensionAxisType"/>
+				<xs:element name="Axis2" type="AxisType"/>
+				<xs:element ref="Elements"/>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="AngularMotor">
+		<xs:annotation>
+			<xs:documentation>Documentation is missing</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:choice minOccurs="0">
+					<xs:element ref="PController"/>
+					<xs:element ref="PIDController"/>
+				</xs:choice>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string"/>
+			<xs:attribute name="maxVelocity" type="xs:double" use="required"/>
+			<xs:attribute name="maxForce" type="xs:double" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="VelocityMotor">
+		<xs:annotation>
+			<xs:documentation>Documentation is missing</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="name" type="xs:string"/>
+			<xs:attribute name="maxVelocity" type="xs:double" use="required"/>
+			<xs:attribute name="maxForce" type="xs:double" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="PController">
+		<xs:annotation>
+			<xs:documentation>Describes the constant needed for a P controller</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="pControlFactor" type="xs:double" use="required"/>
+			<xs:attribute name="stopBias" type="xs:double" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="PIDController">
+		<xs:annotation>
+			<xs:documentation>Describes the constants needed for a PID controller</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="pControlFactor" type="xs:double" use="required"/>
+			<xs:attribute name="iControlFactor" type="xs:double" use="required"/>
+			<xs:attribute name="dControlFactor" type="xs:double" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<!--
+
+  *
+
+  * Structure elements
+
+  *
+
+  -->
+	<xs:element name="Movable">
+		<xs:annotation>
+			<xs:documentation>Encloses a set of movable objects</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Elements" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Compound">
+		<xs:annotation>
+			<xs:documentation>A group of objects</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Translation" minOccurs="0"/>
+				<xs:element ref="Rotation" minOccurs="0"/>
+				<xs:element ref="Elements" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Use">
+		<xs:annotation>
+			<xs:documentation>Instantiiation of a macro</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:choice minOccurs="0" maxOccurs="unbounded">
+					<xs:element ref="Translation" minOccurs="0"/>
+					<xs:element ref="Rotation" minOccurs="0"/>
+					<xs:element ref="LightBinding" minOccurs="0"/>
+					<xs:element ref="EnvironmentMappingBinding" minOccurs="0"/>
+					<xs:element ref="MotionBlurMethod" minOccurs="0"/>
+					<xs:element name="SubstituteSurfaces">
+						<xs:complexType>
+							<xs:attribute name="substitute" type="xs:string" use="required"/>
+							<xs:attribute name="with" type="xs:string" use="required"/>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="SubstituteAllSurfaces">
+						<xs:complexType>
+							<xs:attribute name="with" type="xs:string" use="required"/>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="SubstituteShaderPrograms">
+						<xs:complexType>
+							<xs:attribute name="substitute" type="xs:string" use="required"/>
+							<xs:attribute name="with" type="xs:string" use="required"/>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="SubstituteAllShaderPrograms">
+						<xs:complexType>
+							<xs:attribute name="with" type="xs:string" use="required"/>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="Collision" minOccurs="0">
+						<xs:complexType>
+							<xs:attribute name="value" type="xs:boolean" use="required"/>
+						</xs:complexType>
+					</xs:element>
+					<xs:element ref="Elements" minOccurs="0"/>
+				</xs:choice>
+			</xs:sequence>
+			<xs:attribute name="macroName" type="xs:string"/>
+			<xs:attribute name="instanceName" type="xs:string"/>
+			<xs:attribute name="nodeForElements" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="AppearanceDefinition">
+		<xs:annotation>
+			<xs:documentation>Description of a graphical surface</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element name="Color" type="RGBAColor"/>
+				<xs:element name="AmbientColor" type="RGBAColor" minOccurs="0"/>
+				<xs:element name="SpecularColor" type="RGBAColor" minOccurs="0"/>
+				<xs:element name="Shininess" type="Double" minOccurs="0"/>
+				<xs:element name="EmissionColor" type="RGBAColor" minOccurs="0"/>
+				<xs:element name="DiffuseTexture" type="Texture" minOccurs="0"/>
+				<xs:element name="BorderColor" type="UnboundedRGBAColor" minOccurs="0"/>
+				<xs:element name="TextureGenModeS" type="TextureGen" minOccurs="0"/>
+				<xs:element name="TextureGenModeT" type="TextureGen" minOccurs="0"/>
+				<xs:element name="Reflectivity" minOccurs="0">
+					<xs:complexType>
+						<xs:attribute name="value" type="Double0.0To1.0" use="required"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:choice>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+		</xs:complexType>
+		<xs:unique name="all-surfaces-must-have-different-names">
+			<xs:selector xpath="AppearanceDefinition"/>
+			<xs:field xpath="@name"/>
+		</xs:unique>
+	</xs:element>
+	<xs:element name="LightDefinition">
+		<xs:annotation>
+			<xs:documentation>Description of an OpenGL Light</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element name="AmbientColor" type="RGBAColor" minOccurs="0"/>
+				<xs:element name="DiffuseColor" type="RGBAColor" minOccurs="0"/>
+				<xs:element name="SpecularColor" type="RGBAColor" minOccurs="0"/>
+				<xs:element name="Position" type="Quadrupel" minOccurs="0"/>
+				<xs:element name="ConstantAttenuation" type="Double" minOccurs="0"/>
+				<xs:element name="LinearAttenuation" type="Double" minOccurs="0"/>
+				<xs:element name="QuadraticAttenuation" type="Double" minOccurs="0"/>
+				<xs:element name="SpotCutoff" type="CutoffAngle" minOccurs="0"/>
+				<xs:element name="SpotExponent" type="Double" minOccurs="0"/>
+				<xs:element name="SpotDirection" type="Triple" minOccurs="0"/>
+				<xs:element name="ShadowMap" minOccurs="0">
+					<xs:complexType>
+						<xs:attribute name="size" use="required">
+							<xs:simpleType>
+								<xs:restriction base="xs:integer">
+									<xs:enumeration value="128"/>
+									<xs:enumeration value="256"/>
+									<xs:enumeration value="512"/>
+									<xs:enumeration value="1024"/>
+									<xs:enumeration value="2048"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+						<xs:attribute name="nearClip" type="xs:int" use="required"/>
+						<xs:attribute name="farClip" type="xs:int" use="required"/>
+						<xs:attribute name="intensity" type="xs:double" use="required"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:choice>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="EnvironmentDefinition">
+		<xs:annotation>
+			<xs:documentation>Description of an Render Environment</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:choice>
+					<xs:element name="CubeMap" type="CubeMap"/>
+					<xs:element name="SimpleCubeMap" type="SimpleCubeMap"/>
+				</xs:choice>
+				<xs:choice minOccurs="0" maxOccurs="8">
+					<xs:element name="Light">
+						<xs:annotation>
+							<xs:documentation>Light to enligten the scene</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:attribute name="ref" use="required"/>
+						</xs:complexType>
+					</xs:element>
+				</xs:choice>
+				<xs:element ref="Elements" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="OpenGLSettings">
+		<xs:annotation>
+			<xs:documentation>Settings for the OpenGL Render Contexts</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="LightModel" minOccurs="0">
+					<xs:complexType>
+						<xs:attribute name="twoSided" type="xs:boolean" use="optional" default="true"/>
+						<xs:attribute name="localCameraViewer" type="xs:boolean" use="optional" default="true"/>
+						<xs:attribute name="localObjectViewer" type="xs:boolean" use="optional" default="false"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Culling" minOccurs="0">
+					<xs:complexType>
+						<xs:attribute name="face" use="optional">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="FRONT"/>
+									<xs:enumeration value="BACK"/>
+									<xs:enumeration value="NONE"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+						<xs:attribute name="front" use="optional">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="CW"/>
+									<xs:enumeration value="CCW"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Antialiasing" minOccurs="0">
+					<xs:complexType>
+						<xs:attribute name="samples" use="required">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="0"/>
+									<xs:enumeration value="2"/>
+									<xs:enumeration value="4"/>
+									<xs:enumeration value="8"/>
+									<xs:enumeration value="16"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="UseBaseColors" minOccurs="0"/>
+				<xs:element name="DisableWGLShareLists" minOccurs="0"/>
+				<xs:element name="Hints" minOccurs="0">
+					<xs:complexType>
+						<xs:attribute name="display" use="optional">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="NONE"/>
+									<xs:enumeration value="WARNINGS"/>
+									<xs:enumeration value="COMMON"/>
+									<xs:enumeration value="ALL"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="PolygonOffset" minOccurs="0">
+					<xs:complexType>
+						<xs:attribute name="factor" type="xs:double" use="required"/>
+						<xs:attribute name="units" type="xs:double" use="required"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="CubeMapGeneration" minOccurs="0">
+					<xs:complexType>
+						<xs:attribute name="posx" type="xs:double" use="required"/>
+						<xs:attribute name="posy" type="xs:double" use="required"/>
+						<xs:attribute name="posz" type="xs:double" use="required"/>
+						<xs:attribute name="size" use="required">
+							<xs:simpleType>
+								<xs:restriction base="xs:int">
+									<xs:enumeration value="64"/>
+									<xs:enumeration value="128"/>
+									<xs:enumeration value="256"/>
+									<xs:enumeration value="512"/>
+									<xs:enumeration value="1024"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+						<xs:attribute name="clipNear" type="xs:double" use="optional"/>
+						<xs:attribute name="clipFar" type="xs:double" use="optional"/>
+						<xs:attribute name="update" type="xs:int" use="optional"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="ShaderDef" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:attribute name="name" type="xs:string" use="required"/>
+						<xs:attribute name="type" use="required">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="VERTEX"/>
+									<xs:enumeration value="FRAGMENT"/>
+									<xs:enumeration value="GEOMETRY"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+						<xs:attribute name="file" type="xs:string" use="required"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="FilterDef" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:choice maxOccurs="unbounded">
+							<xs:element name="Shader">
+								<xs:complexType>
+									<xs:attribute name="ref" use="required"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Uniform">
+								<xs:complexType>
+									<xs:attribute name="ref" type="xs:string" use="required"/>
+									<xs:attribute name="swap" type="xs:string" use="optional"/>
+									<xs:attribute name="type" use="optional">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:enumeration value="Value"/>
+												<xs:enumeration value="File"/>
+												<xs:enumeration value="Noise"/>
+												<xs:enumeration value="FBO"/>
+												<xs:enumeration value="FBOPhysicUpdateSwap"/>
+												<xs:enumeration value="FBORenderPassSwap"/>
+												<xs:enumeration value="Storage"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+									<xs:attribute name="file" type="xs:string" use="optional"/>
+									<xs:attribute name="ignore" type="xs:boolean" use="optional"/>
+									<xs:attribute name="filter" use="optional">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:enumeration value="linear"/>
+												<xs:enumeration value="nearest"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="MRT">
+								<xs:complexType>
+									<xs:attribute name="bitmask" type="xs:int" use="required"/>
+									<xs:attribute name="clearbitmask" type="xs:int" use="optional"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:choice>
+						<xs:attribute name="name" type="xs:string" use="required"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Program" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:choice maxOccurs="unbounded">
+							<xs:element name="Shader">
+								<xs:complexType>
+									<xs:attribute name="ref" use="required"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Filter">
+								<xs:complexType>
+									<xs:attribute name="ref" use="required"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Uniform">
+								<xs:complexType>
+									<xs:attribute name="ref" type="xs:string" use="required"/>
+									<xs:attribute name="swap" type="xs:string" use="optional"/>
+									<xs:attribute name="type" use="optional">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:enumeration value="Value"/>
+												<xs:enumeration value="File"/>
+												<xs:enumeration value="Noise"/>
+												<xs:enumeration value="FBO"/>
+												<xs:enumeration value="FBOPhysicUpdateSwap"/>
+												<xs:enumeration value="FBORenderPassSwap"/>
+												<xs:enumeration value="Storage"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+									<xs:attribute name="file" type="xs:string" use="optional"/>
+									<xs:attribute name="ignore" type="xs:boolean" use="optional"/>
+									<xs:attribute name="filter" use="optional">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:enumeration value="linear"/>
+												<xs:enumeration value="nearest"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="MRT">
+								<xs:complexType>
+									<xs:attribute name="bitmask" type="xs:int" use="required"/>
+									<xs:attribute name="clearbitmask" type="xs:int" use="optional"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:choice>
+						<xs:attribute name="name" type="xs:string" use="required"/>
+						<xs:attribute name="extension" type="xs:string" use="optional"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="ShaderInterface" minOccurs="0">
+					<xs:complexType>
+						<xs:attribute name="startOn" type="xs:boolean" use="optional" default="false"/>
+						<xs:attribute name="initialShader" type="xs:string" use="optional"/>
+						<xs:attribute name="initialPostShader" type="xs:string" use="optional"/>
+						<xs:attribute name="showInfos" type="xs:boolean" use="optional" default="false"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Macro">
+		<xs:annotation>
+			<xs:documentation>A reusable group of objects</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element ref="BallJoint"/>
+				<xs:element ref="Hinge"/>
+				<xs:element ref="Slider"/>
+				<xs:element ref="PressureSensor"/>
+				<xs:element ref="UniversalJoint"/>
+				<xs:element ref="WheelSuspension"/>
+				<xs:element ref="Movable"/>
+				<xs:element ref="InteractiveButton"/>
+				<xs:element ref="Bumper"/>
+				<xs:element ref="DistanceSensor"/>
+				<xs:element ref="SingleDistanceSensor"/>
+				<xs:element ref="PositionSensor"/>
+				<xs:element ref="Compound"/>
+				<xs:element ref="ComplexShape"/>
+				<xs:element ref="Box"/>
+				<xs:element ref="Sphere"/>
+				<xs:element ref="Cylinder"/>
+				<xs:element ref="Camera"/>
+				<xs:element ref="Accelerometer"/>
+				<xs:element ref="Gyroscope"/>
+				<xs:element ref="Use"/>
+			</xs:choice>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="RoSiIncludeFile">
+		<xs:annotation>
+			<xs:documentation>Content included from another file. Please enclose all nodes with this tag, when defining them in an external file.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element ref="AppearanceDefinition"/>
+				<xs:element ref="LightDefinition"/>
+				<xs:element ref="EnvironmentDefinition"/>
+				<xs:element ref="OpenGLSettings"/>
+				<xs:element ref="Macro"/>
+				<xs:element ref="VertexList"/>
+				<xs:element ref="VertexListWithTexCoords"/>
+				<xs:element ref="MaterialDefinition"/>
+				<xs:element ref="RoSiIncludeFile"/>
+			</xs:choice>
+      <xs:attribute name="description" type="xs:string" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="MaterialDefinition">
+		<xs:annotation>
+			<xs:documentation>Description of a surface material</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="FrictionCoefficient" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="RollingFrictionCoefficient" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="RestitutionCoefficient" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="QuickPhysicsSolver">
+		<xs:annotation>
+			<xs:documentation>
+        Usage of the quick step solver for physical simulation. The default number of iterations for one step is 20.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="iterations" type="xs:int" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="AutomaticObjectDisabling">
+		<xs:annotation>
+			<xs:documentation>
+        Usage of automatic disabling for physical objects if not moving using this thresholds for velocity ore simulation time.
+        Using default values for not set attributes.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="linearVelocityThreshold" type="xs:double" use="optional"/>
+			<xs:attribute name="angularVelocityThreshold" type="xs:double" use="optional"/>
+			<xs:attribute name="physicsSimulationSteps" type="xs:int" use="optional"/>
+			<xs:attribute name="physicsSimulationTime" type="xs:double" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<!--
+
+  *
+
+  * The main simulation specification
+
+  *
+
+  -->
+	<xs:element name="Simulation">
+		<xs:annotation>
+			<xs:documentation>The main tag enclosing all descriptions</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:choice minOccurs="0" maxOccurs="unbounded">
+					<xs:element ref="AppearanceDefinition"/>
+					<xs:element ref="LightDefinition"/>
+					<xs:element ref="EnvironmentDefinition"/>
+					<xs:element ref="Macro"/>
+					<xs:element ref="VertexList"/>
+					<xs:element ref="VertexListWithTexCoords"/>
+					<xs:element ref="MaterialDefinition"/>
+					<xs:element ref="RoSiIncludeFile"/>
+					<xs:element ref="OpenGLSettings"/>
+				</xs:choice>
+				<xs:element name="Scene">
+					<xs:annotation>
+						<xs:documentation>The starting point (root node) of the simulation scene description, which also includes several global parameters.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:choice maxOccurs="unbounded">
+							<xs:element name="Background" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>The graphical background of the scene</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:attribute name="ref" use="required"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="GlobalAmbientLight" type="RGB" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Global ambient light color</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Light" minOccurs="0" maxOccurs="8">
+								<xs:annotation>
+									<xs:documentation>Light to enligten the scene</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:attribute name="ref" use="required"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Environment" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>A complex environment to use as scene setting</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:attribute name="ref" use="required"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="DefaultAppearance">
+								<xs:annotation>
+									<xs:documentation>The default graphical attributes</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:attribute name="ref" type="xs:string" use="required"/>
+									<xs:attribute name="visible-to-user" type="xs:boolean" default="true"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="GlobalPhysicalParameters" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>The default physical attributes</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:attribute name="gravity" type="xs:double" use="required"/>
+									<xs:attribute name="erp" type="xs:double" use="required"/>
+									<xs:attribute name="cfm" type="xs:double" use="required"/>
+									<xs:attribute name="defaultFrictionCoefficient" type="xs:double" use="optional"/>
+									<xs:attribute name="defaultRollingFrictionCoefficient" type="xs:double" use="optional"/>
+									<xs:attribute name="defaultCoefficientOfRestitution" type="Double0.0To1.0" use="optional"/>
+									<xs:attribute name="velocityThresholdForElasticity" type="xs:double" use="optional"/>
+									<xs:attribute name="contactSoftnessERP" type="xs:double" use="optional"/>
+									<xs:attribute name="contactSoftnessCFM" type="xs:double" use="optional"/>
+									<xs:attribute name="slipFactor" type="SlipFactor" use="optional"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:choice minOccurs="0">
+								<xs:element ref="QuickPhysicsSolver"/>
+							</xs:choice>
+							<xs:choice minOccurs="0">
+								<xs:element ref="AutomaticObjectDisabling"/>
+							</xs:choice>
+							<xs:element name="SimulationParameters" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Some global simulation parameters</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:attribute name="stepLength" type="xs:double" use="required"/>
+									<xs:attribute name="physicsStepLength" type="xs:double" use="optional"/>
+									<xs:attribute name="standardLength" type="xs:double" use="required"/>
+									<xs:attribute name="collisionDetectionMode" type="xs:short" use="optional"/>
+									<xs:attribute name="applyDynamicsForceFactor" type="xs:double" use="optional"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element ref="Plane" minOccurs="0" maxOccurs="unbounded"/>
+							<xs:element ref="Elements" minOccurs="0"/>
+						</xs:choice>
+						<xs:attribute name="name" type="xs:string" use="required"/>
+						<xs:attribute name="description" type="xs:string" use="required"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

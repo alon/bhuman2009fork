@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="9,00"
+	Name="SimRobotDemo"
+	ProjectGUID="{1398F6B5-CD94-3372-BF57-9A8B388CDB52}"
+	Keyword="Qt4VSv1.0"
+	TargetFrameworkVersion="0"
+	>
+	<Platforms>
+		<Platform
+			Name="Win32"
+		/>
+	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
+	<Configurations>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory="$(SolutionDir)\..\Build\SimRobotDemo\Win32\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)\..\Build\SimRobotDemo\Win32\$(ConfigurationName)"
+			ConfigurationType="1"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+				CommandLine=""
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				WarningLevel="0"
+				DefaultCharType="0"
+				EnableErrorChecks="1"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalOptions="-Zm200 -w34100 -w34189 -Zm200 -w34100 -w34189 -w34100 -w34189"
+				Optimization="4"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="_WINDOWS,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,_CRT_SECURE_NO_DEPRECATE,QT_THREAD_SUPPORT,QT_DLL,QT_OPENGL_LIB,QT_GUI_LIB,QT_CORE_LIB"
+				GeneratePreprocessedFile="0"
+				ExceptionHandling="1"
+				RuntimeLibrary="3"
+				BufferSecurityCheck="false"
+				TreatWChar_tAsBuiltInType="false"
+				RuntimeTypeInfo="true"
+				AssemblerListingLocation="$(SolutionDir)\..\Build\SimRobotDemo\Win32\Debug\"
+				ObjectFile="$(SolutionDir)\..\Build\SimRobotDemo\Win32\Debug\"
+				ProgramDataBaseFileName="$(SolutionDir)\..\Build\SimRobotDemo\Win32\Debug\"
+				WarningLevel="3"
+				SuppressStartupBanner="true"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_WINDOWS,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,_CRT_SECURE_NO_DEPRECATE,QT_THREAD_SUPPORT,QT_DLL,QT_OPENGL_LIB,QT_GUI_LIB,QT_CORE_LIB,_DEBUG"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				IgnoreImportLibrary="true"
+				LinkLibraryDependencies="true"
+				UseLibraryDependencyInputs="true"
+				AdditionalOptions="&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; &quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot;"
+				AdditionalDependencies="opengl32.lib glu32.lib gdi32.lib user32.lib qtmain.lib ode_single.lib glew32.lib GlAux.lib libxml2.lib libqhull.lib cblas.lib gsl.lib QtOpenGL4.lib QtGui4.lib QtCore4.lib"
+				ShowProgress="0"
+				OutputFile="$(SolutionDir)\..\Build\SimRobotDemo\Win32\Debug\SimRobotDemo.exe"
+				SuppressStartupBanner="true"
+				AdditionalLibraryDirectories="..\Util\qt\Win32\lib;../Util/ode/Win32/lib;../Util/glew/Win32/lib;../Util/libxml2/Win32/lib;../Util/gsl/Win32/lib;../Util/qhull/Win32/lib"
+				IgnoreDefaultLibraryNames="msvcrt.lib"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile=""
+				SubSystem="2"
+				LinkTimeCodeGeneration="0"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="$(SolutionDir)\..\Build\SimRobotDemo\Win32\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)\..\Build\SimRobotDemo\Win32\$(ConfigurationName)"
+			ConfigurationType="1"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+				CommandLine=""
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				WarningLevel="0"
+				DefaultCharType="0"
+				EnableErrorChecks="1"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalOptions="-Zm200 -w34100 -w34189 -Zm200 -w34100 -w34189 -w34100 -w34189"
+				Optimization="2"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="QT_NO_DEBUG,NDEBUG,_WINDOWS,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,_CRT_SECURE_NO_DEPRECATE,QT_THREAD_SUPPORT,QT_DLL,QT_NO_DEBUG,QT_OPENGL_LIB,QT_GUI_LIB,QT_CORE_LIB,NDEBUG"
+				GeneratePreprocessedFile="0"
+				ExceptionHandling="1"
+				RuntimeLibrary="2"
+				BufferSecurityCheck="false"
+				TreatWChar_tAsBuiltInType="false"
+				RuntimeTypeInfo="true"
+				AssemblerListingLocation="$(SolutionDir)\..\Build\SimRobotDemo\Win32\Release\"
+				ObjectFile="$(SolutionDir)\..\Build\SimRobotDemo\Win32\Release\"
+				ProgramDataBaseFileName="$(SolutionDir)\..\Build\SimRobotDemo\Win32\Release\"
+				WarningLevel="3"
+				SuppressStartupBanner="true"
+				DebugInformationFormat="0"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="QT_NO_DEBUG,NDEBUG,_WINDOWS,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,_CRT_SECURE_NO_DEPRECATE,QT_THREAD_SUPPORT,QT_DLL,QT_NO_DEBUG,QT_OPENGL_LIB,QT_GUI_LIB,QT_CORE_LIB"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				IgnoreImportLibrary="true"
+				UseLibraryDependencyInputs="true"
+				AdditionalOptions="&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; &quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot;"
+				AdditionalDependencies="opengl32.lib glu32.lib gdi32.lib user32.lib qtmain.lib ode_single.lib glew32.lib GlAux.lib libxml2.lib libqhull.lib cblas.lib gsl.lib QtOpenGL4.lib QtGui4.lib QtCore4.lib"
+				OutputFile="$(SolutionDir)\..\Build\SimRobotDemo\Win32\Release\SimRobotDemo.exe"
+				LinkIncremental="1"
+				SuppressStartupBanner="true"
+				AdditionalLibraryDirectories="..\Util\qt\Win32\lib;../Util/ode/Win32/lib;../Util/glew/Win32/lib;../Util/libxml2/Win32/lib;../Util/gsl/Win32/lib;../Util/qhull/Win32/lib"
+				GenerateDebugInformation="false"
+				ProgramDatabaseFile=""
+				SubSystem="2"
+				LinkTimeCodeGeneration="0"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<Filter
+			Name=".copy"
+			>
+			<File
+				RelativePath="..\Util\glew\Win32\bin\glew32.dll"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="..\Util\glew\Win32\bin\glew32.dll (copy)"
+						CommandLine="copy ..\Util\glew\Win32\bin\glew32.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="$(OutDir)\glew32.dll"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="..\Util\glew\Win32\bin\glew32.dll (copy)"
+						CommandLine="copy ..\Util\glew\Win32\bin\glew32.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="$(OutDir)\glew32.dll"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\Util\libxml2\Win32\bin\libxml2.dll"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="..\Util\libxml2\Win32\bin\libxml2.dll (copy)"
+						CommandLine="copy ..\Util\libxml2\Win32\bin\libxml2.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="$(OutDir)\libxml2.dll"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="..\Util\libxml2\Win32\bin\libxml2.dll (copy)"
+						CommandLine="copy ..\Util\libxml2\Win32\bin\libxml2.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="$(OutDir)\libxml2.dll"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\Util\ode\Win32\dll\ode_single.dll"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="..\Util\ode\Win32\dll\ode_single.dll (copy)"
+						CommandLine="copy ..\Util\ode\Win32\dll\ode_single.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="$(OutDir)\ode_single.dll"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="..\Util\ode\Win32\dll\ode_single.dll (copy)"
+						CommandLine="copy ..\Util\ode\Win32\dll\ode_single.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="$(OutDir)\ode_single.dll"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\Util\ode\Win32\dll\ode_singled.dll"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="..\Util\ode\Win32\dll\ode_singled.dll (copy)"
+						CommandLine="copy ..\Util\ode\Win32\dll\ode_singled.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="$(OutDir)\ode_singled.dll"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="..\Util\ode\Win32\dll\ode_singled.dll (copy)"
+						CommandLine="copy ..\Util\ode\Win32\dll\ode_singled.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="$(OutDir)\ode_singled.dll"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\Util\qt\Win32\bin\QtCore4.dll"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="..\Util\qt\Win32\bin\QtCore4.dll (copy)"
+						CommandLine="copy ..\Util\qt\Win32\bin\QtCore4.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="$(OutDir)\QtCore4.dll"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="..\Util\qt\Win32\bin\QtCore4.dll (copy)"
+						CommandLine="copy ..\Util\qt\Win32\bin\QtCore4.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="$(OutDir)\QtCore4.dll"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\Util\qt\Win32\bin\QtGui4.dll"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="..\Util\qt\Win32\bin\QtGui4.dll (copy)"
+						CommandLine="copy ..\Util\qt\Win32\bin\QtGui4.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="$(OutDir)\QtGui4.dll"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="..\Util\qt\Win32\bin\QtGui4.dll (copy)"
+						CommandLine="copy ..\Util\qt\Win32\bin\QtGui4.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="$(OutDir)\QtGui4.dll"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\Util\qt\Win32\bin\QtOpenGL4.dll"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="..\Util\qt\Win32\bin\QtOpenGL4.dll (copy)"
+						CommandLine="copy ..\Util\qt\Win32\bin\QtOpenGL4.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="$(OutDir)\QtOpenGL4.dll"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="..\Util\qt\Win32\bin\QtOpenGL4.dll (copy)"
+						CommandLine="copy ..\Util\qt\Win32\bin\QtOpenGL4.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="$(OutDir)\QtOpenGL4.dll"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\SimRobotCore\Simulation\RoSi.xsd"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="..\SimRobotCore\Simulation\RoSi.xsd (copy)"
+						CommandLine="copy ..\SimRobotCore\Simulation\RoSi.xsd &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="$(OutDir)\RoSi.xsd"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="..\SimRobotCore\Simulation\RoSi.xsd (copy)"
+						CommandLine="copy ..\SimRobotCore\Simulation\RoSi.xsd &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="$(OutDir)\RoSi.xsd"
+					/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+		<File
+			RelativePath="..\SimRobotDemo\Demo.cpp"
+			>
+		</File>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>

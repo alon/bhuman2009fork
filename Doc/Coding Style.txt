@@ -1,0 +1,44 @@
+GermanTeam Coding Style
+-----------------------
+
+The best way to understand the coding style is to look at the existing source files. It is also a good idea to copy an existing file and modify it if a new one is required.
+
+
+The general rules are:
+
+CamelCase anywhere (Java style)
+"_" only in preprocessor symbols
+All identifiers and all comments use English language
+
+Examples:
+MyClass
+MyEnum
+MyStruct
+myMemberVar
+myLocalVar
+myEnumConstant
+MY_PREPROCESSOR_SYMBOL
+
+Only a single statement per line.
+"{" and "}" always stand alone in a line
+Indention step size is two spaces.
+Never use tabulator characters (switch them off in Visual Studio)
+Binary and trinary operators are surrounded by spaces: "4 + 5", "x > y ? x : y"
+"(", ")", "[", "]" are not surrounded by spaces. Exceptions: in single line functions ("f() {...}") and in the neighborhood of binary operators ("a[0] = ...")
+There is no space between if, while, for etc. and the "(", e.g. for(.
+Pointers are only used if they cannot be substituted by references.
+Objects are always passed by (const) reference
+Use "const" as often as possible for
+  const member variables
+  const member functions
+  const parameters
+"set" and "get" functions are only implemented where useful.
+
+
+Before checking in:
+- Always get an update before you check in
+- Code must be compilable without warnings and errors (including the update)
+- Code also used by others must work
+- The documentation must be compilable without warnings and errors
+- Ensure that you check in all source files required
+- Give a meaningful description during check-in

@@ -1,0 +1,61 @@
+<?lua
+
+template = "../Src/SimulatorQt/Make/Templates/updateVcProjFile"
+platform = "windows"
+baseFile = "Behavior.vcproj"
+
+files = matchrecursive("..\\Src\\Modules\\BehaviorControl\\*.xabsl")
+table.insert(files, "..\\Src\\Representations\\MotionControl\\MotionRequest.h")
+table.insert(files, "..\\Src\\Representations\\Infrastructure\\SoundRequest.h")
+table.insert(files, "..\\Src\\Modules\\BehaviorControl\\CommonSymbols\\motion_symbols.xabsl")
+table.insert(files, "..\\Src\\Modules\\BehaviorControl\\CommonSymbols\\sound_symbols.xabsl")
+
+root = "..\\Src\\Modules\\BehaviorControl"
+urc = "..\\Build\\URC\\Win32\\Debug\\URC.exe"
+xabslCompiler = "ruby ../../../../Util/xabsl/compiler/xabsl.rb"
+xabslTempDir = "../Build/Behavior/Win32/Release"
+xabslOutputDir = "../Config/Xabsl"
+
+xabslTargets = {}
+for i, file in pairs(matchfiles("Behavior/*.make.zbuild")) do
+  local name = path.dropextension(path.dropextension(path.getbasename(file)))
+  local year = string.sub(name, 5, 7)
+  xabslTargets["..\\Src\\Modules\\BehaviorControl\\" .. name .. "BehaviorControl\\agents.xabsl"] = "bh" .. year .. "-ic.dat"
+end
+
+customBuildTools = {
+  {
+    filter = ".URC",
+    file = "..\\Src\\Representations\\MotionControl\\MotionRequest.h",
+    command = urc .. " /motion",
+    description = "MotionRequest.h (URC)",
+    output = "..\\Src\\Modules\\BehaviorControl\\CommonSymbols\\motion_symbols.xabsl",
+    dependencies = { 
+      "..\\Src\\Representations\\MotionControl\\SpecialActionRequest.h",
+      "..\\Src\\Representations\\MotionControl\\WalkRequest.h",
+      urc,
+    },
+  },
+  {
+    filter = ".URC",
+    file = "..\\Src\\Representations\\Infrastructure\\SoundRequest.h",
+    command = urc .. " /sound",
+    description = "SoundRequest.h (URC)",
+    output = "..\\Src\\Modules\\BehaviorControl\\CommonSymbols\\sound_symbols.xabsl",
+    dependencies = { urc },
+  },
+}
+
+table.sort(files)
+for src, target in pairs(xabslTargets) do
+  local tool = {
+    file = src,
+    command = { "cd " .. path.getdirname(src), xabslCompiler .. " -V -a ../../../" .. xabslTempDir .. "/xabsl.api -I ../../../" .. xabslTempDir .. " -i ../../../" .. xabslOutputDir .. "/" .. target .. " " .. path.getbasename(src) },
+    description = path.getbasename(src) .. " (xabsl.rb)",
+    dependencies = files,
+    output = xabslOutputDir .. "/" .. target,
+  }
+  table.insert(customBuildTools, tool)
+end
+
+?>

@@ -1,0 +1,31 @@
+/** Symbols for accessing information about the opponent's goal */
+namespace goal_symbols("Goal Symbols") 
+{  
+  /** angle to the left end of the free part */
+  float input goal.left_angle_to_free_part "deg";
+
+  /** angle to the right end of the free part */
+  float input goal.right_angle_to_free_part "deg";
+
+  /** angle to the center of the free part */
+  float input goal.angle_to_center_of_free_part "deg";
+
+  /** is the empty goal in front of me? */
+  bool input goal.free_part_in_front_of_me;
+
+  /** is the empty goal in front of me and enough space to both sides? */
+  bool input goal.free_part_in_front_of_me_safe;
+
+  /** Time since the goal was last seen in ms */
+  float input goal.time_since_last_seen "ms";
+  
+  /** Time since the goal was last seen in ms */
+  float input goal.time_since_last_seen_any_goal "ms";
+  
+  /** Whether the goal was seen in the last 500 ms */
+  bool input goal.was_seen;
+  
+  /** Opening angle to the largest free part. */
+  float input goal.free_part_size "deg";
+}
+

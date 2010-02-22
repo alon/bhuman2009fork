@@ -1,0 +1,24 @@
+/* comparing boolean to decimal */
+option alpha
+{
+	@gamma;
+
+	initial state beta
+	{
+  		subsequent-option {
+  			alpha(gamma = @gamma);
+  		}
+
+		decision-tree {
+			if(@gamma > 1 && @gamma > 2 && gamma > 3 && @gamma > 4 && 77 == 77 && (@gamma == 17 ? 44 : 55) > 99 && child_done > @gamma || current_state_ms > 5000)
+			{
+				transition-to-state(beta);
+			}
+			else
+			{
+				transition-to-state(beta);
+			}
+		}
+		
+	}
+}

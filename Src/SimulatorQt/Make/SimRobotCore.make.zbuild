@@ -1,0 +1,50 @@
+<?lua if linux then ?>
+<?lua
+
+template = "Templates/Makefile"
+files = matchrecursive("../SimRobotCore/*.cpp", "../SimRobotCore/*.h")
+configs = {
+  {
+    name = "Debug",
+    objdir = "$(SolutionDir)/../Build/SimRobotCore/Linux/Debug",
+    defines = { "DEBUG", "_DEBUG" },
+    includepaths = { 
+      "../", "../SimRobotCore",
+      "../Util/glew/Linux/include",
+      "../Util/gsl/Linux/include",
+      "../Util/libxml2/Linux/include",
+      "../Util/ode/Linux/include",
+      "../Util/qhull/Linux/include",
+      "/usr/include/qt4",
+    },
+    buildflags = "-pipe -Wall -W -Wno-unused-parameter -Wno-non-virtual-dtor -Wno-strict-aliasing -g",
+    type = "lib",
+  }, 
+  {
+    name = "Release",
+    objdir = "$(SolutionDir)/../Build/SimRobotCore/Linux/Release",
+    defines = { "NDEBUG" },
+    includepaths = {
+      "../", "../SimRobotCore",
+      "../Util/glew/Linux/include",
+      "../Util/gsl/Linux/include",
+      "../Util/libxml2/Linux/include",
+      "../Util/ode/Linux/include",
+      "../Util/qhull/Linux/include",
+      "/usr/include/qt4",
+    },
+    buildflags = "-pipe -Wall -W -Wno-unused-parameter -Wno-non-virtual-dtor -Wno-strict-aliasing -O3 -fomit-frame-pointer",
+    type = "lib",
+  },
+}
+
+newFiles = {}
+for i, file in pairs(files) do
+  if path.getbasename(path.getdirname(file)) ~= "Win32" then
+    table.insert(newFiles, file)
+  end
+end
+files = newFiles
+
+?>
+<?lua end ?>

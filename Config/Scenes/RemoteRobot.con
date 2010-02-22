@@ -1,0 +1,22 @@
+# connect to a robot
+call connect
+
+# all views are defined in another script
+call ViewsJpeg
+
+# request joint data and sensor data
+dr representation:SensorData
+dr representation:JointData
+
+# request behavior messages
+dr automatedRequests:xabsl:debugSymbols once
+dr automatedRequests:xabsl:debugMessages
+
+jc press 1 set representation:MotionRequest { motion = specialAction; specialActionRequest = { specialAction = kickLeftNao; mirror = false; }; walkRequest = { speed = { rotation = 0; translation = { x = 0; y = 0; }; }; target = { rotation = 0; translation = { x = 0; y = 0; }; }; pedantic = false; }; kickRequest = { kickType = none; mirror = false; dynamical = false; dynPoints[0] = { }; odometryOffset[0] = { }; }; }
+
+jc press 2 set representation:MotionRequest { motion = stand; specialActionRequest = { specialAction = kickLeftNao; mirror = false; }; walkRequest = { speed = { rotation = 0; translation = { x = 0; y = 0; }; }; target = { rotation = 0; translation = { x = 0; y = 0; }; }; pedantic = false; }; kickRequest = { kickType = none; mirror = false; dynamical = false; dynPoints[0] = { }; odometryOffset[0] = { }; }; }
+
+jc press 5 call MotionRequestJoystick
+jc press 6 call HeadJointRequestJoystick
+
+echo dr representation:JPEGImage off

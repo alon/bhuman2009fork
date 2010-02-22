@@ -1,0 +1,64 @@
+<?lua if linux then ?>
+<?lua
+
+template = "../Src/SimulatorQt/Make/Templates/QtMakefile"
+--template = "../Src/SimulatorQt/Make/Templates/Makefile"
+files = matchrecursive("../Src/ControllerQt/*.cpp", "../Src/ControllerQt/*.h")
+
+qtMoc = "moc-qt4"
+qtRcc = "rcc"
+qtGenDir = "$(IntDir)"
+
+configs = {
+  {
+    name = "Debug",
+    objdir = "$(SolutionDir)/../Build/Controller/Linux/Debug",
+    defines = { "DEBUG", "_DEBUG", "LINUX", "TARGET_SIM", "SIMROBOTQT", "__STRICT_ANSI__",
+      "QT_SHARED", "QT_OPENGL_LIB", "QT_GUI_LIB", "QT_CORE_LIB" },
+    includepaths = { 
+      "../Src",
+      "../Src/SimulatorQt",
+--      "../Src/SimulatorQt/SimRobotCore",
+      "../Src/SimulatorQt/Util/glew/Win32/include",
+
+      "/usr/share/qt4/mkspecs/linux-g++",
+      "/usr/include/qt4/QtCore",
+      "/usr/include/qt4/QtGui",
+      "/usr/include/qt4/QtOpenGL",
+      "/usr/include/qt4",
+    },
+    buildflags = "-pipe -Wall -Wno-strict-aliasing -Wno-non-virtual-dtor -Wno-deprecated -Wno-ignored-qualifiers -g",
+    type = "lib",
+  }, 
+  {
+    name = "Release",
+    objdir = "$(SolutionDir)/../Build/Controller/Linux/Release",
+    defines = { "NDEBUG", "QT_NO_DEBUG", "LINUX", "TARGET_SIM", "SIMROBOTQT", "__STRICT_ANSI__", 
+      "QT_SHARED", "QT_OPENGL_LIB", "QT_GUI_LIB", "QT_CORE_LIB" },
+    includepaths = {
+      "../Src",
+      "../Src/SimulatorQt",
+--      "../Src/SimulatorQt/SimRobotCore",
+      "../Src/SimulatorQt/Util/glew/Win32/include",
+
+      "/usr/share/qt4/mkspecs/linux-g++",
+      "/usr/include/qt4/QtCore",
+      "/usr/include/qt4/QtGui",
+      "/usr/include/qt4/QtOpenGL",
+      "/usr/include/qt4",
+    },
+    buildflags = "-pipe -Wall -Wno-strict-aliasing -Wno-non-virtual-dtor -Wno-deprecated -Wno-ignored-qualifiers -Wno-unused -O3 -fomit-frame-pointer",
+    type = "lib",
+  },
+}
+
+newFiles = {}
+for i, file in pairs(files) do
+  if path.getbasename(path.getdirname(file)) ~= "Win32" then
+    table.insert(newFiles, file)
+  end
+end
+files = newFiles
+
+?>
+<?lua end ?>

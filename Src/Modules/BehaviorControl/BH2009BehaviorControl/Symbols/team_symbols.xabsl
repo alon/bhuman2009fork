@@ -1,0 +1,116 @@
+/** Symbols for accessing the team mate's pose and ball model */
+namespace team_symbols("Team Symbols") {
+
+  /** The player ids for team mate symbols */
+  enum team.mate {
+    player1,
+    keeper,
+    player2,
+    player3,
+    player4
+  };
+
+  /** Distance of the ball to a team mate */
+  float input team.ball.distance "mm" (
+    /** Player id of the team mate */
+    enum team.mate player;
+  );
+
+  /** Distance of a team mate to a specified point*/
+  float input team.distance.to "mm" (
+    /** Player id of the team mate */
+    enum team.mate player;
+    /** The x position on the field */
+    x [-3000..3000] "mm";
+    /** The y position on the field */
+    y [-2000..2000] "mm";
+  );
+
+  /** Angle of the ball to a team mate */
+  float input team.ball.angle "deg" (
+    /** Player id of the team mate */
+    enum team.mate player;
+  );
+
+  /** Position of the ball to a team mate in x direction relative to the robot */
+  float input team.ball.x "mm" (
+    /** Player id of the team mate */
+    enum team.mate player;
+  );
+  /** Position of the ball to a team mate in y direction relative to the tobot */
+  float input team.ball.y "mm" (
+    /** Player id of the team mate */
+    enum team.mate player;
+  );
+  
+  /** Position of the ball to a team mate in x direction relative to the field */
+  float input team.ball.position.field.x "mm" (
+    /** Player id of the team mate */
+    enum team.mate player;
+  );
+  /** Position of the ball to a team mate in y direction relative to the field */
+  float input team.ball.position.field.y "mm" (
+    /** Player id of the team mate */
+    enum team.mate player;
+  );
+
+    /** The team mate's x-position on the field*/
+  float input team.locator.pose.x "mm" (
+    /** Player id of the team mate */
+    enum team.mate player;
+  );
+
+  /** The team mate's y-position on the field*/
+  float input team.locator.pose.y "mm" (
+    /** Player id of the team mate */
+    enum team.mate player;
+  );
+
+  /** The team mate's angle on the field*/
+  float input team.locator.pose.angle "deg" (
+    /** Player id of the team mate */
+    enum team.mate player;
+  );
+  
+  /** The team mate's role */
+  enum role.role input team.role (
+    /** Player id of the team mate */
+    enum team.mate player;
+  );
+
+  /** The team mate's action */
+  enum soccer.behavior_action input team.action (
+    /** Player id of the team mate */
+    enum team.mate player;
+  );
+  
+  /** States if the team is attacking */
+  bool input team.is_attacking;
+
+    /** The ID of the first Team Mate */
+  enum team.mate input team.first_team_mate;
+
+    /** The ID of the second Team Mate */
+  enum team.mate input team.second_team_mate;
+
+    /** Ball Distance dependent on team mates and time since ball last seen */
+  float input team.ball_distance_all_players "mm";
+
+    /** Ball Distance of Team Mate dependent on team mates and time since ball last seen*/
+  float input team.ball_distance_team_mate_all_players "mm"(
+    /** Player id of the team mate */
+    enum team.mate player;
+  );
+
+    /** whether striker is still executing kickoff*/
+  bool input team.kickoff_in_progress(
+    /** Player id of the team mate */
+    enum team.mate player;
+  );
+
+    /** ball x position of robot who saw the ball last */
+  float input team.ball_position_all_players.x;
+
+    /** ball y position of robot who saw the ball last */
+  float input team.ball_position_all_players.y;
+}

@@ -1,0 +1,27 @@
+/* initial state twice */
+option alpha
+{
+	initial state beta
+	{
+  		subsequent-option {
+  			alpha();
+  		}
+
+		decision-tree {
+			transition-to-state(beta);
+		}
+		
+	}
+
+	initial state gamma
+	{
+  		subsequent-option {
+  			alpha();
+  		}
+
+		decision-tree {
+			transition-to-state(gamma);
+		}
+		
+	}
+}

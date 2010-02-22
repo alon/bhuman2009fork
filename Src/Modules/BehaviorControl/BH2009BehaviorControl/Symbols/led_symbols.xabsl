@@ -1,0 +1,39 @@
+/** Symbols for the led request. */
+namespace led_request_symbols("LED Request Symbols") {
+
+  /** The possible states of LEDs. */
+  enum led_request.state {
+    off,
+    on,
+    blinking,
+    fast_blinking
+  };
+
+  /** Nao LEDs */
+  enum led_request.state output led_request.faceLeftRed;
+  enum led_request.state output led_request.faceLeftGreen;
+  enum led_request.state output led_request.faceLeftBlue;
+  
+  enum led_request.state output led_request.faceRightRed;
+  enum led_request.state output led_request.faceRightGreen;
+  enum led_request.state output led_request.faceRightBlue;
+  
+  enum led_request.state output led_request.chestRed;
+  enum led_request.state output led_request.chestGreen;
+  enum led_request.state output led_request.chestBlue;
+  
+  enum led_request.state output led_request.footLeftRed;
+  enum led_request.state output led_request.footLeftGreen;
+  enum led_request.state output led_request.footLeftBlue;
+  
+  enum led_request.state output led_request.footRightRed;
+  enum led_request.state output led_request.footRightGreen;
+  enum led_request.state output led_request.footRightBlue;
+  
+  /** The LEDs for the ears are combined and currently not available as single objects*/
+  enum led_request.state output led_request.earLeft.complete;
+  enum led_request.state output led_request.earRight.complete;
+  enum led_request.state output led_request.earRight.battery;
+  enum led_request.state output led_request.earLeft.ballSeen;
+  enum led_request.state output led_request.earLeft.connectedPlayers;
+}

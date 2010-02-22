@@ -1,0 +1,104 @@
+/** Symbols for accessing ball position and speed */
+namespace ball_symbols("Ball Symbols") {
+
+  /** Position of the ball in x direction relative to the field */
+  float input ball.position.field.x "mm";
+  /** Position of the ball in y direction relative to the field */
+  float input ball.position.field.y "mm";
+  
+    /** Position of the ball in x direction relative to the robot */
+  float input ball.x "mm";
+  /** Position of the ball in y direction relative to the robot */
+  float input ball.y "mm";
+
+  /** Position of the seen ball in x direction relative to the robot based on last Perception */
+  float input ball.seen.x "mm";
+  /** Position of the ball in y direction relative to the robot  based on last Perception*/
+  float input ball.seen.y "mm";
+
+  /** Angle of the ball relative to the robot based on last Perception*/
+  float input ball.seen.angle "degree";
+  
+    /** Distance of the seen ball to the robot */
+  float input ball.seen.distance "mm";
+
+  /** Distance of the ball to the robot */
+  float input ball.distance "mm";
+
+  /** Angle of the ball to the robot */
+  float input ball.angle "deg";
+
+  /** Whether the ball was seen in the last 500 ms */
+  bool input ball.was_seen;
+
+  /** Time since the ball was seen */
+  float input ball.time_since_last_seen "ms";
+  
+
+  /** Speed of the Ball in x direction relative to the field */
+  float input ball.speed.field.x "mm/s";
+  /** Speed of the Ball in y direction relative to the field */
+  float input ball.speed.field.y "mm/s";
+
+  /** Speed of the Ball in x direction relative to the robot */
+  float input ball.speed.robot.x "mm/s";
+  /** Speed of the Ball in y direction relative to the robot */
+  float input ball.speed.robot.y "mm/s";
+
+  /** The time when the ball crosses our y-axis, or a 100000 if ball is resting */
+  float input ball.time_when_own_y_axis_reached "ms";
+
+  /** The y position when the ball crosses our y-axis */
+  float input ball.position_when_ball_reaches_own_y_axis.y "mm";
+
+  /** Whether the ball was seen by a team mate in the last 500 ms */
+  bool input ball.was_seen.by_team_mate (
+    /** Player id of the team mate */
+    enum team.mate player;
+  );
+
+  /** Time since the ball was seen by a team mate in ms */
+  float input ball.time_since_last_seen.by_team_mate "ms" (
+    /** Player id of the team mate */
+    enum team.mate player;
+  );
+
+  /** Position of the ball (seen by a team mate) in x direction relative to the field in mm */
+  float input ball.position.field.by_team_mate.x "mm" (
+    /** Player id of the team mate */
+    enum team.mate player;
+  );
+  /** Position of the ball (seen by a team mate) in y direction relative to the field in mm */
+  float input ball.position.field.by_team_mate.y "mm" (
+    /** Player id of the team mate */
+    enum team.mate player;
+  );
+
+  /** Position of the ball (seen by a team mate) in x direction relative to the robot in mm */
+  float input ball.position.robot.by_team_mate.x "mm" (
+    /** Player id of the team mate */
+    enum team.mate player;
+  );
+  /** Position of the ball (seen by a team mate) in y direction relative to the robot in mm */
+  float input ball.position.robot.by_team_mate.y "mm" (
+    /** Player id of the team mate */
+    enum team.mate player;
+  );
+
+  /** Distance of the ball (seen by a team mate) to the robot */
+  float input ball.distance.by_team_mate "mm" (
+    /** Player id of the team mate */
+    enum team.mate player;
+  );
+
+  /** Angle of the ball (seen by a team mate) to the robot */
+  float input ball.angle.by_team_mate "deg" (
+    /** Player id of the team mate */
+    enum team.mate player;
+  );
+
+
+  /** distance between ball and own goal */
+  float input ball.distance.own_goal "mm";
+
+}

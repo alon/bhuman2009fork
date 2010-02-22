@@ -1,0 +1,108 @@
+/** Math symbols */
+namespace math_symbols("Math Symbols") {
+
+  /** A random number between 0 and 1 */
+  float input random;
+
+  /** the sign of a number */
+  float input sgn "-1/1" (
+    /** The value for that the sign shall be calculated */
+    value [decimal];
+  );
+
+  /** the absolute value of a number */
+  float input abs (
+    /** The value for that the absolute value shall be calculated */
+    value [decimal];
+  );
+
+  /** Calculates the minimum of two values */
+  float input min "mm" (
+    /** one value */
+    value0 [..] "mm";
+  /** other value */
+  value1 [..] "mm";
+  );
+
+  /** Calculates the max of two values */
+  float input max "mm" (
+    /** one value */
+    value0 [..] "mm";
+  /** other value */
+  value1 [..] "mm";
+  );
+
+  /** the sin function */
+  float input sin (
+    /** angle */
+    angle [-180..180] "deg";
+  );
+
+  /** the cos function */
+  float input cos (
+    /** alpha */
+    angle [-180..180] "deg";
+  );
+
+  /** Normalized angle */
+  float input normalize "deg" (
+    /** Angle to be normalized */
+    angle "deg";
+  );
+
+  /** Clip a value into a range */
+  float input clip (
+    /** Value to be clipped */
+    float value;
+    /** Minimum */
+    float min;
+    /** Maximum */
+    float max;
+  );
+  
+  /** Exclude a range from a value */
+  float input exclude (
+    /** Value to be clipped */
+    float value;
+    /** the minimum of the range*/
+    float min;
+    /** the maximum of the range*/
+    float max;
+  );
+
+  /** Absolute value of a vector (deprecated name, use "distance" instead) */
+  float input vector.abs (
+    float x;
+    float y;
+  );
+  
+  /** Distance to a point */
+  float input distance (
+    /** The x coordinate of the point. */
+    float x;
+    /** The y coordinate of the point. */
+    float y;
+  );
+
+  /** Distance of point a to point b */
+  float input distance_a_to_b (
+    /** The x coordinate of the point a. */
+    float x1;
+    /** The y coordinate of the point a. */
+    float y1;
+     /** The x coordinate of the point b. */
+    float x2;
+    /** The y coordinate of the point b. */
+    float y2;
+  );
+  
+  /** Angle to a point. */
+  float input atan2 (
+    /** The y coordinate of the point. */
+    float y;
+    /** The x coordinate of the point. */
+    float x;
+  );
+
+}
+

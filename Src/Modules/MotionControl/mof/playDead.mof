@@ -1,0 +1,9 @@
+motion_id = playDead
+"Switch off all joints
+
+label start
+
+"HP  HT  AL0 AL1 AL2 AL3  AR0 AR1 AR2 AR3  LL0 LL1 LL2 LL3 LL4 LL5  LR0 LR1 LR2 LR3 LR4 LR5  Int Dur
+  -   -    -   -   -   -    -   -   -   -    -   -   -   -   -   -    -   -   -   -   -   -    0 100
+
+transition allMotions extern start

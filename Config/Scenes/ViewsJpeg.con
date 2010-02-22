@@ -1,0 +1,29 @@
+# image views
+vi image jpeg raw
+vi image jpeg segmented segmented
+vid raw representation:LinePercept:Image
+vid raw representation:BallPercept:Image 
+vid raw representation:GoalPercept:Image
+vid raw representation:BodyContour
+
+# field views
+vf worldState
+vfd worldState fieldPolygons
+vfd worldState fieldLines
+vfd worldState representation:RobotPose 
+
+# views relative to robot
+# from now, relative to estimated robot pose
+vfd worldState origin:RobotPose
+vfd worldState representation:BallModel 
+vfd worldState representation:BallPercept:Field
+vfd worldState representation:LinePercept:Field
+vfd worldState representation:GoalPercept:Field 
+vfd worldState representation:ObstacleModel 
+vfd worldState module:ObstacleModelProvider:us
+
+# back to global coordinates
+vfd worldState origin:Reset
+
+# 3-D image views
+v3 image jpeg raw

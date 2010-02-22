@@ -1,0 +1,60 @@
+/** Symbols for easy soccer playing. */
+namespace soccerr_symbols("Soccer Symbols") {
+
+  /* Enumeration of behavior actions. */
+  enum soccer.behavior_action
+  {
+    unknown,
+    dribble,
+    go_to_ball,
+    search_for_ball,
+    go_to_target,
+    prepare_kick,
+    kick,
+    kick_sidewards,
+    pass,
+    block,
+    hold,
+    stand_up,
+    patrol,
+    pass_before_goal,
+    kickoff,
+    wait_for_pass,
+    prepare_pass
+  };
+  
+  /** A generalized behavior action. */
+  enum soccer.behavior_action output soccer.behavior_action;
+
+  /* if the Simulation or real Nao is used*/
+  bool input soccer.disable_pre_initial;
+
+  /* angle to goal depending on selflocator and goallocator*/
+  float input soccer.opponent_goal_angle;
+
+  /* x position to a specified point next to ball dependend of the relativ position of the robot to the ball*/
+  float input soccer.position_next_to_ball.x (
+    bool side;
+  );
+
+  /* y position to a specified point next to the ball dependend of the relativ position of the robot to the ball*/
+  float input soccer.position_next_to_ball.y (
+    bool side;
+  );
+
+  /* angle to a specified point next to the ball dependend of the relativ position of the robot to the ball*/
+  float input soccer.position_next_to_ball.angle (
+    bool side;
+  );
+
+  /* angle to a specified point behind the ball dependend of the relativ position of the robot to the ball*/
+  float input soccer.position_behind_ball.angle;
+
+
+  /* x position to a specified point behind the ball dependend of the relativ position of the robot to the ball*/
+  float input soccer.position_behind_ball.x;
+
+  /* y position to a specified point behind the ball dependend of the relativ position of the robot to the ball*/
+  float input soccer.position_behind_ball.y;
+}
+

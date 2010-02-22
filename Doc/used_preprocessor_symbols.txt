@@ -1,0 +1,2 @@
+TARGET_SIM  : code will be compiled only for simulator
+TARGET_ROBOT: code will be compiled only for robot

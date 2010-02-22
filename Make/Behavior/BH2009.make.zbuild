@@ -1,0 +1,7 @@
+<?lua
+
+template = "Template/BH200X.make"
+name = "BH2009"
+target = "bh09-ic.dat"
+
+?>

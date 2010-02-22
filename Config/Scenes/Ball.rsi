@@ -1,0 +1,30 @@
+<RoSiIncludeFile>
+
+  <AppearanceDefinition name="orange">
+    <Color r="0.635" g="0.384" b="0.321" a="1.0"/>
+    <AmbientColor r="0.65" g="0.4" b="0.35" a="1.0"/>
+    <SpecularColor r="0.3" g="0.3" b="0.3" a="1.0"/>
+    <Shininess value="75.0"/>
+  </AppearanceDefinition>
+  
+  <MaterialDefinition name="Carpet">
+    <FrictionCoefficient otherMaterial="BallPlastic" value="0.015"/>
+    <RollingFrictionCoefficient otherMaterial="BallPlastic" value="0.001"/> 
+  </MaterialDefinition>
+  <MaterialDefinition name="BallPlastic"/>
+
+  <Macro name="ball">
+    <Movable name="ball">
+      <Elements>
+        <Sphere name="ball" radius="0.043">
+          <Appearance ref="orange"/>
+          <Material name="BallPlastic"/>
+          <PhysicalAttributes>
+            <Mass value="0.026"/>
+          </PhysicalAttributes>
+        </Sphere>
+      </Elements>
+    </Movable>
+  </Macro>
+
+</RoSiIncludeFile>

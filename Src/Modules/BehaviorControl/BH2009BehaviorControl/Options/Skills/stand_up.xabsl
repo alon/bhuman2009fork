@@ -1,0 +1,119 @@
+/** This option lets the robot stand up when it has fallen down. */
+option stand_up
+{  
+  initial state lying_down
+  {
+    decision
+    { 
+      if (fall_down_state == fall_down_state.lying_on_back)
+        goto lyingOnBack;
+      else if (fall_down_state == fall_down_state.lying_on_front)
+        goto lyingOnFront;
+      else if (fall_down_state == fall_down_state.lying_on_left_side ||  fall_down_state == lying_on_right_side )
+        goto lyingOnSide;
+      else
+        stay;
+    }
+    action
+    {
+    }
+  }
+
+  state lyingOnBack
+  {
+    decision
+    {
+      if (state_time > 8500)
+      {
+        goto standing;
+      }
+      else
+      {
+        stay;
+      }
+    }
+    action
+    {
+      head.control_mode = look_straight_ahead;
+      special_action(id = stand_up_back_nao);
+    }
+  }
+
+  state lyingOnBackMirror
+  {
+    decision
+    {
+      if (state_time > 10000)
+      {
+        goto standing;
+      }
+      else
+      {
+        stay;
+      }
+    }
+    action
+    {
+      head.control_mode = look_straight_ahead;
+      special_action(id = stand_up_back_nao, mirror = true);
+    }
+  }
+
+  state lyingOnFront
+  {
+    decision
+    {
+      if (state_time > 2000)
+      {
+        goto standing;
+      }
+      else
+      {
+        stay;
+      }
+    }
+    action
+    {
+      head.control_mode = look_straight_ahead;
+      special_action(id = stand_up_front_nao);
+    }
+  }
+
+
+  state lyingOnSide
+  {
+    decision
+    {
+      if (state_time > 2000)
+      {
+        goto standing;
+      }
+      else
+      {
+        stay;
+      }
+    }
+    action
+    {
+      head.control_mode = look_straight_ahead;
+    }
+  }
+
+  target state standing
+  {
+    decision
+    { 
+      if (fall_down_state == fall_down_state.lying_on_back)
+        goto lyingOnBackMirror;
+      else if (fall_down_state == fall_down_state.lying_on_front)
+        goto lyingOnFront;
+      else if (fall_down_state == fall_down_state.lying_on_left_side ||  fall_down_state == lying_on_right_side )
+        goto lyingOnSide;
+      else
+        stay;
+    }
+    action
+    {
+    }
+  }
+}

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+dot=$(which dot 2> /dev/null)
+retVal=$?
+if [ ${retVal} -eq 0 ]; then
+  $dot $@
+else
+  echo "dot executable was not found" >&2
+  echo "Install graphviz or check your PATH environment variable" >&2
+fi

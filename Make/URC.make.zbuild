@@ -1,0 +1,40 @@
+<?lua if linux then ?>
+<?lua
+
+template = "../Src/SimulatorQt/Make/Templates/Makefile"
+files = { 
+  "../Src/Platform/linux/File.cpp",
+  "../Src/Platform/linux/File.h",
+  "../Src/Tools/Xabsl/GT/GTXabslTools.cpp",
+  "../Src/Tools/Xabsl/GT/GTXabslTools.h",
+  "../Src/Tools/Streams/InOut.cpp",
+  "../Src/Tools/Streams/InOut.h",
+  "../Src/URC/MofCompiler.cpp",
+  "../Src/URC/MofCompiler.h",
+  "../Src/Representations/MotionControl/SpecialActionRequest.h",
+  "../Src/Tools/Streams/Streamable.cpp",
+  "../Src/Tools/Streams/Streamable.h",
+  "../Src/Tools/Streams/StreamHandler.cpp",
+  "../Src/Tools/Streams/StreamHandler.h",
+  "../Src/URC/UniversalResourceCompiler.cpp",
+}
+root = "../Src"
+configs = {
+  {
+    name = "Debug",
+    objdir = "$(SolutionDir)/../Build/URC/Linux/Debug",
+    defines = { "DEBUG", "_DEBUG", "LINUX", "TARGET_SIM", "SIMROBOTQT" },
+    includepaths = { 
+      "../Src",
+    },
+    buildflags = "-pipe -Wall -Wno-non-virtual-dtor -Wno-deprecated -g",
+    linkflags = "",
+    libpaths = { 
+    },
+    libs = { 
+    },
+  }, 
+}
+
+?>
+<?lua end ?>

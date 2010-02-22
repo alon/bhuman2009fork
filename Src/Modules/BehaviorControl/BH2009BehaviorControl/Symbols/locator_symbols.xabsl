@@ -1,0 +1,63 @@
+/** Symbols concerning self-localization. */
+namespace locator_symbols("Self-localization Symbols") {
+
+  /* Angle to the opponent goal */
+  float input locator.opponent_goal.angle "deg";
+
+  /* Angle width of the opponent goal */
+  float input locator.opponent_goal.angle_width "deg"; 
+  
+  /* Angle to the own goal */
+  float input locator.own_goal.angle "deg";
+
+  /* Angle width of the own goal */
+  float input locator.own_goal.angle_width "deg"; 
+
+  /** Calculates the distance to a specified point on the field */
+  float input locator.distance_to "mm" (
+    /** The x position on the field */
+    x [-3000..3000] "mm";
+    /** The y position on the field */
+    y [-2000..2000] "mm";
+  );
+
+  /** Calculates the angle to a specified point on the field */
+  float input locator.angle_to "deg" (
+    /** The x position on the field */
+    x [-3000..3000] "mm";
+    /** The y position on the field */
+    y [-2000..2000] "mm";
+  );
+
+  /** Calculates the relative x position to a specified point on the field */
+  float input locator.field_to_relative.x "mm" (
+    /** The x position on the field */
+    x [-3000..3000] "mm";
+    /** The y position on the field */
+    y [-2000..2000] "mm";
+  );
+
+  /** Calculates the relative y position to a specified point on the field */
+  float input locator.field_to_relative.y "mm" (
+    /** The x position on the field */
+    x [-3000..3000] "mm";
+    /** The y position on the field */
+    y [-2000..2000] "mm";
+  );
+
+  /** The robot's x-position on the field. */
+  float input locator.pose.x "mm";
+
+  /** The robot's y-position on the field. */
+  float input locator.pose.y "mm";
+
+  /** The robot's angle on the field. */
+  float input locator.pose.angle "deg";
+  
+  /** Flag that determines if the robot hat ground contact */
+  bool input locator.ground_contact;
+
+  /** angle tolerance to opponent goal for kick decision */
+  float input locator.angle_tolerance;
+}
+

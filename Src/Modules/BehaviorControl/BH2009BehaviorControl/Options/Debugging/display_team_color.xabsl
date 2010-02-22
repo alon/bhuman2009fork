@@ -1,0 +1,47 @@
+option display_team_color
+{
+  common decision 
+  {
+    if(game.team_color == game.team_color.red) 
+    {
+      goto red;
+    }
+    else if(game.team_color == game.team_color.blue) 
+    {
+      goto blue;
+    }
+  }
+  
+  
+  initial state nothing
+  {
+    action
+    {
+      led_request.footLeftRed   = led_request.state.off;
+      led_request.footLeftGreen = led_request.state.off;
+      led_request.footLeftBlue  = led_request.state.off;
+    }
+  }
+  
+  
+  state red
+  {
+    action
+    {
+      led_request.footLeftRed   = led_request.state.on;
+      led_request.footLeftGreen = led_request.state.off;
+      led_request.footLeftBlue  = led_request.state.off;
+    }
+  }
+  
+  
+  state blue
+  {
+    action
+    {
+      led_request.footLeftRed   = led_request.state.off;
+      led_request.footLeftGreen = led_request.state.off;
+      led_request.footLeftBlue  = led_request.state.on;
+    }
+  }
+}

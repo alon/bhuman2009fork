@@ -1,0 +1,9 @@
+--- .profile.org	2009-06-08 15:50:07.000000000 +0200
++++ .profile	2009-06-08 15:51:32.000000000 +0200
+@@ -14,3 +14,6 @@
+ alias naoload='nano /opt/naoqi/modules/lib/autoload.ini'
+ 
+ alias deep_shutdown='harakiri --deep && halt'
++
++export HISTFILE='/media/userdata/system/.ash_history'
++export GT_DIR='/media/userdata/'

@@ -1,0 +1,15 @@
+#!/bin/bash
+# the g++ crosscompiler with error and warning messages like the microsoft compiler
+
+
+CXX=/opt/crosstool/gcc-4.1.1-glibc-2.3.6/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++.exe
+
+
+OUTPUT=$($CXX $* 2>&1)
+CXX_EXIT_CODE=$?
+
+if [ -n "$OUTPUT" ]; then
+  echo "$OUTPUT" | sed -e "s=:\([0-9][0-9]*\)[:,]=(\1) :=" -e "s=/=\\\=g" 1>&2
+fi
+
+exit $CXX_EXIT_CODE

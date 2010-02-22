@@ -1,0 +1,9 @@
+<?lua
+
+for line in io.lines("../Src/Modules/CognitionModules.h") do
+  if string.find(line, "#include") then
+    echo(string.match(line, ".*/(.*)[.]h.*") .. "\n")
+  end
+end
+
+?>

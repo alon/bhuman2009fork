@@ -1,0 +1,242 @@
+<?lua if linux then ?>
+<?lua
+
+template = "../Src/SimulatorQt/Make/Templates/Makefile"
+files = { 
+  matchrecursive("../Src/Modules/*.cpp", "../Src/Modules/*.h"),
+  matchfiles("../Src/Platform/*.h"),
+  matchfiles("../Src/Platform/linux/*.cpp", "../Src/Platform/linux/*.h"),
+  matchfiles("../Src/Platform/Win32Linux/*.cpp", "../Src/Platform/Win32Linux/*.h"),
+  matchfiles("../Src/Platform/SimRobotQt/*.cpp", "../Src/Platform/SimRobotQt/*.h"),
+  matchrecursive("../Src/Processes/*.cpp", "../Src/Processes/*.h"),
+  matchrecursive("../Src/Representations/*.cpp", "../Src/Representations/*.h"),
+  matchrecursive("../Src/Tools/*.cpp", "../Src/Tools/*.h"),
+  matchrecursive("../Src/URC/*.cpp", "../Src/URC/*.h"),
+}
+excludes = { 
+  "../Src/URC/UniversalResourceCompiler.cpp",
+  "../Src/Platform/linux/Oracle.cpp",
+  "../Src/Platform/linux/Oracle.h",
+  "../Src/Platform/linux/ProcessFramework.cpp",
+  "../Src/Platform/linux/ProcessFramework.h",
+  "../Src/Platform/linux/Receiver.cpp",
+  "../Src/Platform/linux/Receiver.h",
+  "../Src/Platform/linux/Sender.cpp",
+  "../Src/Platform/linux/Sender.h",
+  "../Src/Platform/linux/SystemCall.cpp",
+  "../Src/Platform/linux/SystemCall.h",
+  "../Src/Platform/linux/TeamHandler.cpp",
+  "../Src/Platform/linux/TeamHandler.h",
+  "../Src/Platform/linux/Robot.cpp",
+  "../Src/Platform/linux/Robot.h",
+  "../Src/Platform/linux/Main.cpp",
+}
+root = "../Src"
+copyfiles = {
+  "../Src/SimulatorQt/SimRobotCore/Simulation/RoSi.xsd",
+}
+configs = {
+  {
+    name = "DebugWithReleaseLibs",
+    objdir = "$(SolutionDir)/../Build/Simulator/Linux/DebugWithReleaseLibs",
+    defines = { "DEBUG", "_DEBUG", "LINUX", "TARGET_SIM", "SIMROBOTQT", "__STRICT_ANSI__" },
+    includepaths = { 
+      "../Src",
+      "../Src/SimulatorQt",
+      "../Src/SimulatorQt/SimRobotCore",
+      "../Src/SimulatorQt/Util/glew/Linux/include",
+      "../Util/I2C/include",
+      "../Build/Simulator/Linux/DebugWithReleaseLibs",
+      "../Util/protobuf/include",
+    },
+    buildflags = "-pipe -Wall -Wno-strict-aliasing -Wno-non-virtual-dtor -Wno-deprecated -Wno-ignored-qualifiers -g",
+    --linkflags = "-Wl,--no-undefined",
+    linkflags = "",
+    libpaths = { 
+      "../Build/SimRobotCore/Linux/Release", 
+      "../Build/SimRobotGUI/Linux/Release",
+      "../Build/Controller/Linux/Release",
+
+      "../Src/SimulatorQt/Util/ode/Linux/lib",
+      "../Src/SimulatorQt/Util/glew/Linux/lib",
+      "../Src/SimulatorQt/Util/libxml2/Linux/lib",
+      "../Src/SimulatorQt/Util/gsl/Linux/lib",
+      "../Src/SimulatorQt/Util/qhull/Linux/lib",
+      "../Util/libjpeg/lib",
+      "../Util/protobuf/linux/lib",
+      "../Util/OpenCV/lib",
+
+      "/usr/lib",
+      "/usr/X11R6/lib",
+      "/usr/lib/qt4",
+    },
+    libs = { 
+      "Controller", "SimRobotGUI", "SimRobotCore",
+      "ode", "GLEW", "xml2", "qhull", "gsl", "gslcblas", "jpeg",
+      "rt", "pthread", "QtOpenGL", "QtGui", "QtCore", "GLU", "GL", 
+      "protobuf",
+    },
+    dependencies = { 
+      "../Build/SimRobotCore/Linux/Release/libSimRobotCore.a", 
+      "../Build/SimRobotGUI/Linux/Release/libSimRobotGUI.a",
+      "../Build/Controller/Linux/Release/libController.a",
+    },
+  }, 
+  {
+    name = "Debug",
+    objdir = "$(SolutionDir)/../Build/Simulator/Linux/Debug",
+    defines = { "DEBUG", "_DEBUG", "LINUX", "TARGET_SIM", "SIMROBOTQT", "__STRICT_ANSI__" },
+    includepaths = { 
+      "../Src",
+      "../Src/SimulatorQt",
+      "../Src/SimulatorQt/SimRobotCore",
+      "../Src/SimulatorQt/Util/glew/Linux/include",
+      "../Util/I2C/include",
+      "../Build/Simulator/Linux/Debug",
+      "../Util/protobuf/include",
+    },
+    buildflags = "-pipe -Wall -Wno-strict-aliasing -Wno-non-virtual-dtor -Wno-deprecated -Wno-ignored-qualifiers -g",
+    --linkflags = "-Wl,--no-undefined",
+    linkflags = "",
+    libpaths = { 
+      "../Build/SimRobotCore/Linux/Debug", 
+      "../Build/SimRobotGUI/Linux/Debug",
+      "../Build/Controller/Linux/Debug",
+
+      "../Src/SimulatorQt/Util/ode/Linux/lib",
+      "../Src/SimulatorQt/Util/glew/Linux/lib",
+      "../Src/SimulatorQt/Util/libxml2/Linux/lib",
+      "../Src/SimulatorQt/Util/gsl/Linux/lib",
+      "../Src/SimulatorQt/Util/qhull/Linux/lib",
+      "../Util/libjpeg/lib",
+      "../Util/protobuf/linux/lib",
+
+      "/usr/lib",
+      "/usr/X11R6/lib",
+      "/usr/lib/qt4",
+    },
+    libs = { 
+      "Controller", "SimRobotGUI", "SimRobotCore",
+      "ode", "GLEW", "xml2", "qhull", "gsl", "gslcblas", "jpeg", 
+      "rt", "pthread", "QtOpenGL", "QtGui", "QtCore", "GLU", "GL", 
+      "protobuf",
+    },
+    dependencies = { 
+      "../Build/SimRobotCore/Linux/Debug/libSimRobotCore.a", 
+      "../Build/SimRobotGUI/Linux/Debug/libSimRobotGUI.a",
+      "../Build/Controller/Linux/Debug/libController.a",
+    },
+  }, 
+  {
+    name = "Optimized",
+    objdir = "$(SolutionDir)/../Build/Simulator/Linux/Optimized",
+    defines = { "NDEBUG", "LINUX", "TARGET_SIM", "SIMROBOTQT", "__STRICT_ANSI__" },
+    includepaths = {
+      "../Src",
+      "../Src/SimulatorQt",
+      "../Src/SimulatorQt/SimRobotCore",
+      "../Src/SimulatorQt/Util/glew/Linux/include",
+      "../Util/I2C/include",
+      "../Build/Simulator/Linux/Optimized",
+      "../Util/protobuf/include",
+    },
+    buildflags = "-pipe -Wall -Wno-strict-aliasing -Wno-non-virtual-dtor -Wno-deprecated -Wno-ignored-qualifiers -O3 -fomit-frame-pointer",
+    --linkflags = "-Wl,--no-undefined -s",
+    linkflags = "-s",
+    libpaths = { 
+      "../Build/SimRobotCore/Linux/Release",
+      "../Build/SimRobotGUI/Linux/Release",
+      "../Build/Controller/Linux/Release",
+
+      "../Src/SimulatorQt/Util/ode/Linux/lib",
+      "../Src/SimulatorQt/Util/glew/Linux/lib",
+      "../Src/SimulatorQt/Util/libxml2/Linux/lib",
+      "../Src/SimulatorQt/Util/gsl/Linux/lib",
+      "../Src/SimulatorQt/Util/qhull/Linux/lib",
+      "../Util/libjpeg/lib",
+      "../Util/protobuf/linux/lib",
+
+      "/usr/lib", 
+      "/usr/X11R6/lib",
+      "/usr/lib/qt4",
+    },
+    libs = {
+      "Controller", "SimRobotGUI", "SimRobotCore",
+      "ode", "GLEW", "xml2", "qhull", "gsl", "gslcblas", "jpeg",
+      "rt", "pthread", "QtOpenGL", "QtGui", "QtCore", "GLU", "GL", 
+      "protobuf",
+    },
+    dependencies = { 
+      "../Build/SimRobotCore/Linux/Release/libSimRobotCore.a", 
+      "../Build/SimRobotGUI/Linux/Release/libSimRobotGUI.a",
+      "../Build/Controller/Linux/Release/libController.a",
+    },
+  },
+}
+
+
+
+customBuildTools = {
+  {
+    file = "CognitionModules.cfg.build",
+    command = "$(ZBUILDGEN) CognitionModules.cfg.build -o ../Config/Processes/CognitionModules.cfg", 
+    description = "CognitionModules.cfg.build (h2cfg)",
+    dependencies = { "../Src/Modules/CognitionModules.h" },
+    output = "../Config/Processes/CognitionModules.cfg",
+  },
+  {
+    file = "MotionModules.cfg.build",
+    command = "$(ZBUILDGEN) MotionModules.cfg.build -o ../Config/Processes/MotionModules.cfg",
+    description = "MotionModules.cfg.build (h2cfg)",
+    dependencies = { "../Src/Modules/MotionModules.h" },
+    output = "../Config/Processes/MotionModules.cfg",
+  },
+}
+
+local sslProtoPath = "../Src/Tools/sslvision/proto";
+local protoFiles = matchfiles(sslProtoPath .. "/*.proto")
+for i,file in pairs(protoFiles) do
+  local basename = path.getbasename(file)
+  local outname = "$(OutDir)/" .. path.dropextension(basename) .. ".pb.cc"
+  local tool = {
+    file = file,
+    command = "../Util/protobuf/linux/bin/protoc -I" .. sslProtoPath .. " --cpp_out=$(OutDir) " .. file,
+    description = basename .. " (protoc)",
+    output = outname,
+  }
+  table.insert(customBuildTools, tool)
+  table.insert(files, { tool.output })
+end
+
+for i, file in pairs(copyfiles) do
+  local tool = {
+    file = file,
+    command = "cp " .. file .. " \"$(OutDir)\"",
+    description = path.getbasename(file) .. " (copy)",
+    output = "$(OutDir)/" .. path.getbasename(file),
+  }
+  table.insert(customBuildTools, tool)
+end
+
+
+-- build final file list from files and excludes
+
+newFiles = {}
+for i, filelist in pairs(files) do
+  for i, file in pairs(filelist) do
+    local exclude = false
+    for i, exfile in pairs(excludes) do
+      if exfile == file then
+        exclude = true
+        break
+      end
+    end
+    if not exclude then
+      table.insert(newFiles, file)
+    end
+  end
+end
+files = newFiles
+
+?>
+<?lua end ?>

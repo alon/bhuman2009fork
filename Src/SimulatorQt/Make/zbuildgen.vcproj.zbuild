@@ -1,0 +1,8 @@
+<?lua
+
+template = "Templates/updateVcProjFile"
+platform = "windows"
+baseFile = "zbuildgen.vcproj"
+files = matchfiles(".\\*.zbuild")
+
+?>

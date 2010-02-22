@@ -1,0 +1,17 @@
+
+/** Symbols for setting the Fall-Down-State. */
+namespace fall_down_symbols("Fall Down Symbols") {
+
+  /** The ids of the states */
+  enum fall_down_state {
+    undefined, 
+    upright, 
+    lying_on_front, 
+    lying_on_back,
+    lying_on_left_side,
+    lying_on_right_side
+  };
+
+  enum fall_down_state input fall_down_state;
+
+}

@@ -1,0 +1,14 @@
+/* unknown behavior symbol */
+option alpha
+{
+	initial state beta {
+		
+		subsequent-basic-behavior {
+			non_existent();
+		}
+	
+		decision-tree {
+			transition-to-state(beta);
+		}
+	}
+}

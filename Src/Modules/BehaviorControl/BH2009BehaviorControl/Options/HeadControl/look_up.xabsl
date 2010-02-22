@@ -1,0 +1,16 @@
+option look_up
+{
+  initial state look_up
+  {
+    decision
+    {
+      stay;
+    }
+    action
+    {
+      head.head_pan = 0;
+      head.head_tilt = 30;
+      head.speed = 100;
+    }
+  }
+}

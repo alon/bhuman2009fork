@@ -1,0 +1,177 @@
+/** button-interface */
+option official_button_interface
+{
+  initial state set_nothing 
+  {
+    decision
+    {
+      if (key.chest_button_pressed_and_released && game.state == _initial)
+        goto set_penalised_initial;
+      else if (key.chest_button_pressed_and_released && game.state == playing && game.penalty == none)
+        goto set_penalised;
+      else if (key.chest_button_pressed_and_released && game.penalty != none)
+        goto set_unpenalised;
+
+      else if ((key.left_foot_left_button_pressed_and_released || key.left_foot_right_button_pressed_and_released) && game.state == _initial && game.team_color == blue)
+        goto set_red;
+      else if ((key.left_foot_left_button_pressed_and_released || key.left_foot_right_button_pressed_and_released) && game.state == _initial && game.team_color == red)
+        goto set_blue;
+        
+      else if ((key.right_foot_left_button_pressed_and_released || key.right_foot_right_button_pressed_and_released)&& game.state == _initial && game.kickoff_team != game.team_color)
+        goto set_kickoff_own;
+      else if ((key.right_foot_left_button_pressed_and_released || key.right_foot_right_button_pressed_and_released) && game.state == _initial && game.kickoff_team == game.team_color)
+        goto set_kickoff_opp;
+
+      else
+        stay;
+    }
+    action 
+    {
+    }
+  }
+
+  state set_initial 
+  {
+    decision
+    {
+      if (state_time > 500)
+        goto set_nothing;
+      else 
+        stay;
+    }
+    action 
+    {
+      game.state = _initial;
+      game.startup = true;
+    }
+  }
+
+
+  state set_playing 
+  {
+    decision
+    {
+      if (state_time > 500)
+        goto set_nothing;
+      else 
+        stay;
+    }
+    action 
+    {
+      game.state = playing;
+    }
+  }
+  
+  state set_penalised
+  { 
+    decision
+    {
+      if (state_time > 500)
+        goto set_nothing;
+      else 
+        stay;
+    }
+    action 
+    { 
+      game.penalty = manual;
+      sound = penalized;
+    }
+  }
+
+  state set_penalised_initial
+  { 
+    decision
+    {
+      if (state_time > 500)
+        goto set_nothing;
+      else 
+        stay;
+    }
+    action 
+    { 
+      game.state = playing;
+      game.penalty = manual;
+      sound = penalized;
+    }
+  }
+  
+  state set_unpenalised
+  { 
+    decision
+    {
+      if (state_time > 500)
+        goto set_nothing;
+      else 
+        stay;
+    }
+    action 
+    { 
+      game.penalty = none;
+      sound = not_penalized;
+    }
+  }
+
+  state set_red 
+  {
+    decision
+    {
+      if (state_time > 1500)
+        goto set_nothing;
+      else 
+        stay;
+    }
+    action 
+    {
+      sound = red;
+      game.team_color = red;
+    }
+  }
+
+  state set_blue
+  {
+    decision
+    {
+      if (state_time > 1500)
+        goto set_nothing;
+      else 
+        stay;
+    }
+    action 
+    {
+      sound = blue;
+      game.team_color = blue;
+    }
+  }
+
+  state set_kickoff_own
+  {
+    decision
+    {
+      if (state_time > 1500)
+        goto set_nothing;
+      else 
+        stay;
+    }
+    action 
+    {
+      sound = own_kickoff;
+      game.kickoff_team = game.team_color;
+    }
+  }
+
+  state set_kickoff_opp
+  {
+    decision
+    {
+      if (state_time > 1500)
+        goto set_nothing;
+      else 
+        stay;
+    }
+    action 
+    {
+      sound = opponent_kickoff;
+      game.kickoff_team = game.opponent_team_color;
+    }
+  }
+}

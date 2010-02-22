@@ -1,0 +1,14 @@
+<?lua
+
+template = "Templates/updateQtVcProjFile"
+platform = "windows"
+baseFile = "SimRobotGUI.vcproj"
+files = matchrecursive("..\\SimRobotGUI\\*.cpp", "..\\SimRobotGUI\\*.h", "..\\SimRobotGUI\\SimRobotGUI.qrc", "..\\SimRobotGUI\\icons\\*.png")
+root = "..\\SimRobotGUI"
+
+qtMoc = "..\\Util\\qt\\Win32\\bin\\moc.exe"
+qtRcc = "..\\Util\\qt\\Win32\\bin\\rcc.exe"
+--qtGenDir = "$(IntDir)"
+qtGenDir = "..\\Build\\SimRobotGUI\\Win32\\$(ConfigurationName)"
+
+?>

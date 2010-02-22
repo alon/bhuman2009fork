@@ -1,0 +1,34 @@
+<?lua
+
+template = "../Src/SimulatorQt/Make/Templates/updateVcProjFile"
+platform = "windows"
+baseFile = "SpecialActions.vcproj"
+files = matchfiles("..\\Src\\Modules\\MotionControl\\mof\\*")
+root = "..\\Src\\Modules\\MotionControl\\mof"
+target = "..\\Config\\specialActions.dat"
+urc = "..\\Build\\URC\\Win32\\Debug\\URC.exe"
+
+dependencies = { urc }
+table.sort(files)
+for i, file in pairs(files) do
+  if path.getextension(file) == "mof" then
+    table.insert(dependencies, file)
+  end
+end
+
+customBuildTools = {}
+for i, file in pairs(files) do
+  if path.getextension(file) == "mof" then
+    local tool = {
+      file = file,
+      command = urc,
+      description = "*.mof (URC)",
+      dependencies = dependencies,
+      output = target,
+    }
+    table.insert(customBuildTools, tool)
+    break
+  end
+end
+
+?>

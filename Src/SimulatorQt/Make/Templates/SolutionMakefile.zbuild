@@ -1,0 +1,121 @@
+<?lua --[[
+
+This template creates a solution Makefile (a Makefile that launch other Makfiles)
+from a specification like this:
+
+template = "SolutionMakefile"
+projects = {
+  {
+    name = "projectname1",
+    dir = "path/to/projectfile",
+    dependencies = { "projectdependencies1", "projectdependencies2", ... }
+    dontBuild = nil or true,
+  }
+}
+configs = {
+  {
+    name = "configname1",
+    projectConfigs = {
+      { "project1", "config1" },
+      { "project2", "config2" },
+      ...
+    }
+  },
+  ...
+}
+zbuildgen = "path/to/zbuildgen"
+zbuildgenFlags = "--some flags" or nil
+
+--]] ?>
+<?lua if configs and projects then ?>
+<?lua
+
+-- set default values
+if zbuildgen == nil then
+  zbuildgen = "zbuildgen"
+end
+
+-- create project "hash table"
+projectByName = {}
+for i, project in pairs(projects) do
+  projectByName[project.name] = project
+end
+
+?>
+
+SOLUTIONDIR := $(shell pwd)
+CONFIG ?= <?lua=configs[1].name?>
+CONFIGS := <?lua for i, config in pairs(configs) do echo(config.name .. " "); end ?>
+PROJECTS := <?lua for i, project in pairs(projects) do echo(project.name .. " "); end ?>
+PROJECTCONFIGS := <?lua
+
+for i, config in pairs(configs) do
+  for i, project in pairs(projects) do
+    echo(project.name .. "_" .. config.name .. " ")
+  end
+end
+
+?>
+ZBUILDGEN ?= <?lua=zbuildgen?>
+
+export PATH
+export SOLUTIONDIR
+export CFLAGS
+export CXXFLAGS
+export LDFLAGS
+export CC
+export CXX
+export AR
+export ZBUILDGEN
+
+.PHONY: all clean $(CONFIGS) $(PACKAGES) $(PACKAGECONFIGS) dist
+
+all: $(CONFIG)
+
+prebuild:
+#	@echo "------ Regenerating Makefiles ------"
+	-@$(ZBUILDGEN) <?lua=zbuildgenFlags?> --platform <?lua=platform?> > /dev/null
+
+<?lua for i, config in pairs(configs) do ?>
+<?lua=config.name?>: <?lua
+
+  for i, project in pairs(projects) do
+    if project.dontBuild == nil then
+      echo(project.name .. "_" .. config.name .. " ")
+    end
+  end
+
+?>
+
+<?lua for i, projectconfig in pairs(config.projectConfigs) do project = projectByName[projectconfig[1]] ?>
+<?lua=project.name?>_<?lua=config.name?>: prebuild <?lua 
+
+  if project.dependencies then
+    for i, dependency in pairs(project.dependencies) do
+      echo(dependency .. "_" .. config.name .. " ")
+    end
+  end
+
+?>
+	@$(MAKE) <?lua if project.makeflags then echo(project.makeflags) else echo("-j 2") end ?> --no-print-directory <?lua if project.dir then echo("-C " .. project.dir); end ?> -f <?lua=project.name?>.make <?lua=projectconfig[2]?>
+
+<?lua end ?>
+<?lua end ?>
+
+<?lua for i, project in pairs(projects) do ?>
+<?lua=project.name?>: <?lua=project.name?>_$(CONFIG)
+
+<?lua end ?>
+
+clean: prebuild
+	@echo "------ Cleaning ------"
+<?lua for i, project in pairs(projects) do ?>
+	@$(MAKE) --no-print-directory <?lua if project.dir then echo("-C " .. project.dir); end ?> -f <?lua=project.name?>.make clean
+<?lua end ?>
+
+dist: prebuild
+<?lua for i, project in pairs(projects) do ?>
+	@$(MAKE) --no-print-directory <?lua if project.dir then echo("-C " .. project.dir); end ?> -f <?lua=project.name?>.make dist
+<?lua end ?>
+
+<?lua end ?>

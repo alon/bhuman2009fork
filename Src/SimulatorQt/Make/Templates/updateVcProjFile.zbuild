@@ -1,0 +1,355 @@
+<?lua --[[
+
+This template updates the file Tree of a .vcproj file from a specification like this:
+
+template = "updateVcProjFile"
+baseFile = "anyBaseFile.vcproj"
+files = { "file1", "file2", ... }
+root = "Src"
+customBuildTools = {
+  {
+    filter = nil or "filtername",
+    file = "file",
+    configs = nil or { "config1", "config2", ... }
+    command = "command" or { "command1", "command2", ... } or a function with (file, tool, config) arguments
+    description = "any output string",
+    dependencies = { "file1", "file2", ... },
+    output = nil or "outputfile" or { "outputfile1", "outputfile2", ... },
+  },
+  ...
+}
+
+--]] ?>
+<?lua if files and baseFile then ?>
+<?lua
+
+-- zbuildgen helper functions for inserting custom file trees into vcproj files
+
+
+-- creates a tree from file list
+
+function createFileTree(files, root, customFilter)
+
+  local fileTree = {}
+  
+  table.sort(files)
+  
+  for i, file in pairs(files) do
+
+    if file ~= files[i + 1] then -- this avoids duplicated files
+
+      local customFilterName = customFilter[file]
+      if customFilterName then
+        if fileTree[customFilterName] == nil then
+          fileTree[customFilterName] = {}
+          table.insert(fileTree, ":filter:" .. customFilterName)
+        end
+        table.insert(fileTree[customFilterName], file)
+      else
+      
+        local requestdir = {}
+        local reqdirname = path.getdirname(file)
+        while reqdirname ~= "." and reqdirname ~= "" and reqdirname ~= root do
+          table.insert(requestdir, 1, path.getbasename(reqdirname))
+          reqdirname = path.getdirname(reqdirname)
+        end
+        
+        local currentTree = fileTree
+        if table.maxn(requestdir) > 0 then
+          for i = 1, table.maxn(requestdir), 1 do
+            local subTree = currentTree[requestdir[i]]
+            if subTree == nil then
+              subTree = {}
+              currentTree[requestdir[i]] = subTree
+              table.insert(currentTree, ":filter:" .. requestdir[i])
+            end
+            currentTree = subTree
+          end
+        end
+        
+        table.insert(currentTree, file)
+        
+      end
+      
+    end
+  end
+  
+  return fileTree
+  
+end
+
+
+-- extracts header, footer and configurations (including includepaths and defines) from existing vcproj file
+
+function parseProjectFile(baseFile)
+
+  local header, footer, configs = {}, {}, {}
+
+  local currentConfig = nil
+  local inHeader = false
+  local inFooter = false
+  local inFiles = false
+  local inConfiguration = false
+  local inVCCLCompilerTool = false
+  local inTool = false
+  
+  for line in io.lines(baseFile) do
+  
+    if inHeader then
+      table.insert(header, line)
+    end
+    
+    if inFooter then
+      table.insert(footer, line)
+    end
+    
+    if not inHeader and not inFiles and not inFooter and string.find(line, "<?xml") then
+      inHeader = true
+    end
+    
+    if inHeader and string.find(line, "<Files>") then      
+      inFiles = true
+      inHeader = false
+    end
+    
+    if inFiles and string.find(line, "</Files>") then
+      inFiles = false
+      table.insert(footer, line)
+      inFooter = true
+    end
+    
+    if inHeader and string.find(line, "<Configuration") then
+      inConfiguration = true
+    end
+    
+    if inConfiguration and string.find(line, "</Configuration>") then
+      inConfiguration = false
+    end
+    
+    if inConfiguration and string.find(line, "<Tool") then
+      inTool = true
+    end
+    
+    if inTool and string.find(line, "Name=\"VCCLCompilerTool\"") then
+      inVCCLCompilerTool = true
+    end  
+
+    if inTool and string.find(line, "/>") then
+      inTool = false
+      inVCCLCompilerTool = false
+    end
+    
+    
+    if inConfiguration and not inTool then
+    
+      -- maybe this line describes a configuration
+      local maybeconfig = string.match(line, ".*Name=\"(.*)|Win32\".*")
+      if maybeconfig then
+        if configs[maybeconfig] == nil then
+          currentConfig = { name=maybeconfig, defines={}, includepaths={} }
+          configs[maybeconfig] = currentConfig
+          table.insert(configs, currentConfig)
+        end
+      end
+      
+      local maybeoutdir = string.match(line, ".*OutputDirectory=\"(.*)\"")
+      if maybeoutdir then
+        currentConfig.outdir = maybeoutdir
+      end
+      
+      local maybeintdir = string.match(line, ".*IntermediateDirectory=\"(.*)\"")
+      if maybeintdir then
+        currentConfig.objdir = maybeintdir
+      end
+      
+    end
+    
+    if inVCCLCompilerTool then
+    
+      -- maybe this line describes includepaths
+      local maybeincludes = string.match(line, ".*AdditionalIncludeDirectories=\"(.*)\"")
+      if maybeincludes then
+        for includepath in string.gmatch(maybeincludes, "[^, ]*") do
+          includepath = string.gsub(includepath, "&quot;", "")
+          if includepath ~= "" then
+            table.insert(currentConfig.includepaths, includepath)
+          end
+        end
+      end
+      
+      -- maybe this line describes defines
+      local maybedefines = string.match(line, ".*PreprocessorDefinitions=\"(.*)\"")
+      if maybedefines then
+        for define in string.gmatch(maybedefines, "[^, ]*") do
+          if define ~= "" then
+            table.insert(currentConfig.defines, define)
+          end
+        end
+      end
+      
+    end
+  end
+  
+  return header, footer, configs
+  
+end
+
+
+--
+
+function xmlEscape(val)
+  return string.gsub(val, "\"", "&quot;")
+end
+
+
+--
+
+function formatTable(tab, sep, prefix, suffix, func)
+  local res
+  if prefix == nil then
+    prefix = ""
+  end
+  if suffix == nil then
+    suffix = ""
+  end
+  if func == nil then
+    func = function(v) return v; end
+  end
+  if type(tab) == "table" then
+    for i, val in pairs(tab) do
+      if res then
+        res = res .. sep .. prefix .. func(val) .. suffix
+      else
+        res = prefix .. func(val) .. suffix
+      end
+    end
+  elseif type(tab) == "string" then
+    res = prefix .. func(tab) .. suffix
+  end
+  return res
+end
+
+
+--
+
+function formatPath(path, config)
+  local t = { 
+    ConfigurationName=config.name, 
+    OutDir=config.outdir, IntDir=config.objdir, ObjDir=config.objdir,
+    SolutionDir="$(SolutionDir)" }
+  return string.gsub(path, "%$[(](%w+)[)]", t)
+end
+
+
+-- perform
+
+customFilter = {}
+customBuildTool = {}
+restrictedFile = {}
+
+if customBuildTools == nil then
+  customBuildTools = {}
+else
+  for i, tool in pairs(customBuildTools) do
+    local file = tool.file
+    table.insert(files, file)
+    if tool.filter then
+      customFilter[file] = tool.filter
+    end
+    customBuildTool[file] = tool
+  end
+end
+
+header, footer, configs = parseProjectFile(baseFile)
+
+for i, config in pairs(configs) do
+  config.objdir = formatPath(config.objdir, config)
+  config.outdir = formatPath(config.outdir, config)
+end
+
+local tbl = {}
+table.expand(files, tbl)
+files = tbl
+
+newFiles = {}
+for i, file in pairs(files) do
+  local filepath = formatPath(file, configs[1])
+  if filepath ~= file then
+    for j, config in ipairs(configs) do
+      if j > 1 then
+        filepath = formatPath(file, config)
+      end
+      table.insert(newFiles, filepath)
+      if restrictedFile[filepath] == nil then
+        restrictedFile[filepath] = {}
+      end
+      restrictedFile[filepath][config.name] = true
+      local filter = customFilter[file]
+      if filter then
+        customFilter[filepath] = filter
+      end
+    end
+  else
+    table.insert(newFiles, file)
+  end
+end
+files = newFiles
+
+
+fileTree = createFileTree(files, root, customFilter)
+
+?><?xml version="1.0" encoding="Windows-1252"?>
+<?lua for i, line in pairs(header) do ?>
+<?lua=line?>
+<?lua end ?>
+<?lua function printFileTree(fileTree, depth) --[[ if depth == 0 then table.sort(fileTree) end --]] local space = string.rep("\t", depth) ?>
+<?lua for i, file in ipairs(fileTree) do ?>
+<?lua if string.find(file, ":filter:") then local name = string.sub(file, 9); ?>
+<?lua=space?>		<Filter
+<?lua=space?>			Name="<?lua=name?>"
+<?lua=space?>			>
+<?lua printFileTree(fileTree[name], depth + 1) ?>
+<?lua=space?>		</Filter>
+<?lua else ?>
+<?lua=space?>		<File
+<?lua=space?>			RelativePath="<?lua=file?>"
+<?lua=space?>			>
+<?lua tool = customBuildTool[file]; if tool and tool.output then ?>
+<?lua for i, config in ipairs(configs) do ?>
+<?lua if tool.configs == nil or table.contains(tool.configs, config.name) then ?>
+<?lua=space?>			<FileConfiguration
+<?lua=space?>				Name="<?lua=config.name?>|Win32"
+<?lua=space?>				>
+<?lua=space?>				<Tool
+<?lua=space?>					Name="VCCustomBuildTool"
+<?lua=space?>					Description="<?lua=xmlEscape(tool.description)?>"
+<?lua=space?>					CommandLine="<?lua if type(tool.command) == "function" then echo(formatTable(tool.command(tool.file, tool, config), "&#x0D;&#x0A;", nil, nil, xmlEscape)); else echo(formatTable(tool.command, "&#x0D;&#x0A;", nil, nil, xmlEscape)); end ?>&#x0D;&#x0A;"
+<?lua=space?>					AdditionalDependencies="<?lua=formatTable(tool.dependencies, ";")?>"
+<?lua=space?>					Outputs="<?lua=formatTable(tool.output, ";")?>"
+<?lua=space?>				/>
+<?lua=space?>			</FileConfiguration>
+<?lua end ?>
+<?lua end ?>
+<?lua end ?>
+<?lua restricted = restrictedFile[file]; if restricted then ?>
+<?lua for i, config in ipairs(configs) do ?>
+<?lua if restricted[config.name] == nil then ?>
+<?lua=space?>			<FileConfiguration
+<?lua=space?>				Name="<?lua=config.name?>|Win32"
+<?lua=space?>				ExcludedFromBuild="true"
+<?lua=space?>				>
+<?lua=space?>				<Tool
+<?lua=space?>					Name="VCCLCompilerTool"
+<?lua=space?>				/>
+<?lua=space?>			</FileConfiguration>
+<?lua end ?>
+<?lua end ?>
+<?lua end ?>
+<?lua=space?>		</File>
+<?lua end ?>
+<?lua end ?>
+<?lua end; printFileTree(fileTree, 0); ?>
+<?lua for i, line in pairs(footer) do ?>
+<?lua=line?>
+<?lua end ?>
+<?lua end ?>

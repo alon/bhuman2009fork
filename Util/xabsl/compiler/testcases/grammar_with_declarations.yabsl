@@ -1,0 +1,74 @@
+/* declaration proposals */
+
+
+/** The default agent behavior */
+agent default_agent("Default", alpha);
+
+namespace another_world("Another World") {
+	 
+ 	/** comment for basic behavior */
+	behavior dumm_rumstehen
+	{
+		/** comment on value */
+		value [0..1] "mm"; 
+	}
+
+}
+
+
+/** equivalent to symbols tag */
+namespace soundso("So und so") {
+	
+	/** The number of the action nothing. */
+	float const action.nothing = 0 "int";
+	
+	
+	/** The relative angle where the goalie kicks the ball to */
+	float input angle.goal_kick_angle "deg";
+	
+	
+	/** A ball handling movement is executed */
+	bool input ball.is_handled_at_the_moment;
+	
+	
+	/** The side on which a collision occured */
+	enum input obstacles.collision_side {
+		middle,
+		left,
+		right
+	}
+	
+	
+	/** Sets whether the ball is handled at the moment */
+	enum output ball.handling {
+		handling_the_ball,
+		not_handling_the_ball
+	}
+	
+	
+	/** comment on abs */
+	function abs
+	{
+		/** comment on value */
+		value [0..1] "mm"; 
+	}
+}
+
+
+option alpha
+{
+	/** siff */
+	@gamma [0..1] "mm";
+
+	initial state beta
+	{
+  		subsequent-option {
+  			alpha(gamma = @gamma);
+  		}
+
+		decision-tree {
+			transition-to-state(beta);
+		}
+		
+	}
+}

@@ -1,0 +1,20 @@
+call teamPort
+su Robot1 1
+su Robot2 2
+su Robot3 3
+echo set teamColor 0
+echo set teamColor 1
+echo ro linePercept on
+robot all
+
+vf worldState
+vfd worldState fieldPolygons
+vfd worldState fieldLines
+vfd worldState robotState
+vfd worldState robotOffline
+vfd worldState representation:RobotPose
+vfd worldState origin:RobotPose
+vfd worldState representation:BallModel
+vfd worldState representation:GoalPercept:Field
+vfd worldState representation:MotionRequest
+vfd worldState representation:LinePercept:Field

@@ -1,0 +1,82 @@
+<?lua if linux then ?>
+<?lua
+
+template = "Templates/Makefile"
+files = matchrecursive("../SimRobotDemo/*.cpp", "../SimRobotDemo/*.h")
+configs = {
+  {
+    name = "Debug",
+    objdir = "$(SolutionDir)/../Build/SimRobotDemo/Linux/Debug",
+    defines = { "DEBUG", "_DEBUG" },
+    includepaths = { "../SimRobotDemo" },
+    buildflags = "-pipe -Wall -W -Wno-unused-parameter -g",
+    --linkflags = "-Wl,--no-undefined",
+    linkflags = "",
+    libpaths = { 
+      "../Build/SimRobotCore/Linux/Debug", 
+      "../Build/SimRobotGUI/Linux/Debug",
+
+      "../Util/ode/Linux/lib",
+      "../Util/glew/Linux/lib",
+      "../Util/libxml2/Linux/lib",
+      "../Util/gsl/Linux/lib",
+      "../Util/qhull/Linux/lib",
+
+      "/usr/lib",
+      "/usr/X11R6/lib",
+    },
+    libs = { 
+      "SimRobotGUI", "SimRobotCore",
+      "ode", "GLEW", "xml2", "qhull", "gsl", "gslcblas",
+      "rt", "pthread", "QtOpenGL", "QtGui", "QtCore", "GLU", "GL",
+    },
+    dependencies = { 
+      "../Build/SimRobotCore/Linux/Debug/libSimRobotCore.a", 
+      "../Build/SimRobotGUI/Linux/Debug/libSimRobotGUI.a",
+    },
+  }, 
+  {
+    name = "Release",
+    objdir = "$(SolutionDir)/../Build/SimRobotDemo/Linux/Release",
+    defines = { "NDEBUG" },
+    includepaths = { "../SimRobotDemo" },
+    buildflags = "-pipe -Wall -W -Wno-unused-parameter -O3 -fomit-frame-pointer",
+    --linkflags = "-Wl,--no-undefined -s",
+    linkflags = "-s",
+    libpaths = { 
+      "../Build/SimRobotCore/Linux/Release",
+      "../Build/SimRobotGUI/Linux/Release",
+
+      "../Util/ode/Linux/lib",
+      "../Util/glew/Linux/lib",
+      "../Util/libxml2/Linux/lib",
+      "../Util/gsl/Linux/lib",
+      "../Util/qhull/Linux/lib",
+
+      "/usr/lib", 
+      "/usr/X11R6/lib",
+
+    },
+    libs = {
+      "SimRobotGUI", "SimRobotCore",
+      "ode", "GLEW", "xml2", "qhull", "gsl", "gslcblas",
+      "rt", "pthread", "QtOpenGL", "QtGui", "QtCore", "GLU", "GL",
+    },
+    dependencies = { 
+      "../Build/SimRobotCore/Linux/Release/libSimRobotCore.a", 
+      "../Build/SimRobotGUI/Linux/Release/libSimRobotGUI.a",
+    },
+  },
+}
+
+customBuildTool = {
+  {
+    file = "../SimRobotCore/Simulation/RoSi.xsd",
+    command = "cp ../SimRobotCore/Simulation/RoSi.xsd \"$(OutDir)/RoSi.xsd\"",
+    description = "RoSi.xsd (copy)",
+    output = "$(OutDir)/RoSi.xsd",
+  },
+}
+
+?>
+<?lua end ?>

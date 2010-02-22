@@ -1,0 +1,22 @@
+#!/bin/sh
+
+NAME=$1
+
+usage()
+{
+  echo "usage: $0 <name> - Saves the last deployed bhuman version as <name>."
+  exit 1
+}
+
+error()
+{
+  echo "$1"
+  exit 1
+}
+
+[ -z $NAME ] && usage
+
+[ -f "/media/userdata/Saves/$NAME" ] && error "There is already a saved bhuman version called $NAME."
+mkdir -p "/media/userdata/Saves/$NAME" || exit
+cp -Rp /media/userdata/Config "/media/userdata/Saves/$NAME" || exit
+

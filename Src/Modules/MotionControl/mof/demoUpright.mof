@@ -1,0 +1,10 @@
+motion_id = demoUpright
+"the upright position for center of mass measurement
+
+label start
+
+"HP HT  AL1 AL2 AL3  AR1 AR2 AR3  LL0 LL1 LL2 LL3 LL4 LL5  LR0 LR1 LR2 LR3 LR4 LR5  Int Dur
+0  0    0 -90 0 0    0 -90 0 0    0   0   0   0   0   0    0   0   0   0   0   0    1 1000
+
+
+transition allMotions extern start

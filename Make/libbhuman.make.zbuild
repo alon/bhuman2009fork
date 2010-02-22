@@ -1,0 +1,41 @@
+
+# on cygwin insert path to crosscompiler 
+ifneq ($(ComSpec)$(COMSPEC),)
+PATH := crosstool:$(PATH)
+endif
+
+<?lua
+
+template = "../Src/SimulatorQt/Make/Templates/Makefile"
+platform = "linux" -- force platform, use linux even on windows (for / separated paths)
+files = { "../Src/libbhuman/bhuman.cpp", "../Src/libbhuman/bhuman.h" }
+
+global = {
+  includepaths = { 
+    "../Util/alcommon/include",
+    "../Util/alcommon/interface",
+    "../Util/alcommon/soap",
+  },
+  libpaths = { 
+    "../Util/alcommon/lib/linux",
+  },
+  libs = { 
+    "alcommon",
+  },
+}
+
+configs = {
+  {
+    name = "Release",
+    objdir = "$(SolutionDir)/../Build/libbhuman/Linux/Release",
+    defines = { "NDEBUG" },
+    includepaths = global.includepaths,
+    buildflags = "-march=k6-2 -pipe -fPIC -Wall -Wno-strict-aliasing -Wno-non-virtual-dtor  -Wno-deprecated -Wno-unused -fomit-frame-pointer -O3 -mmmx -m3dnow",
+    linkflags = "-fPIC -shared -Wl,-soname,$(ObjDir)/bhuman.so -s",
+    libpaths = global.libpaths,
+    libs = global.libs,
+    output = "libbhuman.so",
+  }, 
+}
+
+?>
