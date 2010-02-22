@@ -104,8 +104,7 @@ int main(int argc, char *argv[])
     // change working directory
     if(*gtDir && chdir(gtDir) != 0)
     {
-      fprintf(stderr, "chdir to config directory failed!\n");
-      exit(EXIT_FAILURE);
+      fprintf(stderr, "chdir to config directory failed! assuming we aren't on a robot\n");
     }
 
     // the watchdog

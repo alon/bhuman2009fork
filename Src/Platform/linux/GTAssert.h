@@ -3,7 +3,7 @@
  *
  * This file contains macros for low level debugging.
  *
- * @author Thomas Röfer
+ * @author Thomas Rï¿½fer
  */
 #ifndef __GTAssert_h_
 #define __GTAssert_h_
@@ -42,6 +42,13 @@
  * @param c The condition to be checked.
  */
 #define VERIFY(c) assert(c)
+
+/**
+ * Warn macros - print warning but carry on
+ */
+#define WARN(c, msg) { if (c) { printf("%s\n", msg); } }
+
+#define WARN0(c) { if (c) { printf(#c " failed\n"); } }
 
 /**
  * PRINT prints a text directly to the output if and NDEBUG is not defined.

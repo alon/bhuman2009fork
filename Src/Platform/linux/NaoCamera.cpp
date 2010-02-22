@@ -2,7 +2,7 @@
 * \file Platform/linux/NaoCamera.cpp
 * Interface to the Nao camera using linux-uvc.
 * \author Colin Graf
-* \author Thomas Röfer
+* \author Thomas Rï¿½fer
 */
 
 #if defined(TARGET_SIM) && !defined(NO_NAO_EXTENSIONS)
@@ -89,12 +89,15 @@ storedTimeStamp(SystemCall::getCurrentSystemTime())
 
 #ifndef NO_NAO_EXTENSIONS
   int i2cFd = open("/dev/i2c-0", O_RDWR);
-  ASSERT(i2cFd != -1);
-  VERIFY(ioctl(i2cFd, 0x703, 8) == 0);
-  VERIFY(i2c_smbus_read_byte_data(i2cFd, 170) >= 2); // at least Nao V3
-  unsigned char cmd[2] = {2, 0};
-  VERIFY(i2c_smbus_write_block_data(i2cFd, 220, 1, cmd) != -1); // select lower camera
-  close(i2cFd);
+  if (i2cFd != -1) {
+	  VERIFY(ioctl(i2cFd, 0x703, 8) == 0);
+	  VERIFY(i2c_smbus_read_byte_data(i2cFd, 170) >= 2); // at least Nao V3
+	  unsigned char cmd[2] = {2, 0};
+	  VERIFY(i2c_smbus_write_block_data(i2cFd, 220, 1, cmd) != -1); // select lower camera
+	  close(i2cFd);
+  } else {
+	  std::cout << "could not open /dev/i2c-0 - we are not on a nao?\n";
+  }
 #endif
 
   // open device
@@ -107,10 +110,10 @@ storedTimeStamp(SystemCall::getCurrentSystemTime())
   memset(&control, 0, sizeof(control));
   control.id = V4L2_CID_CAM_INIT;
   control.value = 0;
-  VERIFY(ioctl(fd, VIDIOC_S_CTRL, &control) >= 0);
+  WARN(ioctl(fd, VIDIOC_S_CTRL, &control) >= 0, "VIDIOC_S_CTRL failed");
 
   v4l2_std_id esid0 = WIDTH == 320 ? 0x04000000UL : 0x08000000UL;
-  VERIFY(!ioctl(fd, VIDIOC_S_STD, &esid0));
+  WARN(!ioctl(fd, VIDIOC_S_STD, &esid0), "VIDIOC_S_STD failed");
 #endif
   
   // set format
@@ -172,11 +175,11 @@ storedTimeStamp(SystemCall::getCurrentSystemTime())
   settings.gain = getControlSetting(V4L2_CID_GAIN);
   // make sure automatic stuff is off
 #ifndef NO_NAO_EXTENSIONS
-  VERIFY(setControlSetting(V4L2_CID_AUTOEXPOSURE , 0));
-  VERIFY(setControlSetting(V4L2_CID_AUTO_WHITE_BALANCE, 0));
-  VERIFY(setControlSetting(V4L2_CID_AUTOGAIN, 0));
-  VERIFY(setControlSetting(V4L2_CID_HFLIP, 0));
-  VERIFY(setControlSetting(V4L2_CID_VFLIP, 0));
+  WARN0(setControlSetting(V4L2_CID_AUTOEXPOSURE , 0));
+  WARN0(setControlSetting(V4L2_CID_AUTO_WHITE_BALANCE, 0));
+  WARN0(setControlSetting(V4L2_CID_AUTOGAIN, 0));
+  WARN0(setControlSetting(V4L2_CID_HFLIP, 0));
+  WARN0(setControlSetting(V4L2_CID_VFLIP, 0));
 #else
   setControlSetting(V4L2_CID_AUTO_WHITE_BALANCE, 0);
   setControlSetting(V4L2_CID_AUTOGAIN, 0);

@@ -13,6 +13,7 @@
 
 #include <pthread.h>
 #include <unistd.h>
+#include <iostream> // TODO: remove me
 #include "Platform/GTAssert.h"
 
 /**
@@ -110,7 +111,11 @@ public:
         param.sched_priority = sched_get_priority_max(SCHED_FIFO);
       else
         param.sched_priority = priority;
-      VERIFY(!pthread_setschedparam(handle, SCHED_FIFO, &param));
+      // TODO: use the following line again instead of the warning
+      //VERIFY(!pthread_setschedparam(handle, SCHED_FIFO, &param));
+      if (!pthread_setschedparam(handle, SCHED_FIFO, &param)) {
+    	  std::cout << "could not set thread priority to " << prio << "\n";
+      }
     }
   }
 
