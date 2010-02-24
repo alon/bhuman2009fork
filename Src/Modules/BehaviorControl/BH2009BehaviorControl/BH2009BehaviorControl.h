@@ -3,8 +3,8 @@
 * 
 * Implementation of class BehaviorControl.
 *
-* @author Martin Lötzsch
-* @author Matthias Jüngel
+* @author Martin Lï¿½tzsch
+* @author Matthias Jï¿½ngel
 * @author Max Risler
 */
 
@@ -17,16 +17,18 @@
 #include "Tools/Team.h"
 #include "Tools/RingBufferWithSum.h"
 
+struct CognitionSharedMem;
+
 /**
 * @class BH2009BehaviorControl
 *
 * A Behavior based on the xabsl::Engine that is used by GermanTeam
 * for the RoboCup 2009.
 *
-* @author Martin Lötzsch
-* @author Matthias Jüngel
+* @author Martin Lï¿½tzsch
+* @author Matthias Jï¿½ngel
 * @author Max Risler
-* @author Judith Müller
+* @author Judith Mï¿½ller
 */ 
 class BH2009BehaviorControl : public BH2009BehaviorControlBase, public GTXabslEngineExecutor
 {
@@ -49,6 +51,13 @@ public:
   static bool handleMessage(InMessage& message);
 
 private:
+
+  CognitionSharedMem* 	cognition_data;
+  int 					cognition_mem_fd;
+  void initCognitionSharedMemory();
+  void readWriteCognitionSharedMemory();
+  void writeBHumanSharedMemory();
+  void readCognitionSharedMemory();
 
   /** Registers symbols and basic behaviors at the engine */
   virtual void registerSymbolsAndBasicBehaviors();

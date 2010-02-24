@@ -2,4 +2,5 @@
 # You have to adjust the ip address appropriatly.
 #sc Remote #172.21.3.3
 #sc Remote 192.168.56.28
-sc Remote 10.0.3.26
+#sc Remote 10.0.3.26
+sc Remote 127.0.0.1

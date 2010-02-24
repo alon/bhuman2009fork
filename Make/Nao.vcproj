@@ -201,6 +201,10 @@
 							>
 						</File>
 					</Filter>
+					<File
+						RelativePath="..\Src\Modules\BehaviorControl\BH2009BehaviorControl\cognition_shared_mem.h"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="CommonSymbols"
