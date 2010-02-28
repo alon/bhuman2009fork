@@ -167,23 +167,30 @@ void BH2009BehaviorControl::readWriteCognitionSharedMemory()
 
 void BH2009BehaviorControl::writeBHumanSharedMemory()
 {
+	Locked(cognition_data->bhuman);
 	cognition_data->bhuman.ball_time_when_last_seen = theBallModel.timeWhenLastSeen;
 	cognition_data->bhuman.ball_velocity_estimate.x = theBallModel.estimate.velocity.x;
 	cognition_data->bhuman.ball_velocity_estimate.y = theBallModel.estimate.velocity.y;
 	cognition_data->bhuman.ball_position_estimate.x = theBallModel.estimate.position.x;
 	cognition_data->bhuman.ball_position_estimate.y = theBallModel.estimate.position.y;
-	cognition_data->bhuman_writes++;
+	cognition_data->bhuman.writes++;
 }
 
 void BH2009BehaviorControl::readCognitionSharedMemory()
 {
 	static int jesus_moves = 0;
-	if (cognition_data->cognition_writes <= cognition_data->cognition_reads) return;
-	cognition_data->cognition_reads++;
-	if (cognition_data->cognition.startTurn) {
-		std::cout << "Jesus move on " << jesus_moves++ << "\n";
-		behaviorControlOutput.motionRequest.motion = MotionRequest::specialAction;
-		behaviorControlOutput.motionRequest.specialActionRequest.specialAction = SpecialActionRequest::demoJesus;
+	{
+		Locked(cognition_data->cognition);
+		if (cognition_data->cognition.writes <= cognition_data->cognition.reads) return;
+		cognition_data->cognition.reads++;
+		if (cognition_data->cognition.startTurn) {
+			jesus_moves++;
+			behaviorControlOutput.motionRequest.motion = MotionRequest::specialAction;
+			behaviorControlOutput.motionRequest.specialActionRequest.specialAction = SpecialActionRequest::demoJesus;
+		}
+	}
+	if (cognition_data->cognition.startTurn) { // do cout out of the lock - might take time?
+		std::cout << "Jesus move on " << jesus_moves << "\n";
 	}
 }
 

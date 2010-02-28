@@ -54,7 +54,7 @@ void create_shared_memory()
 	}
 	// try to be a little careful here, since we will restart cognition while Simulator/bhuman
 	// are still running. So zero the cognition_writes first, then the rest;
-	data->cognition_writes = 0;
+	data->cognition.writes = 0;
 	memset(data, 0, sizeof(CognitionSharedMem));
 }
 
@@ -63,32 +63,53 @@ int main(int argc, char** argv) {
 	cout << "inited shared memory\n";
 	if (argc > 1) {
 		cout << "doing a one shot - should do the jesus move\n";
-		data->cognition.startTurn = true;
-		data->cognition_writes++;
+		{
+			Locked(data->cognition);
+			data->cognition.startTurn = true;
+			data->cognition.writes++;
+		}
 		usleep(1000000);
-		data->cognition_reads = data->cognition_writes; // yeah, we shouldn't. And this is not atomic and bad bad bad.
+		{
+			Locked(data->cognition);
+			data->cognition.reads = data->cognition.writes;
+		}
 		return 0;
 	}
 	// default - endlessly toggle something
 	while (true) {
 		usleep(1000000);
 		// write
-		if (data->cognition_reads < data->cognition_writes) {
+		if (data->cognition.reads < data->cognition.writes) {
 			std::cout << "waiting for bhuman to catch up to cognition_writes\n";
 		} else {
-			data->cognition.startTurn = not data->cognition.startTurn;
-			data->cognition_writes++;
+			{
+				Locked(data->cognition);
+				data->cognition.startTurn = not data->cognition.startTurn;
+				data->cognition.writes++;
+			}
 			cout << "signaled start turn\n";
 		}
 		// and read
-		if (data->bhuman_writes > data->bhuman_reads) {
-			data->bhuman_reads = data->bhuman_writes; // TODO: again, locking required if I want to skip writes without missing any. (and for reading without the 'is being updated in the middle' effect)
-			cout << "data->bhuman_writes" << data->bhuman_writes << "\n";
-			cout << data->bhuman.ball_time_when_last_seen << "\n";
-			cout << data->bhuman.ball_position_estimate.x << "," << data->bhuman.ball_position_estimate.y << "\n";
-			cout << data->bhuman.ball_velocity_estimate.x << "," << data->bhuman.ball_velocity_estimate.y << "\n";
+		if (data->bhuman.writes > data->bhuman.reads) {
+			double ball_x, ball_y, ball_vx, ball_vy;
+			int bhuman_writes;
+			int ball_time_when_last_seen;
+			{
+				Locked(data->bhuman); // NOTE: as long as you only update writes *after* you are done, you can leave the comparison unlocked above.
+				data->bhuman.reads = data->bhuman.writes;
+				bhuman_writes = data->bhuman.writes;
+				ball_x = data->bhuman.ball_position_estimate.x;
+				ball_y = data->bhuman.ball_position_estimate.y;
+				ball_vx = data->bhuman.ball_velocity_estimate.x;
+				ball_vy = data->bhuman.ball_velocity_estimate.y;
+				ball_time_when_last_seen = data->bhuman.ball_time_when_last_seen;
+			}
+			cout << "data->bhuman_writes" << bhuman_writes << "\n";
+			cout << ball_time_when_last_seen << "\n";
+			cout << ball_x << "," << ball_y << "\n";
+			cout << ball_vx << "," << ball_vy << "\n";
 		}
-		std::cout << data->bhuman_writes << "\n";
+		std::cout << data->bhuman.writes << "\n"; // unlocked
 	}
 	return 0;
 }
