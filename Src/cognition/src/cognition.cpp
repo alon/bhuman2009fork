@@ -6,9 +6,9 @@
 // Description : Hello World in C++, Ansi-style
 //============================================================================
 
-#include <cunistd>
 #include <cstring>
 #include <cstdio>
+#include <unistd.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -56,6 +56,22 @@ void create_shared_memory()
 	// are still running. So zero the cognition_writes first, then the rest;
 	data->cognition.writes = 0;
 	memset(data, 0, sizeof(CognitionSharedMem));
+}
+
+class NaoqiConnection {
+public:
+	NaoqiConnection();
+	void doWalk();
+};
+
+NaoqiConnection::NaoqiConnection()
+{
+
+}
+
+void NaoqiConnection::doWalk()
+{
+
 }
 
 int main(int argc, char** argv) {

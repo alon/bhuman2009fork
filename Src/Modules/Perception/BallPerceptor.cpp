@@ -8,11 +8,13 @@
 * @author <A href="mailto:brunn@sim.tu-darmstadt.de">Ronnie Brunn</A>
 * @author <A href="mailto:mkunz@sim.tu-darmstadt.de">Michael Kunz</A>
 * @author <a href="mailto:walter.nistico@uni-dortmund.de">Walter Nistico</a>
-* @author <a href="mailto:judy@informatik.uni-bremen.de">Judith Müller</a>
-* @author <a href="mailto:Thomas.Roefer@dfki.de">Thomas Röfer</a>
+* @author <a href="mailto:judy@informatik.uni-bremen.de">Judith Mï¿½ller</a>
+* @author <a href="mailto:Thomas.Roefer@dfki.de">Thomas Rï¿½fer</a>
 * @author <a href="mailto:ingsie@informatik.uni-bremen.de">Ingo Sieverdingbeck</a>
 * @author <a href="mailto:jworch@informatik.uni-bremen.de">Jan-Hendrik Worch</a>
 */
+
+#include <iostream>
 
 #include "BallPerceptor.h"
 #include "Tools/Streams/InStreams.h"
@@ -60,6 +62,11 @@ void BallPerceptor::update(BallPercept& ballPercept)
   else
   {
     ballPercept.ballWasSeen = false;
+  }
+  {
+  	static int count = 0;
+  	count++;
+  	std::cout << count << " : " << ballPercept.ballWasSeen << "\n";
   }
 }
 

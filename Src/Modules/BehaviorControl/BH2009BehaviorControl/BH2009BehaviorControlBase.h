@@ -37,6 +37,7 @@
 #include "Representations/BehaviorControl/BehaviorControlOutput.h"
 #include "Representations/Configuration/JointCalibration.h"
 #include "Representations/Configuration/RobotDimensions.h"
+#include "Representations/Perception/BallPercept.h"
 
 MODULE(BH2009BehaviorControl)
   //CameraMatrix, JointCalibration, FilteredJointData & CameraInfo is needed by HeadControlSymbols
@@ -50,6 +51,7 @@ MODULE(BH2009BehaviorControl)
   REQUIRES(KeyStates)
   REQUIRES(MotionInfo)
   REQUIRES(WalkingEngineOutput)
+  REQUIRES(BallPercept) // added
   REQUIRES(BallModel)
   REQUIRES(GoalPercept)
   REQUIRES(RobotPose)

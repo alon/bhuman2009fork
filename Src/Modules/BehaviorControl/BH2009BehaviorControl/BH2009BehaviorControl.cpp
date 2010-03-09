@@ -67,9 +67,9 @@ BH2009BehaviorControl::BH2009BehaviorControl()
 	  ASSERT(pEngine);
 	  if (!errorHandler.errorsOccurred)
 	    currentAgent = pEngine->getSelectedAgentName();
+  } else {
+	  initCognitionSharedMemory();
   }
-
-  initCognitionSharedMemory();
 }
 
 void BH2009BehaviorControl::init()
@@ -160,6 +160,10 @@ void BH2009BehaviorControl::initCognitionSharedMemory()
 
 void BH2009BehaviorControl::readWriteCognitionSharedMemory()
 {
+	static int count = 0;
+	++count;
+	std::cout << count << " : " << theBallPercept.ballWasSeen << ", " << theBallModel.timeWhenLastSeen << "\n";
+	//std::cout << count << " : " << theBallModel.timeWhenLastSeen << "\n";
 	if (cognition_data == NULL) return;
 	readCognitionSharedMemory();
 	writeBHumanSharedMemory();

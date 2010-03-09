@@ -1046,6 +1046,11 @@ void Simulation::resetSimulation()
   }
 }
 
+void Simulation::updateActuatorsFromNaoqi()
+{
+	// TODO
+}
+
 void Simulation::doSimulationStep()
 {
   //Let actuators manipulate the scene:
