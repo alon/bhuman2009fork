@@ -8,6 +8,8 @@
 * @author <A href="mailto:pachur@informatik.uni-bremen.de">Dennis Pachur</A>
 */
 
+#include <iostream>
+
 #include <math.h>
 
 #include "Simulation.h"
@@ -1046,18 +1048,50 @@ void Simulation::resetSimulation()
   }
 }
 
-void Simulation::updateActuatorsFromNaoqi()
+void Simulation::readWriteNaoqi()
 {
 	// TODO
 }
 
 void Simulation::doSimulationStep()
 {
-  //Let actuators manipulate the scene:
-  for(unsigned int i=0; i<actuatorList.size(); i++)
-  {
-    actuatorList[i]->act();
-  }
+#define NH 22
+	{
+		static double val = 0.2;
+		static int count = 0;
+		static int hinge_indices[NH];
+		static bool inited_indices = false;
+		count++;
+		if (count % 100 == 0) val = 1.0 - val;
+		//Let actuators manipulate the scene:
+		if (!inited_indices) {
+			std::cout << "Total sensors " << sensorPortList.size() << "\nHinges: ";
+			int count_hinge = 0;
+			for (unsigned int i=0; i<sensorPortList.size(); ++i)
+				if (sensorPortList[i].sensor->getKind() == "hinge") {
+					if (count_hinge < NH)
+						hinge_indices[count_hinge++] = i;
+					std::cout << i << ": " << sensorPortList[i].sensor->getName() << ", ";
+				}
+			std::cout << "\nHinge count: " << count_hinge << "\nActuator# " << actuatorList.size() << ": ";
+			inited_indices = true;
+		}
+		std::cout << "Hinges position: ";
+		for (unsigned int i=0; i<NH; ++i) {
+			Sensor* sensor = sensorPortList[hinge_indices[i]].sensor;
+			SensorReading& r = sensor->getSensorReading(0 /* port */);
+			std::cout << r.data.doubleValue << ", ";
+		}
+		for(unsigned int i=0; i<actuatorList.size(); i++)
+		{
+			//std::cout << actuatorList[i]->getValue() << "->";
+			actuatorList[i]->setValue(val, 0 /*port*/);
+			actuatorList[i]->act();
+			//std::cout << actuatorList[i]->getValue() << "; ";
+		}
+		std::cout << "\n";
+	}
+#undef NH
   //PHYSICS SIMULATION
   int physicsStepsPerSimStep = (int)(stepLength / physicsStepLength);
   double physicsSimulationStepsize = stepLength/physicsStepsPerSimStep;

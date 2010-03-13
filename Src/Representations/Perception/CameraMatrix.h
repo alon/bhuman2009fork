@@ -24,10 +24,9 @@ public:
 */
 class CameraMatrix : public Pose3D
 {
-private:
+public:
   bool isValid; /**< Matrix is only valid if motion was stable. */
 
-public:
   /** Kind of copy-constructor. 
   * @param pose The other pose.
   */

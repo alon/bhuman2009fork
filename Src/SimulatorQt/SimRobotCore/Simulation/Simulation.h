@@ -1003,6 +1003,11 @@ public:
   * @param rot The target rotation.
   */
   void moveObject(SimObject* object, const Vector3d& pos, const Vector3d& rot);
+
+  /** interface with Naoqi - let naoqi decide where each joint will be moved, provide information
+   * to naoqi. All of this is done using the naoqi simulation api.
+   */
+  void readWriteNaoqi();
 };
 
 #endif //SIMULATION_H_
