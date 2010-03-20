@@ -7,6 +7,8 @@
 #ifndef __Blackboard_h_
 #define __Blackboard_h_
 
+#include <stddef.h>
+
 #include "Platform/SystemCall.h"
 
 // Declare prototypes of all representations here:
@@ -225,7 +227,7 @@ public:
   * @param size The size of the block in bytes.
   * @return A pointer to the block.
   */
-  static void* operator new(unsigned size);
+  static void* operator new(size_t size);
 
   /**
   * The operator frees a memory block.

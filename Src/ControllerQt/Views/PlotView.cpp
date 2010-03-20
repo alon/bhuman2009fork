@@ -288,7 +288,7 @@ void PlotView::paintAll(QPainter& painter, PlotWidget* widget)
         i != end; ++i)
     {
       const std::list<double>& list = console.plots[i->layer].points;
-      int numOfPoints = std::min<>(list.size(), plotSize);
+      int numOfPoints = std::min<>(list.size(), static_cast<size_t>(plotSize));
       if(numOfPoints > 1)
       {
         std::list<double>::const_iterator k = list.begin();
@@ -345,7 +345,7 @@ void PlotView::determineMinMaxValue()
   for(std::list<RobotConsole::Layer>::const_iterator i = plotList.begin(), end = plotList.end(); i != end; ++i)
   {
     const std::list<double>& list = console.plots[i->layer].points;
-    int numOfPoints = std::min<>(list.size(), plotSize);
+    int numOfPoints = std::min<>(list.size(), static_cast<size_t>(plotSize));
     if(numOfPoints > 1)
     {
       std::list<double>::const_iterator k = list.begin();

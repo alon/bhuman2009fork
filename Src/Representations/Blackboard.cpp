@@ -97,7 +97,7 @@ void Blackboard::operator=(const Blackboard& other)
   memcpy(this, &other, sizeof(Blackboard)); 
 }
 
-void* Blackboard::operator new(unsigned size)
+void* Blackboard::operator new(size_t size)
 {
   return calloc(1, size);
 }

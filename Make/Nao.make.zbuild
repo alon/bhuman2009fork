@@ -4,7 +4,7 @@ ifneq ($(ComSpec)$(COMSPEC),)
   PATH := crosstool:$(PATH)
   PROTOC := ../Util/protobuf/win32/bin/protoc
 else
-  PROTOC := ../Util/protobuf/linux/bin/protoc
+  PROTOC := protoc
 endif
 
 <?lua

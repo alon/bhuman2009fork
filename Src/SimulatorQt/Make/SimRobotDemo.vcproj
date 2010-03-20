@@ -211,6 +211,32 @@
 			Name=".copy"
 			>
 			<File
+				RelativePath="..\SimRobotCore\Simulation\RoSi.xsd"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="..\SimRobotCore\Simulation\RoSi.xsd (copy)"
+						CommandLine="copy ..\SimRobotCore\Simulation\RoSi.xsd &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="$(OutDir)\RoSi.xsd"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="..\SimRobotCore\Simulation\RoSi.xsd (copy)"
+						CommandLine="copy ..\SimRobotCore\Simulation\RoSi.xsd &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies=""
+						Outputs="$(OutDir)\RoSi.xsd"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\Util\glew\Win32\bin\glew32.dll"
 				>
 				<FileConfiguration
@@ -389,32 +415,6 @@
 						CommandLine="copy ..\Util\qt\Win32\bin\QtOpenGL4.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;"
 						AdditionalDependencies=""
 						Outputs="$(OutDir)\QtOpenGL4.dll"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\SimRobotCore\Simulation\RoSi.xsd"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="..\SimRobotCore\Simulation\RoSi.xsd (copy)"
-						CommandLine="copy ..\SimRobotCore\Simulation\RoSi.xsd &quot;$(OutDir)&quot;&#x0D;&#x0A;"
-						AdditionalDependencies=""
-						Outputs="$(OutDir)\RoSi.xsd"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="..\SimRobotCore\Simulation\RoSi.xsd (copy)"
-						CommandLine="copy ..\SimRobotCore\Simulation\RoSi.xsd &quot;$(OutDir)&quot;&#x0D;&#x0A;"
-						AdditionalDependencies=""
-						Outputs="$(OutDir)\RoSi.xsd"
 					/>
 				</FileConfiguration>
 			</File>

@@ -20,7 +20,7 @@
 #define HAVE_BOOLEAN
 #endif
 
-#include <../Util/libjpeg/src/jpeglib.h>
+#include <jpeglib.h>
 
 #undef INT32
 #undef FAR
@@ -29,7 +29,7 @@
 #else
 extern "C"
 {
-#include <../Util/libjpeg/src/jpeglib.h>
+#include <jpeglib.h>
 }
 #endif
 
